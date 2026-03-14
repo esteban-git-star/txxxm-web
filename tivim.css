@@ -1,0 +1,327 @@
+/* ===== Idiotensicher: Bild = King, ruhiges Dark-UI ===== */
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-violet: #a855f7;
+  --neon-blue: #3b82f6;
+  --glow-cyan: rgba(0, 243, 255, 0.5);
+  --glow-violet: rgba(168, 85, 247, 0.5);
+  --glow-blue: rgba(59, 130, 246, 0.45);
+  --bg-page: #030304;
+  --bg-card: #111827;
+  --border-card: rgba(0, 243, 255, 0.1);
+  --text-primary: #f3f4f6;
+  --text-muted: #9ca3af;
+  --space-card: 2rem;
+  --space-list: 1.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 20px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Wizard: breiter = größeres Bild = besser vergleichbar mit TV ===== */
+.wizard {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ===== Progress-Bar: futuristischer Leuchtbalken ===== */
+.wizard-header {
+  width: 100%;
+  padding: 0.5rem 0 1rem;
+}
+
+.progress-wrap {
+  height: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00f3ff, #bd00ff);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px #00f3ff, 0 0 20px #bd00ff;
+}
+
+.progress-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ===== Schritte ===== */
+.wizard-main {
+  width: 100%;
+  position: relative;
+  min-height: 400px;
+}
+
+.step {
+  display: none;
+  width: 100%;
+}
+
+.step.step-visible {
+  display: block;
+  animation: stepIn 0.3s ease;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Schritt 0 (Willkommen): Emoji + luftiger Text ===== */
+.step--welcome .step-0-emoji {
+  display: block;
+  font-size: 4rem;
+  line-height: 1;
+  text-align: center;
+  margin: 0 0 1rem;
+  filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.4));
+}
+
+.step--welcome .step-list li {
+  margin-bottom: 1.75rem;
+}
+
+.step--welcome .step-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== Karte: strikt von oben nach unten, viel Innenabstand ===== */
+.step-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== 1. Überschrift: oben, zentriert, kompakt – Bild soll sofort folgen ===== */
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* ===== 2. Screenshot = KING: groß, 16:9, fast volle Kartenbreite, abgerundet ===== */
+.step-media {
+  width: 100%;
+  margin-bottom: 1.75rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+  background: #0d1117;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.step-media--16-9 {
+  aspect-ratio: 16 / 9;
+  min-height: 220px;
+}
+
+.step-media--minimal {
+  display: none;
+}
+
+.step-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.step-media img.step-media-small {
+  width: auto;
+  max-width: 45%;
+  height: auto;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+}
+
+.media-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.media-placeholder--success {
+  font-size: 3rem;
+  color: var(--neon-cyan);
+}
+
+/* ===== 3. Anleitung: NUR nummerierte Liste, gut lesbar, viel Zeilenabstand ===== */
+.step-list {
+  margin: 0 0 1.75rem;
+  padding-left: 1.75rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.step-list li {
+  margin-bottom: var(--space-list);
+  padding-left: 0.35rem;
+}
+
+.step-list li:last-child {
+  margin-bottom: 0;
+}
+
+.step-list strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Code: sofort sichtbar – größer, fett, Neon-Cyan ===== */
+.code-highlight {
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 24px var(--glow-cyan);
+  margin: 0 0.2em;
+}
+
+/* ===== 4. Button: 100 % Breite, dickes Padding, klarer Hover-Glow ===== */
+.step-footer {
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.back-btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #fff;
+  transform: translateX(-3px);
+}
+
+.step-actions {
+  margin: 0;
+}
+
+.step-actions--choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 4px;
+}
+
+.btn--next {
+  display: block;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-violet));
+  color: #fff;
+  box-shadow: 0 0 28px var(--glow-blue), 0 0 48px rgba(168, 85, 247, 0.2);
+}
+
+.btn--next:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 36px var(--glow-violet), 0 0 60px rgba(168, 85, 247, 0.4);
+  filter: brightness(1.1);
+}
+
+.btn--choice {
+  flex: 1;
+  min-width: 150px;
+  padding: 1.1rem 1.25rem;
+  font-size: 1.05rem;
+  background: #1f2937;
+  color: var(--text-primary);
+  border: 2px solid var(--border-card);
+}
+
+.btn--choice:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px var(--glow-cyan);
+}
+
+.btn--choice.selected {
+  border-color: var(--neon-violet);
+  background: rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 20px var(--glow-violet);
+}

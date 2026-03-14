@@ -1,0 +1,143 @@
+/* ===== Basis & Dark Mode ===== */
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-magenta: #ff00ff;
+  --glow-cyan: rgba(0, 243, 255, 0.4);
+  --glow-magenta: rgba(255, 0, 255, 0.4);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  background: #0a0a12;
+  background-image: radial-gradient(
+    ellipse 80% 60% at 50% 20%,
+    rgba(88, 28, 135, 0.15) 0%,
+    rgba(30, 27, 75, 0.08) 40%,
+    transparent 70%
+  );
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* ===== Zentriertes Layout ===== */
+.page {
+  width: 100%;
+  max-width: 960px;
+  text-align: center;
+}
+
+/* ===== Überschrift & Untertitel ===== */
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  text-shadow: 0 0 24px rgba(0, 243, 255, 0.25), 0 0 48px rgba(0, 243, 255, 0.1);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ===== Kacheln (Cards) ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+  min-height: 200px;
+  padding: 2rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(18, 18, 28, 0.85);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 0 20px var(--glow-cyan), 0 0 40px rgba(0, 243, 255, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  opacity: 0;
+}
+
+.card.card--magenta {
+  border-color: rgba(255, 0, 255, 0.2);
+  box-shadow: 0 0 20px var(--glow-magenta), 0 0 40px rgba(255, 0, 255, 0.06);
+}
+
+.card.card-visible {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 32px var(--glow-cyan), 0 0 64px rgba(0, 243, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.card.card--magenta:hover {
+  border-color: var(--neon-magenta);
+  box-shadow: 0 0 32px var(--glow-magenta), 0 0 64px rgba(255, 0, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 4px;
+}
+
+.card.card-flash {
+  box-shadow: 0 0 48px var(--glow-magenta), 0 0 80px rgba(255, 0, 255, 0.3);
+  border-color: var(--neon-magenta);
+}
+
+.card-icon {
+  display: block;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  filter: grayscale(0.2);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #f8fafc;
+}
+
+.card-desc {
+  font-size: 1rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0;
+}
