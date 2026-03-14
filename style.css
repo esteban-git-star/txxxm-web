@@ -17,11 +17,16 @@
 html {
   font-size: 18px;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Stabileres Viewport in Chromium/Brave */
+  height: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport: bessere Mobile-Übereinstimmung (Brave/Safari) */
+  min-height: -webkit-fill-available; /* Safari < 15.4 Fallback */
   font-family: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
   background: #0a0a12;
   background-image: radial-gradient(
@@ -35,12 +40,14 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
+  overflow-x: hidden; /* Verhindert horizontales Scrollen in Brave/Chromium */
 }
 
 /* ===== Zentriertes Layout ===== */
 .page {
   width: 100%;
   max-width: 960px;
+  min-width: 0; /* Flex-Kind kann schrumpfen, verhindert Overflow in Chromium */
   text-align: center;
   margin: 0 auto;
 }
@@ -55,8 +62,8 @@ body {
   padding: 2rem 1.5rem;
 }
 
-/* Subpages: etwas mehr Platz oben für Breadcrumbs */
-.header:has(.breadcrumbs) {
+/* Subpages: etwas mehr Platz oben für Breadcrumbs (Klasse für Brave/alle Browser) */
+.header.header--with-breadcrumbs {
   padding-top: 1.75rem;
 }
 
@@ -119,8 +126,9 @@ body {
   margin-right: auto;
 }
 
+/* Titel: feste Stufen statt vw – gleiches Verhalten in Safari/Brave */
 .title {
-  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  font-size: 2.25rem;
   font-weight: 800;
   margin: 0 0 0.75rem;
   letter-spacing: -0.02em;
@@ -256,6 +264,7 @@ body {
   justify-items: stretch;
   width: 100%;
   max-width: 640px;
+  min-width: 0; /* Grid-Overflow in Brave verhindern */
   margin: 0 auto;
 }
 
@@ -550,11 +559,11 @@ body {
   }
 
   .title {
-    font-size: max(1.5rem, 24px);
+    font-size: 1.5rem; /* Mind. 24px bei 16px-Basis; einheitlich ohne max() */
   }
 
   .subtitle {
-    font-size: max(1.125rem, 18px);
+    font-size: 1.125rem;
   }
 
   .card-title {
@@ -567,5 +576,19 @@ body {
 
   .card {
     padding: 1.25rem 1rem;
+    min-width: 0; /* Flex-Kind in Grid: Overflow in Brave verhindern */
+  }
+}
+
+/* ===== Größere Screens: Titel stufenweise größer (ohne vw = gleiches Verhalten überall) ===== */
+@media (min-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .title {
+    font-size: 3.25rem;
   }
 }
