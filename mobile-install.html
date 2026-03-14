@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handy &amp; Tablet – Tivim Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="app-header">
+      <div class="header-bg-overlay" aria-hidden="true"></div>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">Handy &amp; Tablet</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="hub-main">
+      <!-- App-Auswahl -->
+      <section class="hub-section app-selector-section">
+        <h2 class="hub-section-title">Wähle dein Betriebssystem</h2>
+        <div class="app-selector-grid" role="tablist" aria-label="Betriebssystem auswählen">
+          <button type="button" class="app-selector-card active" data-app="pro" onclick="selectInstall('pro')" role="tab" aria-selected="true" aria-controls="install-pro" id="card-install-pro">
+            <span class="app-selector-icon" aria-hidden="true">🤖</span>
+            <span class="app-selector-label">Tivim Pro (Android)</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="xc" onclick="selectInstall('xc')" role="tab" aria-selected="false" aria-controls="install-xc" id="card-install-xc">
+            <span class="app-selector-icon" aria-hidden="true">⚡</span>
+            <span class="app-selector-label">Tivim XC (Android)</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="purple" onclick="selectInstall('purple')" role="tab" aria-selected="false" aria-controls="install-purple" id="card-install-purple">
+            <span class="app-selector-icon" aria-hidden="true">🍏</span>
+            <span class="app-selector-label">Purple Player (iOS)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Inhalt: Tivim Pro (Android) -->
+      <div id="install-pro" class="app-content active" role="tabpanel" aria-labelledby="card-install-pro">
+        <h3 class="app-content-title">Tivim Pro für Android</h3>
+        <div class="hub-card">
+          <a href="https://drive.google.com/uc?export=download&id=1TurRnGghecEQi0Ec1haLN6TMekNEbsLL" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer">⬇️ App herunterladen</a>
+          <ol class="hub-steps">
+            <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
+            <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
+            <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
+            <li>Öffne die App und logge dich mit deinen Daten ein. ✅</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Inhalt: Tivim XC (Android) -->
+      <div id="install-xc" class="app-content" role="tabpanel" aria-labelledby="card-install-xc">
+        <h3 class="app-content-title">Tivim XC für Android</h3>
+        <div class="hub-card">
+          <a href="https://drive.google.com/uc?export=download&id=1fS7wK3zjjID3N7eUq5t81X-89dQgiQ5j" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer">⬇️ App herunterladen</a>
+          <ol class="hub-steps">
+            <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
+            <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
+            <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
+            <li>Öffne die App und logge dich mit deinen Daten ein. ✅</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Inhalt: Purple Player (iOS) -->
+      <div id="install-purple" class="app-content" role="tabpanel" aria-labelledby="card-install-purple">
+        <div class="hub-card">
+          <h3 class="app-content-title">Installation für iOS (iPhone &amp; iPad)</h3>
+          <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" target="_blank" rel="noopener noreferrer" class="primary-btn appstore-btn">🍏 Purple Player im App Store öffnen</a>
+          <ol class="step-list">
+            <li>Lade die App herunter und <strong>öffne</strong> sie.</li>
+            <li>Klicke auf <strong>Consent</strong> (Zustimmen).</li>
+            <li>Wähle die Sprache <strong>German</strong> und klicke auf <strong>akzeptieren</strong>.</li>
+            <li>Klicke auf <strong>überspringen</strong>.</li>
+            <li>Wähle <strong>NEUE PLAYLIST hinzufügen</strong>.</li>
+            <li>Scrolle ganz nach unten und tippe auf <strong>MIT CODE anmelden</strong>.</li>
+            <li>Gib exakt diesen Code ein: <span class="highlight-code">FA69EV</span></li>
+            <li>Gib nun deine <strong>TIVIM-Daten</strong> (Username &amp; Passwort) ein und klicke auf <strong>absenden</strong>.</li>
+            <li>Klicke auf <strong>Load</strong>. Live-TV, Filme und Serien werden nun geladen.</li>
+            <li><strong>Fertig!</strong> ✅</li>
+          </ol>
+          <div class="alert-box warning-minimal mt-15" role="alert">
+            <span class="warning-icon" aria-hidden="true">⚠️</span>
+            <p><strong>Wichtig:</strong> Falls ein Wiedergabefehler erscheint, kontaktiere bitte deinen Ansprechpartner für die Freigabe deines Accounts.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function selectInstall(appId) {
+      var cards = document.querySelectorAll('.app-selector-card');
+      var contents = document.querySelectorAll('.app-content');
+      cards.forEach(function (card) {
+        card.classList.remove('active');
+        card.setAttribute('aria-selected', card.getAttribute('data-app') === appId ? 'true' : 'false');
+      });
+      contents.forEach(function (content) {
+        content.classList.remove('active');
+      });
+      var activeCard = document.querySelector('.app-selector-card[data-app="' + appId + '"]');
+      var activeContent = document.getElementById('install-' + appId);
+      if (activeCard) activeCard.classList.add('active');
+      if (activeContent) activeContent.classList.add('active');
+    }
+  </script>
+</body>
+</html>

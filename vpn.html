@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VPN einrichten – Support Portal</title>
+  <title>VPN &amp; Umleitung – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -11,20 +11,81 @@
 </head>
 <body>
   <div class="page">
-    <header class="header header--with-breadcrumbs">
+    <header class="app-header">
       <div class="header-bg-overlay" aria-hidden="true"></div>
-      <nav class="breadcrumbs">
-        <a href="index.html">Startseite</a>
-        <span class="breadcrumb-sep">&gt;</span>
-        <span class="current">VPN einrichten</span>
-      </nav>
-      <h1 class="title">VPN einrichten</h1>
-      <p class="subtitle">Sicher und anonym streamen.</p>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">VPN &amp; Umleitung</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Sicher surfen</div>
+        </div>
+      </div>
     </header>
 
-    <main class="placeholder-content">
-      <p class="placeholder-text">Infos folgen in Kürze.</p>
-      <a href="index.html" class="btn btn--back">Zurück zur Startseite</a>
+    <main class="hub-main">
+      <div class="alert-box warning-minimal vpn-alert" role="alert">
+        <span class="warning-icon" aria-hidden="true">⚠️</span>
+        <p><strong>Wichtig für Telekom-Kunden:</strong> Abends kommt es oft zu künstlichen Staus beim Provider. Ein VPN ist hier zwingend nötig für ein flüssiges Bild!</p>
+      </div>
+
+      <section class="hub-section">
+        <h2 class="hub-section-title">Warum ruckelt mein TV abends?</h2>
+        <div class="vpn-explainer-grid">
+          <div class="hub-card">
+            <span class="vpn-card-icon" aria-hidden="true">🚧</span>
+            <p class="hub-card-intro">Dein Anbieter (z.&nbsp;B. Telekom) drosselt abends oft die Verbindungen zu Streaming-Servern. Es entsteht ein Stau auf der Daten-Autobahn.</p>
+          </div>
+          <div class="hub-card">
+            <span class="vpn-card-icon" aria-hidden="true">🛡️</span>
+            <p class="hub-card-intro">Ein VPN ist wie eine unsichtbare Umleitung. Es verschlüsselt deine Daten und leitet sie am Stau vorbei. Ergebnis: Flüssiges Bild.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-section">
+        <h2 class="hub-section-title">Wähle dein VPN</h2>
+        <div class="vpn-choice-grid">
+          <div class="hub-card vpn-choice-card">
+            <h3 class="vpn-choice-title">PrivadoVPN (Premium)</h3>
+            <ul class="vpn-features">
+              <li>✅ Sehr schnell &amp; stabil</li>
+              <li>✅ Fire TV App</li>
+              <li>✅ Extrem günstig</li>
+            </ul>
+            <a href="privado.html" class="primary-btn download-btn">Anleitung öffnen</a>
+          </div>
+          <div class="hub-card vpn-choice-card">
+            <h3 class="vpn-choice-title">Proton VPN (Kostenlos)</h3>
+            <ul class="vpn-features">
+              <li>✅ Dauerhaft kostenlos</li>
+              <li>✅ Keine Limits</li>
+              <li>⚠️ Abends oft etwas voller</li>
+            </ul>
+            <a href="proton-free.html" class="primary-btn vpn-btn-free">Anleitung öffnen</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="hub-section">
+        <h2 class="hub-section-title">Häufige Fragen</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Muss ich das VPN immer anlassen?</summary>
+            <p class="faq-answer">Nicht unbedingt. Morgens läuft meist alles flüssig. Aber abends oder bei Live-Sport ist es dein Rettungsanker.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Kostet ein VPN Geld?</summary>
+            <p class="faq-answer">Kostenlose VPNs (wie Proton) reichen oft aus, können aber abends voll sein. Gute Premium-Anbieter (wie Privado) kosten ca. 2–4 € im Monat und bieten absolute Stabilität.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Kann ich damit im Urlaub deutsches TV schauen?</summary>
+            <p class="faq-answer">Ja! Stell das VPN im Ausland einfach auf „Deutschland“. So umgehst du Sperren am Hotel-Pool.</p>
+          </details>
+        </div>
+      </section>
     </main>
   </div>
 </body>

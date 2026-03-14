@@ -11,15 +11,18 @@
 </head>
 <body>
   <div class="page">
-    <header class="header header--with-breadcrumbs">
+    <header class="app-header">
       <div class="header-bg-overlay" aria-hidden="true"></div>
-      <nav class="breadcrumbs">
-        <a href="index.html">Startseite</a>
-        <span class="breadcrumb-sep">&gt;</span>
-        <span class="current">Neuigkeiten</span>
-      </nav>
-      <h1 class="title">Neuigkeiten &amp; Updates.</h1>
-      <p class="subtitle">Aktuelle Meldungen und Hinweise für Tivim Nutzer.</p>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">Neuigkeiten</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
+        </div>
+      </div>
     </header>
 
     <main class="news-main">

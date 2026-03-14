@@ -11,23 +11,28 @@
 </head>
 <body>
   <div class="page">
-    <header class="header">
+    <header class="dashboard-header">
       <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="title-wrap">
-        <span class="header-logo" aria-hidden="true">T</span>
-        <h1 class="title">Tivim Support</h1>
+      <div class="dashboard-hero">
+        <div class="hero-logo" aria-hidden="true">T</div>
+        <h1 class="hero-title">Tivim Support</h1>
+        <div class="status-indicator center-status">
+          <span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ
+        </div>
+        <p class="hero-subtitle">Hier findest du alle Themen rund um Tivim. Von der Installation bis hin zu Support und Neuigkeiten.</p>
       </div>
-      <p class="status-line">
-        <span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ.
-      </p>
-      <p class="subtitle">Hier findest du in Zukunft alle Themen Rund um Tivim. Von Anleitungen zur Installation bis hin zu Support-Themen und Neuigkeiten.</p>
     </header>
 
-    <nav class="cards">
+    <nav class="cards dashboard-grid" aria-label="Hauptnavigation">
       <a href="tivim.html" class="card card--cyan" data-card>
         <span class="card-icon" aria-hidden="true">📺</span>
-        <span class="card-title">Tivim installieren</span>
-        <span class="card-desc">Schritt-für-Schritt Anleitung für Fire TV &amp; Google TV.</span>
+        <span class="card-title">TV Installation</span>
+        <span class="card-desc">Für Fire TV &amp; Google TV.</span>
+      </a>
+      <a href="mobile-install.html" class="card card--cyan" data-card>
+        <span class="card-icon" aria-hidden="true">📱</span>
+        <span class="card-title">Handy / Tablet</span>
+        <span class="card-desc">App-Setup für iOS &amp; Android.</span>
       </a>
       <a href="vpn.html" class="card card--magenta" data-card>
         <span class="card-icon" aria-hidden="true">🛡️</span>
@@ -43,6 +48,11 @@
         <span class="card-icon" aria-hidden="true">🔔</span>
         <span class="card-title">Neuigkeiten</span>
         <span class="card-desc">Aktuelle Infos &amp; Updates.</span>
+      </a>
+      <a href="kontakt.html" class="card card--contact" data-card>
+        <span class="card-icon" aria-hidden="true">💬</span>
+        <span class="card-title">Kontakt &amp; Support</span>
+        <span class="card-desc">Platzhalter für später.</span>
       </a>
     </nav>
   </div>

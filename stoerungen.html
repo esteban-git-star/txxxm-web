@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hilfe bei Störungen – Support Portal</title>
+  <title>Hilfe &amp; Störungen – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -11,21 +11,155 @@
 </head>
 <body>
   <div class="page">
-    <header class="header header--with-breadcrumbs">
+    <header class="app-header">
       <div class="header-bg-overlay" aria-hidden="true"></div>
-      <nav class="breadcrumbs">
-        <a href="index.html">Startseite</a>
-        <span class="breadcrumb-sep">&gt;</span>
-        <span class="current">Hilfe bei Störungen</span>
-      </nav>
-      <h1 class="title">Hilfe bei Störungen</h1>
-      <p class="subtitle">Probleme einfach selbst lösen.</p>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">Hilfe &amp; Störungen</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
+        </div>
+      </div>
     </header>
 
-    <main class="placeholder-content">
-      <p class="placeholder-text">Infos folgen in Kürze.</p>
-      <a href="index.html" class="btn btn--back">Zurück zur Startseite</a>
+    <main class="hub-main">
+      <!-- App-Auswahl (ganz oben) -->
+      <section class="hub-section app-selector-section">
+        <h2 class="hub-section-title">Welche App nutzt du?</h2>
+        <div class="app-selector-grid" role="tablist" aria-label="App auswählen">
+          <button type="button" class="app-selector-card active" data-app="pro" onclick="selectApp('pro')" role="tab" aria-selected="true" aria-controls="content-pro" id="card-pro">
+            <span class="app-selector-icon" aria-hidden="true">📺</span>
+            <span class="app-selector-label">Tivim Pro</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="xc" onclick="selectApp('xc')" role="tab" aria-selected="false" aria-controls="content-xc" id="card-xc">
+            <span class="app-selector-icon" aria-hidden="true">⚡</span>
+            <span class="app-selector-label">Tivim XC</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="purple" onclick="selectApp('purple')" role="tab" aria-selected="false" aria-controls="content-purple" id="card-purple">
+            <span class="app-selector-icon" aria-hidden="true">📱</span>
+            <span class="app-selector-label">Purple Player (iOS)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Inhalt: Tivim Pro -->
+      <div id="content-pro" class="app-content active" role="tabpanel" aria-labelledby="card-pro">
+        <h3 class="app-content-title">Erste Hilfe für Tivim Pro</h3>
+        <div class="hub-card hub-card--highlight">
+          <ol class="hub-steps">
+            <li><strong>App richtig beenden:</strong> Drücke einen Doppelklick auf die Zurück-Taste deiner Fernbedienung, um das Beenden zu erzwingen.</li>
+            <li><strong>Strom trennen:</strong> Nimm deinen Router und dein TV-Gerät (Fire TV / Stick) für 5 Minuten komplett vom Strom.</li>
+            <li><strong>Neustart:</strong> Stecke alles wieder ein, warte bis das Internet da ist und öffne Tivim neu. <em>(Löst 90 % aller Probleme!)</em></li>
+          </ol>
+        </div>
+        <div class="alert-box warning-minimal" role="alert">
+          <span class="warning-icon" aria-hidden="true">⚠️</span>
+          <p><strong>Wichtig:</strong> Prüfe zuerst die <a href="news.html">Neuigkeiten</a> auf Server-Ausfälle, bevor du die App zurücksetzt!</p>
+        </div>
+        <h3 class="app-content-title">Hilft das nicht? App zurücksetzen</h3>
+        <div class="hub-card">
+          <p class="hub-card-intro">Manchmal hängt sich die Wiedergabeliste auf. So erzwingst du einen frischen Download:</p>
+          <ol class="hub-steps">
+            <li>Gehe in der App auf <strong>Einstellungen</strong>.</li>
+            <li>Wähle <strong>Wiedergabelisten</strong> und klicke auf <strong>Tivim</strong>.</li>
+            <li>Klicke auf <strong>Löschen</strong>.</li>
+            <li>Beende die App einmal komplett und öffne sie neu. Du kannst dich jetzt frisch anmelden.</li>
+          </ol>
+        </div>
+        <h3 class="app-content-title">Häufige Fragen (FAQ)</h3>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Mein Stream ruckelt oder puffert ständig. Was tun?</summary>
+            <p class="faq-answer">Das liegt oft an der Internetverbindung oder dem Routing deines Anbieters (sehr häufig bei Telekom-Kunden).<br><br><b>Lösung:</b> Starte deinen Router neu. Hilft das nicht, empfehlen wir dringend die Nutzung eines VPNs, um Verbindungsprobleme deines Anbieters zu umgehen. <br><br><a href="vpn.html" class="inline-link">➡️ Hier geht's zur VPN-Anleitung</a></p>
+          </details>
+          <details class="faq-item">
+            <summary>Wie kann ich den App-Cache leeren, wenn es hängt?</summary>
+            <p class="faq-answer">Ein voller Speicher kann die App bremsen. Gehe in den Einstellungen deines Fernsehers (Fire TV / Google TV) auf <b>Apps verwalten</b> -> <b>Tivim Pro</b> und wähle <b>Cache leeren</b>.<br><br><i>⚠️ Achtung: Klicke niemals auf "Daten löschen", sonst verlierst du deine Anmeldung!</i></p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Inhalt: Tivim XC -->
+      <div id="content-xc" class="app-content" role="tabpanel" aria-labelledby="card-xc">
+        <h3 class="app-content-title">Erste Hilfe für Tivim XC</h3>
+        <div class="hub-card hub-card--highlight">
+          <ol class="hub-steps">
+            <li><strong>App richtig beenden:</strong> Drücke einen Doppelklick auf die Zurück-Taste deiner Fernbedienung, um das Beenden zu erzwingen.</li>
+            <li><strong>Strom trennen:</strong> Nimm deinen Router und dein TV-Gerät (Fire TV / Stick) für 5 Minuten komplett vom Strom.</li>
+            <li><strong>Neustart:</strong> Stecke alles wieder ein, warte bis das Internet da ist und öffne Tivim neu. <em>(Löst 90 % aller Probleme!)</em></li>
+          </ol>
+        </div>
+        <div class="alert-box warning-minimal" role="alert">
+          <span class="warning-icon" aria-hidden="true">⚠️</span>
+          <p><strong>Wichtig:</strong> Prüfe zuerst die <a href="news.html">Neuigkeiten</a> auf Server-Ausfälle, bevor du die App zurücksetzt!</p>
+        </div>
+        <h3 class="app-content-title">Hilft das nicht? App zurücksetzen</h3>
+        <div class="hub-card">
+          <p class="hub-card-intro">Wenn die Sender nicht laden, hilft oft ein frischer Login:</p>
+          <ol class="hub-steps">
+            <li>Gehe in der App auf <strong>Settings</strong> (Einstellungen).</li>
+            <li>Klicke auf <strong>Sign out</strong> (Abmelden).</li>
+            <li>Klicke danach direkt wieder auf <strong>Sign In</strong> (Anmelden) – deine Zugangsdaten sollten noch gespeichert sein.</li>
+            <li>Die App lädt nun alle Inhalte frisch herunter.</li>
+          </ol>
+        </div>
+        <h3 class="app-content-title">Häufige Fragen (FAQ)</h3>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Mein Stream ruckelt oder puffert ständig. Was tun?</summary>
+            <p class="faq-answer">Das liegt oft an der Internetverbindung oder dem Routing deines Anbieters (sehr häufig bei Telekom-Kunden).<br><br><b>Lösung:</b> Starte deinen Router neu. Hilft das nicht, empfehlen wir dringend die Nutzung eines VPNs, um Verbindungsprobleme deines Anbieters zu umgehen. <br><br><a href="vpn.html" class="inline-link">➡️ Hier geht's zur VPN-Anleitung</a></p>
+          </details>
+          <details class="faq-item">
+            <summary>Die App zeigt "Invalid Login" oder "Account Expired".</summary>
+            <p class="faq-answer">Das bedeutet in 90 % der Fälle, dass sich ein Tippfehler eingeschlichen hat. Achte besonders auf Groß- und Kleinschreibung sowie den Unterschied zwischen dem Buchstaben "O" und der Zahl "0".<br><br>Bist du sicher, dass alles stimmt? Dann ist dein Zugang möglicherweise abgelaufen.</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Inhalt: Purple Player -->
+      <div id="content-purple" class="app-content" role="tabpanel" aria-labelledby="card-purple">
+        <h3 class="app-content-title">Erste Hilfe für Purple Player</h3>
+        <div class="hub-card hub-card--highlight">
+          <ol class="hub-steps">
+            <li><strong>App beenden:</strong> App aus dem Hintergrund schließen (z. B. über die letzten Apps).</li>
+            <li><strong>Cache leeren:</strong> In den Geräte-Einstellungen unter „Apps“ Purple Player finden → Speicher → Cache leeren.</li>
+            <li><strong>Neu starten:</strong> Router und Gerät kurz vom Strom trennen, dann wieder starten und App erneut öffnen.</li>
+          </ol>
+        </div>
+        <h3 class="app-content-title">Häufige Fragen (FAQ)</h3>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Purple Player stürzt auf dem Smartphone ab. Was tun?</summary>
+            <p class="faq-answer">Cache leeren (Einstellungen → Apps → Purple Player → Speicher → Cache leeren). Falls nötig, App deinstallieren und neu installieren. Stelle sicher, dass du die neueste Version nutzt.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Streams starten nicht oder laden ewig.</summary>
+            <p class="faq-answer">Prüfe deine Internetverbindung (am besten WLAN mit gutem Empfang oder Mobilfunk). App vollständig beenden und neu öffnen. Bei weiterem Problem: Zugangsdaten prüfen und ggf. beim Anbieter anfragen.</p>
+          </details>
+        </div>
+      </div>
+
     </main>
   </div>
+  <script>
+    function selectApp(appId) {
+      var cards = document.querySelectorAll('.app-selector-card');
+      var contents = document.querySelectorAll('.app-content');
+      cards.forEach(function (card) {
+        card.classList.remove('active');
+        card.setAttribute('aria-selected', card.getAttribute('data-app') === appId ? 'true' : 'false');
+      });
+      contents.forEach(function (content) {
+        content.classList.remove('active');
+      });
+      var activeCard = document.querySelector('.app-selector-card[data-app="' + appId + '"]');
+      var activeContent = document.getElementById('content-' + appId);
+      if (activeCard) activeCard.classList.add('active');
+      if (activeContent) activeContent.classList.add('active');
+    }
+  </script>
 </body>
 </html>
