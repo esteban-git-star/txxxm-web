@@ -97,13 +97,13 @@ body {
 
 .step.step-visible {
   display: block;
-  animation: stepIn 0.3s ease;
+  animation: stepIn 0.4s ease forwards;
 }
 
 @keyframes stepIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -263,6 +263,24 @@ body {
   transform: translateX(-3px);
 }
 
+/* Globaler Abbruch-Link: auf jeder Karte ganz unten */
+.wizard-abort {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+  transition: color 0.2s ease;
+}
+
+.wizard-abort:hover {
+  color: #fff;
+}
+
 .step-actions {
   margin: 0;
 }
@@ -325,4 +343,43 @@ body {
   border-color: var(--neon-violet);
   background: rgba(168, 85, 247, 0.12);
   box-shadow: 0 0 20px var(--glow-violet);
+}
+
+/* ===== Mobile (< 600px): große Texte, volle Breite, dicker Weiter-Button ===== */
+@media (max-width: 599px) {
+  body {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .wizard {
+    max-width: 100%;
+  }
+
+  .step-title {
+    font-size: max(1.5rem, 24px);
+  }
+
+  .step-list {
+    font-size: max(1.125rem, 18px);
+  }
+
+  .step-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .btn--next {
+    padding: 1.25rem 1.5rem;
+    min-height: 56px;
+    font-size: 1.15rem;
+  }
+
+  .btn--choice {
+    padding: 1rem 1.25rem;
+    min-height: 48px;
+    font-size: 1.05rem;
+  }
+
+  .code-highlight {
+    font-size: 1.4rem;
+  }
 }

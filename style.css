@@ -141,3 +141,62 @@ body {
   line-height: 1.4;
   margin: 0;
 }
+
+/* ===== Platzhalter-Seiten (VPN, Störungen) ===== */
+.placeholder-content {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.placeholder-text {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin: 0 0 2rem;
+}
+
+.btn--back {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0a0a12;
+  background: linear-gradient(135deg, var(--neon-cyan), #0099aa);
+  border: none;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 0 24px var(--glow-cyan);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn--back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px var(--glow-cyan);
+}
+
+/* ===== Mobile (< 600px): große Texte, Karten volle Breite ===== */
+@media (max-width: 599px) {
+  body {
+    padding: 1rem 0.75rem;
+  }
+
+  .title {
+    font-size: max(1.5rem, 24px);
+  }
+
+  .subtitle {
+    font-size: max(1.125rem, 18px);
+  }
+
+  .card-title {
+    font-size: max(1.25rem, 24px);
+  }
+
+  .card-desc {
+    font-size: max(1rem, 18px);
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 1.5rem 1rem;
+  }
+}
