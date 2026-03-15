@@ -263,6 +263,119 @@ body {
   margin: 0 auto;
 }
 
+/* Spotlight-Suche: Lupe im Header */
+.search-trigger-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+.search-trigger-btn:active {
+  transform: scale(0.9);
+}
+
+/* Spotlight Overlay (Glassmorphism) */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(15px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 15vh;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.search-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.search-container {
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+}
+.close-search-btn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+}
+.spotlight-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(0, 243, 255, 0.5);
+  color: #fff;
+  font-size: 1.8rem;
+  padding: 10px 0;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.spotlight-input:focus {
+  border-bottom-color: #00f3ff;
+}
+.spotlight-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.2rem;
+}
+
+/* Suchergebnisse */
+.search-results {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.search-result-item {
+  display: block;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+.search-result-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #00f3ff;
+  transform: translateX(5px);
+}
+.result-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 4px;
+}
+.result-desc {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
 /* Header-Inhalt über Overlay */
 .header .title,
 .header .subtitle,
@@ -802,6 +915,19 @@ body {
   color: #fcd34d;
 }
 
+/* Mobile-Install: Warnung zur Parallel-Nutzung (rot) */
+.mobile-install-parallel-warning {
+  margin-bottom: 25px;
+  border-left-color: #ef4444;
+}
+.alert-box-note {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  display: block;
+  margin-top: 0.35em;
+  line-height: 1.4;
+}
+
 /* Listen in Karten: kompakter Abstand, kein Überstehen */
 .hub-card ul,
 .hub-card ol,
@@ -1220,7 +1346,7 @@ body {
 }
 
 .mt-15 {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .hub-footer {
@@ -1378,6 +1504,73 @@ body {
 
 .mb-10 {
   margin-bottom: 15px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+/* Schritt-Badge Variante: Amber/Warnung (Kontakt-Checkliste) */
+.step-badge--warning {
+  background: #fbbf24;
+  color: #111;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+}
+
+/* Kontakt-Seite: Intro-Karte */
+.kontakt-intro h3 {
+  margin: 0 0 0.5rem;
+  color: #fff;
+  font-size: 1.15rem;
+}
+.kontakt-intro p {
+  margin: 0;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+/* Kontakt-Seite: CTA-Karte mit Support-Button */
+.kontakt-cta {
+  border: 1px solid rgba(0, 243, 255, 0.3);
+}
+.kontakt-cta h3 {
+  margin: 0 0 0.5rem;
+  color: #fff;
+  font-size: 1.15rem;
+}
+.kontakt-cta p {
+  margin: 0;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+.action-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(0, 243, 255, 0.05);
+  border: 1px dashed rgba(0, 243, 255, 0.4);
+  border-radius: 12px;
+  padding: 15px;
+}
+.action-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.action-text {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.action-text strong {
+  color: #fff;
 }
 
 /* ===== Platzhalter-Seiten ===== */

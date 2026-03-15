@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tivim Support</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -12,6 +16,9 @@
 <body>
   <div class="page">
     <header class="dashboard-header">
+      <button type="button" id="searchTrigger" class="search-trigger-btn" aria-label="Suche öffnen">
+        <span class="icon" aria-hidden="true">🔍</span>
+      </button>
       <div class="header-bg-overlay" aria-hidden="true"></div>
       <div class="dashboard-hero">
         <div class="hero-logo" aria-hidden="true">T</div>
@@ -52,9 +59,17 @@
       <a href="kontakt.html" class="card card--contact" data-card>
         <span class="card-icon" aria-hidden="true">💬</span>
         <span class="card-title">Kontakt &amp; Support</span>
-        <span class="card-desc">Platzhalter für später.</span>
+        <span class="card-desc">Persönliche Hilfe anfordern.</span>
       </a>
     </nav>
+  </div>
+
+  <div id="searchOverlay" class="search-overlay hidden" aria-hidden="true">
+    <div class="search-container">
+      <button type="button" id="closeSearch" class="close-search-btn" aria-label="Suche schließen">✕</button>
+      <input type="text" id="spotlightInput" class="spotlight-input" placeholder="Wonach suchst du? (z.B. VPN, Purple, Ruckelt)" autocomplete="off" aria-label="Suchbegriff" />
+      <div id="searchResults" class="search-results" role="list"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>

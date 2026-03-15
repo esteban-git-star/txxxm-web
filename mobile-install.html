@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
   <title>Handy &amp; Tablet – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,6 +30,15 @@
     </header>
 
     <main class="hub-main">
+      <div class="alert-box warning-minimal mobile-install-parallel-warning" role="alert">
+        <span class="warning-icon" aria-hidden="true">🚫</span>
+        <p>
+          <strong>Achtung: Niemals gleichzeitig nutzen!</strong><br>
+          Bitte nutze die App auf dem Handy niemals zeitgleich mit deinem Fernseher. Eine parallele Nutzung führt zur automatischen <strong>Sperrung deines Accounts!</strong><br><br>
+          <span class="alert-box-note"><em>Du möchtest auf zwei Geräten gleichzeitig schauen? Bitte kontaktiere deinen Ansprechpartner für die Freischaltung einer Zweit-Verbindung.</em></span>
+        </p>
+      </div>
+
       <!-- App-Auswahl -->
       <section class="hub-section app-selector-section">
         <h2 class="hub-section-title">Wähle dein Betriebssystem</h2>

@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kontakt &amp; Support – Tivim Support</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
+  <title>Support anfragen – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -19,13 +23,53 @@
           <span class="logo-ring">T</span>
         </a>
         <div class="header-title-wrapper">
-          <h1 class="page-title">Kontakt &amp; Support</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
+          <h1 class="page-title">Support anfragen</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Wir helfen dir gerne</div>
         </div>
       </div>
     </header>
-    <main class="placeholder-content">
-      <p class="placeholder-text">Infos folgen in Kürze.</p>
+
+    <main class="hub-main vpn-guide-main">
+      <div class="hub-card kontakt-intro mb-20">
+        <h3>Bevor du uns schreibst… 🛑</h3>
+        <p>Um dir schnell helfen zu können, prüfe bitte diese 3 Punkte. <strong>90 % aller Probleme</strong> lassen sich damit in 2 Minuten selbst lösen!</p>
+      </div>
+
+      <div class="hub-card step-card">
+        <div class="step-header">
+          <div class="step-badge step-badge--warning" aria-hidden="true">1</div>
+          <h3>Stecker gezogen?</h3>
+        </div>
+        <p>Hast du deinen Fernseher/Stick UND deinen WLAN-Router für <strong>5 Minuten komplett vom Strom</strong> genommen? (Ein einfacher Neustart reicht oft nicht).</p>
+      </div>
+
+      <div class="hub-card step-card">
+        <div class="step-header">
+          <div class="step-badge step-badge--warning" aria-hidden="true">2</div>
+          <h3>Störung gecheckt?</h3>
+        </div>
+        <p>Hast du auf unserer <a href="news.html" class="inline-link">Neuigkeiten-Seite</a> nachgesehen, ob aktuell eine allgemeine Server-Wartung stattfindet? Falls ja, bitte einfach abwarten.</p>
+      </div>
+
+      <div class="hub-card step-card">
+        <div class="step-header">
+          <div class="step-badge step-badge--warning" aria-hidden="true">3</div>
+          <h3>Ruckelt es abends?</h3>
+        </div>
+        <p>Wenn es nur abends ruckelt, liegt es meist an deinem Internetanbieter (oft Telekom). Hast du unsere <a href="vpn.html" class="inline-link">VPN-Lösung</a> schon ausprobiert?</p>
+      </div>
+
+      <div class="hub-card kontakt-cta mt-30">
+        <h3>Alles geprüft und es geht immer noch nicht?</h3>
+        <p>Kein Problem! Bitte melde dich jetzt direkt bei dem <strong>Ansprechpartner, von dem du deine Tivim-Zugangsdaten erhalten hast</strong> (z.&nbsp;B. per WhatsApp oder Telegram).</p>
+        <div class="action-box mt-15">
+          <span class="action-icon" aria-hidden="true">📸</span>
+          <div class="action-text">
+            <strong>WICHTIG FÜR DEINE NACHRICHT:</strong><br>
+            Schick bitte sofort ein <strong>Foto vom Bildschirm / der Fehlermeldung</strong> mit, damit wir nicht raten müssen und dir direkt helfen können!
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </body>
