@@ -563,6 +563,10 @@ h1, h2, h3, h4, h5, h6,
   margin: 0 auto;
 }
 
+.card--full-width {
+  grid-column: 1 / -1;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -1879,7 +1883,8 @@ h1, h2, h3, h4, h5, h6,
   stroke-width: 1.5;
 }
 
-.icon-tv {
+.icon-tv,
+.icon-tips {
   stroke: #00f3ff;
   color: #00f3ff;
   filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.5));
