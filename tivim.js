@@ -43,6 +43,13 @@
 
     if (targetId === "step-8") syncCodeDisplay();
 
+    if (targetId === "step-11") {
+      var btnAfter = document.getElementById("btn-after-download");
+      if (btnAfter) {
+        btnAfter.setAttribute("data-next", selectedDevice === "googletv" ? "g12" : "12");
+      }
+    }
+
     var stepNum = parseInt(id, 10);
     if (targetId === "step-g-delete") stepNum = 1;
     else if (targetId === "step-g-choose") stepNum = 2;
@@ -146,16 +153,6 @@
     });
   }
 
-  function bindBtnAfterDownload() {
-    var btn = document.getElementById("btn-after-download");
-    if (btn) {
-      btn.addEventListener("click", function () {
-        if (selectedDevice === "googletv") goTo("g12");
-        else goTo("12");
-      });
-    }
-  }
-
   function bindBtnGFinish() {
     var btnGFinish = document.getElementById("btn-g-finish");
     if (btnGFinish) {
@@ -192,7 +189,6 @@
     bindStep1();
     bindStep2();
     bindStepGoogleChoose();
-    bindBtnAfterDownload();
     bindBtnGFinish();
     bindNextButtons();
     bindBackButtons();
