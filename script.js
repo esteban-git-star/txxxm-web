@@ -36,10 +36,33 @@
     document.addEventListener("DOMContentLoaded", function () {
       init();
       initSpotlightSearch();
+      initConcierge();
     });
   } else {
     init();
     initSpotlightSearch();
+    initConcierge();
+  }
+
+  // Smarter Concierge (Dynamische Begrüßung)
+  function initConcierge() {
+    var greetingTextElement = document.getElementById("greeting-text");
+    if (!greetingTextElement) return;
+
+    var currentHour = new Date().getHours();
+    var greetingMessage = "Willkommen beim Tivim Support";
+
+    if (currentHour >= 5 && currentHour < 12) {
+      greetingMessage = "Guten Morgen! Wie können wir dir helfen?";
+    } else if (currentHour >= 12 && currentHour < 18) {
+      greetingMessage = "Hallo! Willkommen im Support-Hub.";
+    } else if (currentHour >= 18 && currentHour < 23) {
+      greetingMessage = "Guten Abend! Ruckelt das Bild? Prüfe unsere VPN-Tipps.";
+    } else {
+      greetingMessage = "Noch spät wach? Wir wünschen gutes Streaming!";
+    }
+
+    greetingTextElement.textContent = greetingMessage;
   }
 
   // Service Worker für PWA
@@ -104,5 +127,9 @@
         searchResults.appendChild(a);
       });
     });
+  }
+
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
   }
 })();

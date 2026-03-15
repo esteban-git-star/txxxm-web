@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="page">
@@ -30,41 +31,60 @@
     </header>
 
     <main class="news-main">
-      <div class="timeline">
-        <article class="timeline-item">
-          <div class="timeline-meta">
-            <span class="timeline-dot" aria-hidden="true"></span>
-            <span class="timeline-date">14. März 2026</span>
-          </div>
-          <div class="timeline-content">
-            <h2 class="timeline-title">Wichtig: Wiedergabe-Probleme seit 13.03.</h2>
-            <p class="timeline-intro">Für alle Tivim XC &amp; Tivim Pro Nutzer, die seit dem 13.03. keine Inhalte abspielen können, hier die schnelle Lösung:</p>
-
-            <div class="news-block">
-              <h3 class="news-block-title">🔹 Tivim Pro</h3>
-              <ol class="news-block-list">
+      <div class="smart-timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-date">14. März 2026</div>
+          <details class="hub-card news-card" open>
+            <summary class="news-summary">
+              <div class="news-header-top">
+                <span class="news-badge badge-warning"><i data-lucide="alert-triangle" class="icon-warning icon-inline" aria-hidden="true"></i> Wichtig</span>
+              </div>
+              <h3 class="news-title">Wiedergabe-Probleme seit 13.03.</h3>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
+            <div class="news-content">
+              <p>Für alle Tivim XC &amp; Tivim Pro Nutzer, die seit dem 13.03. keine Inhalte abspielen können, hier die schnelle Lösung:</p>
+              <h4 class="app-subtitel">🔹 Tivim Pro</h4>
+              <ol class="step-list compact-list">
                 <li>Einstellungen öffnen</li>
                 <li>Wiedergabelisten → Tivim auswählen</li>
                 <li>Auf Löschen klicken</li>
                 <li>App einmal beenden</li>
-                <li>Danach einfach erneut anmelden ✅</li>
+                <li>Danach einfach erneut anmelden <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
               </ol>
-            </div>
-
-            <div class="news-block">
-              <h3 class="news-block-title">🔹 Tivim XC</h3>
-              <ol class="news-block-list">
+              <hr class="news-divider" />
+              <h4 class="app-subtitel">🔹 Tivim XC</h4>
+              <ol class="step-list compact-list">
                 <li>Settings öffnen</li>
                 <li>Sign out (Abmelden)</li>
                 <li>App einmal beenden</li>
                 <li>Sign In (Anmelden) → Deine Daten müssten noch gespeichert sein</li>
-                <li>Fertig ✅</li>
+                <li>Fertig <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
               </ol>
             </div>
-          </div>
-        </article>
+          </details>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-date">10. März 2026</div>
+          <details class="hub-card news-card">
+            <summary class="news-summary">
+              <div class="news-header-top">
+                <span class="news-badge badge-info">ℹ️ Info</span>
+              </div>
+              <h3 class="news-title">Server-Wartung erfolgreich beendet</h3>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
+            <div class="news-content">
+              <p>Die nächtlichen Wartungsarbeiten wurden erfolgreich abgeschlossen. Alle Systeme laufen wieder auf Hochtouren.</p>
+            </div>
+          </details>
+        </div>
       </div>
     </main>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>

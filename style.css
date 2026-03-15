@@ -253,6 +253,8 @@ body {
   justify-content: center;
   margin-bottom: 15px;
   font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .hero-subtitle {
@@ -1279,6 +1281,10 @@ body {
   display: inline-block;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
+.inline-link--small {
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
 .inline-link:hover,
 .inline-link:focus {
   color: #7dd3fc;
@@ -1333,6 +1339,12 @@ body {
   margin-bottom: 12px;
   line-height: 1.4;
   color: #d1d5db;
+}
+.step-list--purple {
+  line-height: 1.5;
+}
+.step-list--purple li {
+  margin-bottom: 15px;
 }
 
 .highlight-code {
@@ -1643,4 +1655,231 @@ body {
   .title {
     font-size: 3.25rem;
   }
+}
+
+/* ===== Smart Timeline (Neuigkeiten) ===== */
+.smart-timeline {
+  position: relative;
+  padding-left: 20px;
+  margin-top: 20px;
+}
+.smart-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(0, 243, 255, 0.2);
+}
+
+.smart-timeline .timeline-item {
+  position: relative;
+  margin-bottom: 30px;
+}
+.smart-timeline .timeline-marker {
+  position: absolute;
+  left: -25px;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00f3ff;
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+  border: 2px solid #0a0f1a;
+}
+.smart-timeline .timeline-date {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.news-card {
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.news-summary {
+  padding: 15px 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  list-style: none;
+}
+.news-summary::-webkit-details-marker {
+  display: none;
+}
+
+.news-header-top {
+  margin-bottom: 8px;
+}
+.news-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+.badge-warning {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.badge-info {
+  background: rgba(0, 243, 255, 0.15);
+  color: #00f3ff;
+  border: 1px solid rgba(0, 243, 255, 0.3);
+}
+.badge-success {
+  background: rgba(37, 211, 102, 0.15);
+  color: #25d366;
+  border: 1px solid rgba(37, 211, 102, 0.3);
+}
+
+.news-title {
+  margin: 0;
+  font-size: 1.1rem;
+  padding-right: 25px;
+  color: #fff;
+}
+
+.news-summary .chevron {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid #9ca3af;
+  border-bottom: 2px solid #9ca3af;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.3s ease;
+}
+.news-card[open] .news-summary .chevron {
+  transform: translateY(-50%) rotate(-135deg);
+  border-color: #00f3ff;
+}
+.news-card[open] .news-summary {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.news-content {
+  padding: 20px;
+}
+.news-content p {
+  margin: 0 0 0.75rem;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+.app-subtitel {
+  margin: 15px 0 10px;
+  font-size: 1rem;
+  color: #fff;
+}
+.news-divider {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 20px 0;
+}
+.compact-list {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+}
+.compact-list li {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+/* ===== Lucide Icons – Basis & Signalfarben ===== */
+[data-lucide] {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-warning {
+  stroke: #fbbf24;
+  color: #fbbf24;
+}
+.icon-danger {
+  stroke: #ef4444;
+  color: #ef4444;
+}
+.icon-success {
+  stroke: #25d366;
+  color: #25d366;
+}
+.icon-brand {
+  stroke: #fff;
+  color: #fff;
+}
+.icon-cyan {
+  stroke: #00f3ff;
+  color: #00f3ff;
+}
+
+.icon-inline {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.15em;
+}
+
+.primary-btn [data-lucide] {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.app-selector-icon[data-lucide] {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  margin: 0 auto;
+}
+
+.card-icon[data-lucide],
+.card .card-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: block;
+  margin: 0 auto 0.6rem;
+}
+.action-icon[data-lucide] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.back-home-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.back-home-link:hover {
+  color: #00f3ff;
+  transform: translateY(-2px);
+}
+
+.back-home-link [data-lucide] {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
 }

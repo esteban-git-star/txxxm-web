@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="page">
@@ -31,7 +32,7 @@
 
     <main class="hub-main">
       <div class="alert-box warning-minimal mobile-install-parallel-warning" role="alert">
-        <span class="warning-icon" aria-hidden="true">🚫</span>
+        <i data-lucide="octagon-alert" class="icon-danger" aria-hidden="true"></i>
         <p>
           <strong>Achtung: Niemals gleichzeitig nutzen!</strong><br>
           Bitte nutze die App auf dem Handy niemals zeitgleich mit deinem Fernseher. Eine parallele Nutzung führt zur automatischen <strong>Sperrung deines Accounts!</strong><br><br>
@@ -44,15 +45,15 @@
         <h2 class="hub-section-title">Wähle dein Betriebssystem</h2>
         <div class="app-selector-grid" role="tablist" aria-label="Betriebssystem auswählen">
           <button type="button" class="app-selector-card active" data-app="pro" onclick="selectInstall('pro')" role="tab" aria-selected="true" aria-controls="install-pro" id="card-install-pro">
-            <span class="app-selector-icon" aria-hidden="true">🤖</span>
+            <i data-lucide="smartphone" class="app-selector-icon icon-brand" aria-hidden="true"></i>
             <span class="app-selector-label">Tivim Pro (Android)</span>
           </button>
           <button type="button" class="app-selector-card" data-app="xc" onclick="selectInstall('xc')" role="tab" aria-selected="false" aria-controls="install-xc" id="card-install-xc">
-            <span class="app-selector-icon" aria-hidden="true">⚡</span>
+            <i data-lucide="zap" class="app-selector-icon icon-cyan" aria-hidden="true"></i>
             <span class="app-selector-label">Tivim XC (Android)</span>
           </button>
           <button type="button" class="app-selector-card" data-app="purple" onclick="selectInstall('purple')" role="tab" aria-selected="false" aria-controls="install-purple" id="card-install-purple">
-            <span class="app-selector-icon" aria-hidden="true">🍏</span>
+            <i data-lucide="apple" class="app-selector-icon icon-brand" aria-hidden="true"></i>
             <span class="app-selector-label">Purple Player (iOS)</span>
           </button>
         </div>
@@ -62,12 +63,12 @@
       <div id="install-pro" class="app-content active" role="tabpanel" aria-labelledby="card-install-pro">
         <h3 class="app-content-title">Tivim Pro für Android</h3>
         <div class="hub-card">
-          <a href="https://drive.google.com/uc?export=download&id=1TurRnGghecEQi0Ec1haLN6TMekNEbsLL" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer">⬇️ App herunterladen</a>
+          <a href="https://drive.google.com/uc?export=download&id=1TurRnGghecEQi0Ec1haLN6TMekNEbsLL" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer"><i data-lucide="download" class="icon-brand" aria-hidden="true"></i> App herunterladen</a>
           <ol class="hub-steps">
             <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
             <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
             <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
-            <li>Öffne die App und logge dich mit deinen Daten ein. ✅</li>
+            <li>Öffne die App und logge dich mit deinen Daten ein. <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
           </ol>
         </div>
       </div>
@@ -76,12 +77,12 @@
       <div id="install-xc" class="app-content" role="tabpanel" aria-labelledby="card-install-xc">
         <h3 class="app-content-title">Tivim XC für Android</h3>
         <div class="hub-card">
-          <a href="https://drive.google.com/uc?export=download&id=1fS7wK3zjjID3N7eUq5t81X-89dQgiQ5j" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer">⬇️ App herunterladen</a>
+          <a href="https://drive.google.com/uc?export=download&id=1fS7wK3zjjID3N7eUq5t81X-89dQgiQ5j" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer"><i data-lucide="download" class="icon-brand" aria-hidden="true"></i> App herunterladen</a>
           <ol class="hub-steps">
             <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
             <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
             <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
-            <li>Öffne die App und logge dich mit deinen Daten ein. ✅</li>
+            <li>Öffne die App und logge dich mit deinen Daten ein. <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
           </ol>
         </div>
       </div>
@@ -90,7 +91,7 @@
       <div id="install-purple" class="app-content" role="tabpanel" aria-labelledby="card-install-purple">
         <div class="hub-card">
           <h3 class="app-content-title">Installation für iOS (iPhone &amp; iPad)</h3>
-          <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" target="_blank" rel="noopener noreferrer" class="primary-btn appstore-btn">🍏 Purple Player im App Store öffnen</a>
+          <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" target="_blank" rel="noopener noreferrer" class="primary-btn appstore-btn"><i data-lucide="apple" class="icon-brand" aria-hidden="true"></i> Purple Player im App Store öffnen</a>
           <ol class="step-list">
             <li>Lade die App herunter und <strong>öffne</strong> sie.</li>
             <li>Klicke auf <strong>Consent</strong> (Zustimmen).</li>
@@ -101,10 +102,10 @@
             <li>Gib exakt diesen Code ein: <span class="highlight-code">FA69EV</span></li>
             <li>Gib nun deine <strong>TIVIM-Daten</strong> (Username &amp; Passwort) ein und klicke auf <strong>absenden</strong>.</li>
             <li>Klicke auf <strong>Load</strong>. Live-TV, Filme und Serien werden nun geladen.</li>
-            <li><strong>Fertig!</strong> ✅</li>
+            <li><strong>Fertig!</strong> <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
           </ol>
           <div class="alert-box warning-minimal mt-15" role="alert">
-            <span class="warning-icon" aria-hidden="true">⚠️</span>
+            <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
             <p><strong>Wichtig:</strong> Falls ein Wiedergabefehler erscheint, kontaktiere bitte deinen Ansprechpartner für die Freigabe deines Accounts.</p>
           </div>
         </div>
@@ -112,6 +113,7 @@
     </main>
   </div>
 
+  <script src="script.js"></script>
   <script>
     function selectInstall(appId) {
       var cards = document.querySelectorAll('.app-selector-card');

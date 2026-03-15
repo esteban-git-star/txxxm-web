@@ -287,6 +287,33 @@ body {
   color: #fff;
 }
 
+.back-home-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.back-home-link:hover {
+  color: #00f3ff;
+  transform: translateY(-2px);
+}
+
+.back-home-link [data-lucide] {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
 .step-actions {
   margin: 0;
 }

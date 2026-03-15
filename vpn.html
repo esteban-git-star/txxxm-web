@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="page">
@@ -31,7 +32,7 @@
 
     <main class="hub-main">
       <div class="alert-box warning-minimal vpn-alert" role="alert">
-        <span class="warning-icon" aria-hidden="true">⚠️</span>
+        <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
         <p><strong>Wichtig für Telekom-Kunden:</strong> Abends kommt es oft zu künstlichen Staus beim Provider. Ein VPN ist hier zwingend nötig für ein flüssiges Bild!</p>
       </div>
 
@@ -55,18 +56,18 @@
           <div class="hub-card vpn-choice-card">
             <h3 class="vpn-choice-title">PrivadoVPN (Premium)</h3>
             <ul class="vpn-features">
-              <li>✅ Sehr schnell &amp; stabil</li>
-              <li>✅ Fire TV App</li>
-              <li>✅ Extrem günstig</li>
+              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Sehr schnell &amp; stabil</li>
+              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Fire TV App</li>
+              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Extrem günstig</li>
             </ul>
             <a href="privado.html" class="primary-btn download-btn">Anleitung öffnen</a>
           </div>
           <div class="hub-card vpn-choice-card">
             <h3 class="vpn-choice-title">Proton VPN (Kostenlos)</h3>
             <ul class="vpn-features">
-              <li>✅ Dauerhaft kostenlos</li>
-              <li>✅ Keine Limits</li>
-              <li>⚠️ Abends oft etwas voller</li>
+              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Dauerhaft kostenlos</li>
+              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Keine Limits</li>
+              <li><i data-lucide="alert-triangle" class="icon-warning icon-inline" aria-hidden="true"></i> Abends oft etwas voller</li>
             </ul>
             <a href="proton-free.html" class="primary-btn vpn-btn-free">Anleitung öffnen</a>
           </div>
@@ -92,5 +93,6 @@
       </section>
     </main>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>

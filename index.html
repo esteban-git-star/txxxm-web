@@ -12,19 +12,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="page">
     <header class="dashboard-header">
       <button type="button" id="searchTrigger" class="search-trigger-btn" aria-label="Suche öffnen">
-        <span class="icon" aria-hidden="true">🔍</span>
+        <i data-lucide="search" class="icon-cyan" aria-hidden="true"></i>
       </button>
       <div class="header-bg-overlay" aria-hidden="true"></div>
       <div class="dashboard-hero">
         <div class="hero-logo" aria-hidden="true">T</div>
         <h1 class="hero-title">Tivim Support</h1>
-        <div class="status-indicator center-status">
-          <span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ
+        <div class="status-indicator center-status" id="concierge-greeting">
+          <span class="status-dot pulsing-green" aria-hidden="true"></span>
+          <span id="greeting-text">Willkommen beim Tivim Support</span>
         </div>
         <p class="hero-subtitle">Hier findest du alle Themen rund um Tivim. Von der Installation bis hin zu Support und Neuigkeiten.</p>
       </div>
@@ -32,32 +34,32 @@
 
     <nav class="cards dashboard-grid" aria-label="Hauptnavigation">
       <a href="tivim.html" class="card card--cyan" data-card>
-        <span class="card-icon" aria-hidden="true">📺</span>
+        <i data-lucide="tv" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">TV Installation</span>
         <span class="card-desc">Für Fire TV &amp; Google TV.</span>
       </a>
       <a href="mobile-install.html" class="card card--cyan" data-card>
-        <span class="card-icon" aria-hidden="true">📱</span>
+        <i data-lucide="smartphone" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">Handy / Tablet</span>
         <span class="card-desc">App-Setup für iOS &amp; Android.</span>
       </a>
       <a href="vpn.html" class="card card--magenta" data-card>
-        <span class="card-icon" aria-hidden="true">🛡️</span>
+        <i data-lucide="shield" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">VPN einrichten</span>
         <span class="card-desc">Sicher und anonym streamen.</span>
       </a>
       <a href="stoerungen.html" class="card card--cyan" data-card>
-        <span class="card-icon" aria-hidden="true">🛠️</span>
+        <i data-lucide="wrench" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">Hilfe bei Störungen</span>
         <span class="card-desc">Probleme einfach selbst lösen.</span>
       </a>
       <a href="news.html" class="card card--news" data-card>
-        <span class="card-icon" aria-hidden="true">🔔</span>
+        <i data-lucide="bell" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">Neuigkeiten</span>
         <span class="card-desc">Aktuelle Infos &amp; Updates.</span>
       </a>
       <a href="kontakt.html" class="card card--contact" data-card>
-        <span class="card-icon" aria-hidden="true">💬</span>
+        <i data-lucide="message-circle" class="card-icon icon-brand" aria-hidden="true"></i>
         <span class="card-title">Kontakt &amp; Support</span>
         <span class="card-desc">Persönliche Hilfe anfordern.</span>
       </a>
