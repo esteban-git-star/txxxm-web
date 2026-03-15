@@ -1,5 +1,7 @@
 /* ===== Basis & Dark Mode ===== */
 :root {
+  --font-main: "DM Sans", sans-serif;
+  --font-heading: "Outfit", sans-serif;
   --neon-cyan: #00f3ff;
   --neon-blue: #3b82f6;
   --neon-purple: #a855f7;
@@ -27,7 +29,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport: bessere Mobile-Übereinstimmung (Brave/Safari) */
   min-height: -webkit-fill-available; /* Safari < 15.4 Fallback */
-  font-family: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-main);
   background: #0a0a12;
   background-image: radial-gradient(
     ellipse 80% 60% at 50% 20%,
@@ -41,6 +43,21 @@ body {
   justify-content: center;
   padding: 2rem 1rem;
   overflow-x: hidden; /* Verhindert horizontales Scrollen in Brave/Chromium */
+}
+
+h1, h2, h3, h4, h5, h6,
+.page-title,
+.hero-title,
+.logo-ring {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.btn,
+.primary-btn,
+.action-box,
+.step-badge {
+  font-family: var(--font-heading);
 }
 
 /* ===== Zentriertes Layout ===== */

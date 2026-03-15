@@ -1,5 +1,7 @@
 /* ===== Idiotensicher: Bild = King, ruhiges Dark-UI ===== */
 :root {
+  --font-main: "DM Sans", sans-serif;
+  --font-heading: "Outfit", sans-serif;
   --neon-cyan: #00f3ff;
   --neon-violet: #a855f7;
   --neon-blue: #3b82f6;
@@ -33,7 +35,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   min-height: -webkit-fill-available;
-  font-family: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-main);
   background: var(--bg-page);
   color: var(--text-primary);
   padding: 2rem 1rem;
@@ -41,6 +43,15 @@ body {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6,
+.step-title,
+.btn,
+.step-badge,
+.back-home-link {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
 /* ===== Wizard: breiter = größeres Bild = besser vergleichbar mit TV ===== */
