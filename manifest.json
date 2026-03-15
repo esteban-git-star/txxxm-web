@@ -1,6 +1,6 @@
 {
   "name": "Tivim Support",
-  "short_name": "Tivim Hilfe",
+  "short_name": "Tivim",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0f1a",

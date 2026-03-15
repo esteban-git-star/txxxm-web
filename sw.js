@@ -1,7 +1,7 @@
 self.addEventListener('install', function (e) {
-  console.log('[Service Worker] Install');
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', function (e) {
-  // Dummy Fetch Listener für PWA-Installierbarkeit
+  // Dummy fetch für PWA-Kriterien
 });

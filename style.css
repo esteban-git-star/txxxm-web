@@ -1852,6 +1852,51 @@ body {
   display: block;
   margin: 0 auto 0.6rem;
 }
+
+/* Dashboard Icon Styling */
+.dash-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 15px;
+  display: block;
+  stroke-width: 1.5;
+}
+
+.icon-tv {
+  stroke: #00f3ff;
+  color: #00f3ff;
+  filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.5));
+}
+
+.icon-mobile {
+  stroke: #a855f7;
+  color: #a855f7;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+}
+
+.icon-vpn {
+  stroke: #ec4899;
+  color: #ec4899;
+  filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.5));
+}
+
+.icon-fix {
+  stroke: #fbbf24;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
+}
+
+.icon-news {
+  stroke: #facc15;
+  color: #facc15;
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.5));
+}
+
+.icon-chat {
+  stroke: #22c55e;
+  color: #22c55e;
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+}
 .action-icon[data-lucide] {
   width: 1.5rem;
   height: 1.5rem;

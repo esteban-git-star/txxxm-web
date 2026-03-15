@@ -67,8 +67,12 @@
 
   // Service Worker für PWA
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").then(function () {
-      console.log("Service Worker Registered");
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./sw.js").then(function (reg) {
+        console.log("Service Worker registriert.", reg);
+      }).catch(function (err) {
+        console.log("Service Worker Fehler:", err);
+      });
     });
   }
 
