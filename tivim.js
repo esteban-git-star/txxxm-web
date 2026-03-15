@@ -24,7 +24,7 @@
 
   function showStep(stepId) {
     var id = String(stepId).replace(/^step-?/, "");
-    var targetId = id === "google" ? "step-google" : "step-" + id;
+    var targetId = "step-" + id;
 
     steps.forEach(function (el) {
       el.classList.remove("step-visible");
@@ -41,12 +41,20 @@
       wizardHeader.style.display = targetId === "step-0" ? "none" : "";
     }
 
-    if (targetId === "step-8" && codeDisplay) {
-      codeDisplay.textContent = selectedApp && APP_CODES[selectedApp] ? APP_CODES[selectedApp] : "—";
-    }
+    if (targetId === "step-8") syncCodeDisplay();
 
-    var stepNum = id === "google" ? 0 : parseInt(id, 10);
-    if (targetId === "step-19-pro") stepNum = 20;
+    var stepNum = parseInt(id, 10);
+    if (targetId === "step-g-delete") stepNum = 1;
+    else if (targetId === "step-g-choose") stepNum = 2;
+    else if (targetId === "step-g1") stepNum = 3;
+    else if (targetId === "step-g2") stepNum = 4;
+    else if (targetId === "step-g3") stepNum = 5;
+    else if (targetId === "step-g12") stepNum = 12;
+    else if (targetId === "step-g-dev1") stepNum = 13;
+    else if (targetId === "step-g-dev2") stepNum = 14;
+    else if (targetId === "step-g-dev3") stepNum = 15;
+    else if (targetId === "step-g-success") stepNum = 16;
+    else if (targetId === "step-19-pro") stepNum = 20;
     else if (targetId === "step-20-pro") stepNum = 21;
     else if (targetId === "step-21-pro") stepNum = 22;
     else if (targetId === "step-22-pro") stepNum = 23;
@@ -70,7 +78,6 @@
     else if (next === "24-pro") showStep("step-24-pro");
     else if (next === "20") showStep("step-20");
     else if (next === "21") showStep("step-21");
-    else if (next === "google") showStep("step-google");
     else showStep("step-" + next);
   }
 
@@ -88,7 +95,27 @@
           b.classList.toggle("selected", b === btn);
         });
         if (selectedDevice === "firetv") goTo("2");
-        else goTo("google");
+        else goTo("g-delete");
+      });
+    });
+  }
+
+  function normalizeAppChoice(dataApp) {
+    return (dataApp === "pro-google" || dataApp === "pro") ? "pro" : "xc";
+  }
+
+  function syncCodeDisplay() {
+    if (codeDisplay) {
+      codeDisplay.textContent = selectedApp && APP_CODES[selectedApp] ? APP_CODES[selectedApp] : "—";
+    }
+  }
+
+  function bindAppSelection() {
+    document.querySelectorAll("[data-app]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var raw = this.getAttribute("data-app");
+        selectedApp = normalizeAppChoice(raw);
+        syncCodeDisplay();
       });
     });
   }
@@ -96,13 +123,51 @@
   function bindStep2() {
     document.querySelectorAll("#step-3 [data-app]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        selectedApp = this.getAttribute("data-app");
+        selectedApp = normalizeAppChoice(this.getAttribute("data-app"));
+        syncCodeDisplay();
         document.querySelectorAll("#step-3 [data-app]").forEach(function (b) {
           b.classList.toggle("selected", b === btn);
         });
         goTo("4");
       });
     });
+  }
+
+  function bindStepGoogleChoose() {
+    document.querySelectorAll("#step-g-choose [data-app]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        selectedApp = normalizeAppChoice(this.getAttribute("data-app"));
+        syncCodeDisplay();
+        document.querySelectorAll("#step-g-choose [data-app]").forEach(function (b) {
+          b.classList.toggle("selected", b === btn);
+        });
+        // Navigation zu g1 übernimmt der .btn[data-next] Handler
+      });
+    });
+  }
+
+  function bindBtnAfterDownload() {
+    var btn = document.getElementById("btn-after-download");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        if (selectedDevice === "googletv") goTo("g12");
+        else goTo("12");
+      });
+    }
+  }
+
+  function bindBtnGFinish() {
+    var btnGFinish = document.getElementById("btn-g-finish");
+    if (btnGFinish) {
+      btnGFinish.addEventListener("click", function () {
+        // Direkt zum Login/Startbildschirm (überspringt Home-Screen-Suche)
+        if (selectedApp === "xc" || selectedApp === "xc-google") {
+          goTo("21");      // XC: Einloggen-Screen
+        } else if (selectedApp === "pro" || selectedApp === "pro-google") {
+          goTo("20-pro");  // Pro: Startbildschirm „Hinzufügen“
+        }
+      });
+    }
   }
 
   function bindNextButtons() {
@@ -123,8 +188,12 @@
 
   function init() {
     showStep("step-0");
+    bindAppSelection();
     bindStep1();
     bindStep2();
+    bindStepGoogleChoose();
+    bindBtnAfterDownload();
+    bindBtnGFinish();
     bindNextButtons();
     bindBackButtons();
   }

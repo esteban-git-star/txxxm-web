@@ -295,7 +295,7 @@
             <li>Jetzt startet der eigentliche Download der App (du siehst einen Fortschrittsbalken).</li>
           </ol>
           <div class="step-footer">
-            <button type="button" class="btn btn--next" data-next="12">Download ist fertig! Weiter.</button>
+            <button type="button" class="btn btn--next" id="btn-after-download">Download ist fertig! Weiter.</button>
             <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
             <div class="back-home-wrap">
             <a href="index.html" class="back-home-link">
@@ -386,6 +386,7 @@
           <h1 class="step-title">Schritt 15: Das versteckte Menü</h1>
           <div class="step-media step-media--16-9">
             <img src="assets/schritt14.png" alt="Entwickleroptionen – rot markiert" />
+            <p class="step-media-note">(Hinweis: Bild nur symbolisch mit xc)</p>
           </div>
           <ol class="step-list">
             <li>Drücke jetzt genau <strong>1-mal</strong> die Zurück-Taste (die Taste mit dem gebogenen Pfeil) auf deiner Fernbedienung.</li>
@@ -410,6 +411,7 @@
           <h1 class="step-title">Schritt 16: Installation erlauben</h1>
           <div class="step-media step-media--16-9">
             <img src="assets/schritt15.png" alt="unbekannte apps einschalten" />
+            <p class="step-media-note">(Hinweis: Bild nur symbolisch mit xc)</p>
           </div>
           <ol class="step-list">
             <li>Gehe zu <strong>Entwickleroptionen</strong>.</li>
@@ -698,28 +700,246 @@
         </div>
       </div>
 
-      <!-- Platzhalter Google TV -->
-      <div id="step-google" class="step">
+      <!-- Google TV: Vorbereitung & App-Auswahl -->
+      <div id="step-g-delete" class="step">
         <div class="step-card">
-          <h1 class="step-title">Google TV</h1>
-          <div class="step-media step-media--16-9">
-            <div class="media-placeholder">—</div>
-          </div>
+          <h1 class="step-title">Vorbereitung: Platz schaffen!</h1>
           <ol class="step-list">
-            <li>Die Anleitung für Google TV kommt demnächst.</li>
-            <li>Nutze bis dahin einen Fire TV Stick oder schau später nochmal vorbei.</li>
+            <li>Bevor wir die neue Version installieren, müssen wir die alte löschen. Navigiere auf der Startseite ganz nach rechts oben zum <strong>Zahnrad-Symbol</strong> (Einstellungen).</li>
+            <li>Wähle <strong>Apps</strong> und dann <strong>Alle Apps ansehen</strong>.</li>
+            <li>Suche in der Liste nach deiner alten Tivim-App und klicke darauf.</li>
+            <li>Wähle <strong>Deinstallieren</strong> und bestätige mit OK.</li>
+            <li>Drücke danach wieder die <strong>Haus-Taste</strong> (Home), um zurück zur Startseite zu gehen. Du bist jetzt zu 100 % startklar!</li>
           </ol>
           <div class="step-footer">
-            <button type="button" class="btn btn--next" data-next="1">Zurück zur Geräteauswahl</button>
+            <button type="button" class="btn btn--next" data-next="g-choose">Alte App ist gelöscht! Startklar.</button>
             <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
             <div class="back-home-wrap">
-            <a href="index.html" class="back-home-link">
-              <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
-            </a>
-          </div>
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+      <div id="step-g-choose" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 3: Welche Version möchtest du installieren?</h1>
+          <div class="step-media step-media--16-9">
+            <div class="media-placeholder">App wählen</div>
+          </div>
+          <div class="step-footer">
+            <div class="step-actions step-actions--choice">
+              <button type="button" class="btn btn--choice" data-app="xc-google" data-next="g1">Tivim XC</button>
+              <button type="button" class="btn btn--choice" data-app="pro-google" data-next="g1">Tivim Pro</button>
+            </div>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google TV: Klick-für-Klick-Wizard (Play Store & Downloader) -->
+      <div id="step-g1" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 1: Play Store öffnen</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/google1.png" alt="Google TV Apps Menü" />
+          </div>
+          <ol class="step-list">
+            <li>Navigiere in deinem Google TV Menü oben auf den Reiter <strong>Apps</strong>.</li>
+            <li>Klicke auf das Symbol für den <strong>Google Play Store</strong>. <em>(Tipp: Manchmal verbirgt er sich auch unter "Meine Apps suchen".)</em></li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="g2">Play Store ist offen! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g2" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 2: Nach Downloader suchen</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/google2.png" alt="Downloader Suche" />
+          </div>
+          <ol class="step-list">
+            <li>Gehe im Play Store auf das <strong>Lupe-Symbol</strong> (Suchen).</li>
+            <li>Tippe <strong>Downloader</strong> ein.</li>
+            <li>Wähle die orangefarbene App mit dem weißen "D" auf orangefarbenem Hintergrund aus den Ergebnissen aus.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="g3">Habe die App gefunden! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g3" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 3: App installieren</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/google3.png" alt="Downloader Installieren" />
+          </div>
+          <ol class="step-list">
+            <li>Klicke auf den Button <strong>Installieren</strong>.</li>
+            <li>Warte einen kurzen Moment, bis der Ladevorgang abgeschlossen ist.</li>
+            <li>Klicke direkt danach auf <strong>Öffnen</strong>.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="7">Downloader ist offen! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g12" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 12: Was siehst du jetzt?</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/g-schritt12.png" alt="Sicherheitswarnung Google TV" />
+          </div>
+          <ol class="step-list">
+            <li>Wenn der Download fertig ist, klicke im Downloader-Fenster auf "Installieren". Danach passiert eines von zwei Dingen.</li>
+            <li><strong>Fall A:</strong> Die App fragt dich direkt „Möchtest du diese App installieren?“ (Ein graues Fenster mit Installieren-Button erscheint).</li>
+            <li><strong>Fall B:</strong> Du siehst genau diese Sicherheitswarnung wie auf dem Bild.</li>
+          </ol>
+          <div class="step-footer">
+            <div class="step-actions step-actions--choice">
+              <button type="button" class="btn btn--choice" data-next="g-success">Fall A: Bei mir steht direkt 'Möchtest du diese App installieren?'!</button>
+              <button type="button" class="btn btn--choice" data-next="g-dev1">Fall B: Ich sehe diese Warnung. Klicke auf ‚Einstellungen‘!</button>
+            </div>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g-dev1" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 13: In die Einstellungen</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/g-dev1.png" alt="Sicherheitswarnung Downloader" />
+          </div>
+          <ol class="step-list">
+            <li>Du siehst nun diese Sicherheitswarnung auf deinem Bildschirm.</li>
+            <li>Klicke auf den linken Button <strong>Einstellungen</strong>.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="g-dev2">Habe auf Einstellungen geklickt! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g-dev2" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 14: Downloader zulassen</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/g-dev2.png" alt="Installieren unbekannter Apps" />
+          </div>
+          <ol class="step-list">
+            <li>Du landest im Menü „Installieren unbekannter Apps“.</li>
+            <li>Navigiere nach unten bis zur App <strong>Downloader</strong>.</li>
+            <li>Klicke einmal auf die OK-Taste, um den Schalter auf der rechten Seite zu aktivieren (er wird blau).</li>
+            <li>Drücke danach <strong>1-mal die Zurück-Taste</strong> auf deiner Fernbedienung.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="g-dev3">Schalter ist blau und ich bin zurück! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g-dev3" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Schritt 15: Die Installation</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/g-schritt-install.png" alt="Möchtest du diese App installieren?" />
+          </div>
+          <ol class="step-list">
+            <li>Du bist wieder im Downloader und wirst jetzt gefragt: „Möchtest du diese App installieren?“.</li>
+            <li>Klicke auf den Button <strong>Installieren</strong>.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" data-next="g-success">Habe auf Installieren geklickt! Weiter.</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g-success" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Erfolgreich installiert!</h1>
+          <div class="step-media step-media--16-9">
+            <img src="assets/g-success.png" alt="App wurde installiert" />
+          </div>
+          <ol class="step-list">
+            <li>Klicke auf deiner Fernbedienung auf <strong>Installieren</strong> und warte kurz.</li>
+            <li>Sobald die Meldung „App wurde installiert“ erscheint, hast du es geschafft!</li>
+            <li>Klicke jetzt auf <strong>Öffnen</strong>, um deine neue Tivim-App direkt zu starten.</li>
+          </ol>
+          <div class="step-footer">
+            <button type="button" class="btn btn--next" id="btn-g-finish">Ich habe die App geöffnet! 🎉</button>
+            <button type="button" class="back-btn">⬅ Vorheriger Schritt</button>
+            <div class="back-home-wrap">
+              <a href="index.html" class="back-home-link">
+                <i data-lucide="home" aria-hidden="true"></i> Abbrechen & zur Startseite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-g-finish" class="step">
+        <div class="step-card">
+          <h1 class="step-title">Glückwunsch! Du hast es geschafft.</h1>
+          <p>Tivim ist auf deinem Google TV installiert. Viel Spaß beim Streamen!</p>
+          <div class="step-footer">
+            <a href="index.html" class="btn btn--next">Zur Startseite</a>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 

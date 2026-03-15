@@ -203,6 +203,13 @@ h1, h2, h3, h4, h5, h6,
   border-radius: 8px;
 }
 
+.step-media-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 .media-placeholder {
   width: 100%;
   height: 100%;
@@ -331,9 +338,14 @@ h1, h2, h3, h4, h5, h6,
 
 .step-actions--choice {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .step-actions--choice {
+    flex-direction: row;
+  }
 }
 
 .btn {
@@ -369,13 +381,23 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .btn--choice {
-  flex: 1;
-  min-width: 150px;
-  padding: 1.1rem 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  height: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
   font-size: 1.05rem;
   background: #1f2937;
   color: var(--text-primary);
   border: 2px solid var(--border-card);
+}
+@media (min-width: 600px) {
+  .btn--choice {
+    flex: 1;
+    padding: 1.1rem 1.25rem;
+  }
 }
 
 .btn--choice:hover {
@@ -387,6 +409,60 @@ h1, h2, h3, h4, h5, h6,
   border-color: var(--neon-violet);
   background: rgba(168, 85, 247, 0.12);
   box-shadow: 0 0 20px var(--glow-violet);
+}
+
+/* ===== Google TV: Installation Steps (3 Karten) ===== */
+.installation-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.google-step-card {
+  position: relative;
+  padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.google-step-card .step-number {
+  position: absolute;
+  left: 1rem;
+  top: 1.25rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neon-cyan);
+  color: #0a0f1a;
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--glow-cyan);
+}
+
+.google-step-card .step-media {
+  margin-bottom: 1rem;
+}
+
+.google-step-card .step-title {
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+  text-align: left;
+}
+
+.google-step-card .step-desc {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ===== Mobile (< 600px): große Texte, volle Breite, dicker Weiter-Button ===== */
@@ -421,6 +497,7 @@ h1, h2, h3, h4, h5, h6,
     padding: 1rem 1.25rem;
     min-height: 48px;
     font-size: 1.05rem;
+    width: 100%;
   }
 
   .code-highlight {
