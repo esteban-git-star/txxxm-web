@@ -19,6 +19,10 @@
 <body>
   <div class="page">
     <header class="dashboard-header">
+      <div class="server-status-container" id="server-status">
+        <span id="status-dot" class="status-dot"></span>
+        <span id="status-text" class="status-text">Status wird geprüft...</span>
+      </div>
       <button type="button" id="searchTrigger" class="search-trigger-btn" aria-label="Suche öffnen">
         <i data-lucide="search" class="icon-cyan" aria-hidden="true"></i>
       </button>
@@ -82,6 +86,104 @@
     </div>
   </div>
 
+  <!-- Floating Action Button & Chat (modular) -->
+  <button type="button" class="chat-fab" id="chatFab" aria-label="Chat öffnen">💬</button>
+  <div id="chatWindow" class="chat-window hidden" role="dialog" aria-label="Support-Chat" aria-hidden="true">
+    <div class="chat-header">
+      <h2 class="chat-header-title">Tivim Support</h2>
+      <button type="button" class="chat-close" id="chatClose" aria-label="Chat schließen">✕</button>
+    </div>
+    <div class="chat-messages">
+      <div class="chat-bubble chat-bubble--in">
+        Hi, wie kann ich dir helfen?
+      </div>
+    </div>
+    <div class="chat-input-wrap">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Nachricht eingeben…" autocomplete="off" aria-label="Nachricht" />
+      <button type="button" class="chat-send" id="chatSend" aria-label="Senden">➤</button>
+    </div>
+  </div>
+  <script>
+  (function() {
+    var CHAT_API = "https://tivim-chatbot.eyepitv.workers.dev/";
+    var chatFab = document.getElementById("chatFab");
+    var chatWindow = document.getElementById("chatWindow");
+    var chatClose = document.getElementById("chatClose");
+    var chatMessages = document.querySelector("#chatWindow .chat-messages");
+    var chatInput = document.getElementById("chatInput");
+    var chatSend = document.getElementById("chatSend");
+
+    function scrollChatToBottom() {
+      if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addBubble(text, type) {
+      if (!chatMessages) return;
+      var bubble = document.createElement("div");
+      bubble.className = "chat-bubble chat-bubble--" + (type || "in");
+      bubble.textContent = text;
+      chatMessages.appendChild(bubble);
+      scrollChatToBottom();
+      return bubble;
+    }
+
+    function removeBubble(el) {
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
+
+    function sendMessage() {
+      var text = (chatInput && chatInput.value && chatInput.value.trim()) || "";
+      if (!text) return;
+
+      if (chatInput) chatInput.value = "";
+      addBubble(text, "out");
+
+      var loadingEl = addBubble("Tivim Bot tippt…", "in");
+      loadingEl.classList.add("chat-bubble--loading");
+
+      fetch(CHAT_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      })
+        .then(function(res) {
+          if (!res.ok) throw new Error("Server error");
+          return res.json();
+        })
+        .then(function(data) {
+          removeBubble(loadingEl);
+          var reply = (data && data.reply) ? String(data.reply) : "Keine Antwort erhalten.";
+          addBubble(reply, "in");
+        })
+        .catch(function() {
+          removeBubble(loadingEl);
+          addBubble("Sorry, ich habe gerade Verbindungsfehler. Bitte versuche es später nochmal.", "error");
+        });
+    }
+
+    if (chatFab && chatWindow && chatClose) {
+      chatFab.addEventListener("click", function() {
+        chatWindow.classList.remove("hidden");
+        chatWindow.setAttribute("aria-hidden", "false");
+        if (chatInput) chatInput.focus();
+      });
+      chatClose.addEventListener("click", function() {
+        chatWindow.classList.add("hidden");
+        chatWindow.setAttribute("aria-hidden", "true");
+      });
+    }
+
+    if (chatSend && chatInput) {
+      chatSend.addEventListener("click", sendMessage);
+      chatInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    }
+  })();
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

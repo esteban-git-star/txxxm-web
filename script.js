@@ -32,16 +32,47 @@
     });
   }
 
+  // Live-Server-Status
+  var SERVER_STATUS_URL = "https://tivim-chatbot.eyepitv.workers.dev/";
+
+  async function checkServerStatus() {
+    var dot = document.getElementById("status-dot");
+    var text = document.getElementById("status-text");
+    if (!dot || !text) return;
+
+    try {
+      var res = await fetch(SERVER_STATUS_URL, { method: "GET" });
+      var data = res.ok ? await res.json() : null;
+      if (data && data.status === "online") {
+        dot.classList.remove("offline");
+        dot.classList.add("online");
+        text.textContent = "Server online";
+      } else {
+        dot.classList.remove("online");
+        dot.classList.add("offline");
+        text.textContent = "Wartungsarbeiten";
+      }
+    } catch (e) {
+      dot.classList.remove("online");
+      dot.classList.add("offline");
+      text.textContent = "Wartungsarbeiten";
+    }
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
       init();
       initSpotlightSearch();
       initConcierge();
+      checkServerStatus();
+      setInterval(checkServerStatus, 1800000);
     });
   } else {
     init();
     initSpotlightSearch();
     initConcierge();
+    checkServerStatus();
+    setInterval(checkServerStatus, 1800000);
   }
 
   // Smarter Concierge (Dynamische Begrüßung)
