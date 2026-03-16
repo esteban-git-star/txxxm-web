@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var APP_CODES = { xc: "9280570", pro: "3499175" };
+  var APP_CODES = { xc: "4609023", pro: "4422645" };
   var selectedDevice = null;
   var selectedApp = null;
   var stepHistory = [];
