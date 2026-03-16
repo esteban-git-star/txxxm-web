@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tivim Support</title>
+  <title>Tivim Support &amp; Installation</title>
+  <meta name="description" content="Deine Schritt-für-Schritt Anleitung für Tivim XC und Tivim Pro. Schnelle Hilfe, Tipps und Live-Server-Status." />
+  <!-- Open Graph / WhatsApp & Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Tivim Support &amp; Installation" />
+  <meta property="og:description" content="Deine Schritt-für-Schritt Anleitung für Tivim XC und Tivim Pro. Schnelle Hilfe, Tipps und Live-Server-Status." />
+  <meta property="og:url" content="https://tivim-web.com/" />
+  <meta property="og:image" content="https://tivim-web.com/preview.jpg" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0a0f1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -117,11 +124,39 @@
       if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function addBubble(text, type) {
-      if (!chatMessages) return;
+    function escapeHtml(s) {
+      if (!s) return "";
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function parseReplyToHtml(str) {
+      if (!str) return "";
+      var re = /\[([^\]]*)\]\((https?:\/\/[^\)]*)\)|(https?:\/\/[^\s<>]+)/g;
+      var result = "";
+      var lastIndex = 0;
+      var match;
+      while ((match = re.exec(str)) !== null) {
+        result += escapeHtml(str.slice(lastIndex, match.index));
+        if (match[1] !== undefined) {
+          result += "<a href=\"" + escapeHtml(match[2]) + "\" target=\"_blank\" class=\"chat-link\">" + escapeHtml(match[1]) + "</a>";
+        } else {
+          result += "<a href=\"" + escapeHtml(match[3]) + "\" target=\"_blank\" class=\"chat-link\">" + escapeHtml(match[3]) + "</a>";
+        }
+        lastIndex = re.lastIndex;
+      }
+      result += escapeHtml(str.slice(lastIndex));
+      return result;
+    }
+
+    function addBubble(text, type, useHtml) {
+      if (!chatMessages) return null;
       var bubble = document.createElement("div");
       bubble.className = "chat-bubble chat-bubble--" + (type || "in");
-      bubble.textContent = text;
+      if (useHtml) {
+        bubble.innerHTML = text;
+      } else {
+        bubble.textContent = text;
+      }
       chatMessages.appendChild(bubble);
       scrollChatToBottom();
       return bubble;
@@ -153,7 +188,7 @@
         .then(function(data) {
           removeBubble(loadingEl);
           var reply = (data && data.reply) ? String(data.reply) : "Keine Antwort erhalten.";
-          addBubble(reply, "in");
+          addBubble(parseReplyToHtml(reply), "in", true);
         })
         .catch(function() {
           removeBubble(loadingEl);
