@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
+  <title>Neuigkeiten &amp; Updates – Tivim Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="app-header">
+      <div class="header-bg-overlay" aria-hidden="true"></div>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">Neuigkeiten &amp; Updates</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Filme &amp; Serien</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="hub-main">
+      <!-- Haupt-Reiter: Neue Inhalte | System-Updates -->
+      <section class="hub-section app-selector-section pc-tabs-center">
+        <h2 class="hub-section-title">Neuigkeiten</h2>
+        <div class="app-selector-grid" role="tablist" aria-label="Bereich auswählen">
+          <button type="button" class="app-selector-card active" data-app="inhalte" onclick="selectNeuigkeiten('inhalte')" role="tab" aria-selected="true" aria-controls="content-inhalte" id="tab-inhalte">
+            <span class="app-selector-icon" aria-hidden="true">🍿</span>
+            <span class="app-selector-label">Neue Inhalte</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="updates" onclick="selectNeuigkeiten('updates')" role="tab" aria-selected="false" aria-controls="content-updates" id="tab-updates">
+            <span class="app-selector-icon" aria-hidden="true">📢</span>
+            <span class="app-selector-label">System-Updates</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Inhalt: Neue Inhalte (Filme/Serien + Sprach-Umschalter) -->
+      <div id="content-inhalte" class="app-content active" role="tabpanel" aria-labelledby="tab-inhalte">
+        <div class="lang-switcher-wrap">
+          <span class="lang-switcher-label">Sprache:</span>
+          <div class="lang-switcher" role="group" aria-label="Sprache der Poster">
+            <button type="button" class="lang-btn active" data-lang="de" id="lang-de" aria-pressed="true">🇩🇪 DE</button>
+            <button type="button" class="lang-btn" data-lang="tr" id="lang-tr" aria-pressed="false">🇹🇷 TR</button>
+          </div>
+        </div>
+
+        <section class="hub-section neuigkeiten-section" aria-labelledby="filme-heading">
+          <h3 id="filme-heading" class="neuigkeiten-section-title">🍿 Neueste Filme</h3>
+          <div id="filme-container" class="poster-row" role="list">
+            <p class="poster-row-loading" id="filme-loading">Lade aktuelle Inhalte…</p>
+          </div>
+        </section>
+
+        <section class="hub-section neuigkeiten-section" aria-labelledby="serien-heading">
+          <h3 id="serien-heading" class="neuigkeiten-section-title">📺 Neueste Serien</h3>
+          <div id="serien-container" class="poster-row" role="list">
+            <p class="poster-row-loading" id="serien-loading">Lade aktuelle Inhalte…</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Inhalt: System-Updates (Platzhalter Text-News) -->
+      <div id="content-updates" class="app-content" role="tabpanel" aria-labelledby="tab-updates">
+        <div class="hub-card updates-placeholder">
+          <h3 class="app-content-title app-content-title--with-icon">
+            <span class="app-content-title-icon" aria-hidden="true">📢</span>
+            <span class="app-content-title-text">System-Updates</span>
+          </h3>
+          <p class="hub-card-intro">Hier findest du bald kurze Meldungen zu Wartung und neuen Features.</p>
+          <ul class="updates-placeholder-list">
+            <li>Wartungsarbeiten am Wochenende</li>
+            <li>Neue Sender hinzugefügt</li>
+            <li>Verbesserungen an der App</li>
+          </ul>
+          <p class="updates-placeholder-note">Aktuelle Meldungen folgen in Kürze.</p>
+        </div>
+      </div>
+
+      <div class="back-home-wrap">
+        <a href="index.html" class="back-home-link">
+          <i data-lucide="arrow-left" aria-hidden="true"></i> Zurück zur Startseite
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      var BASE_URL = "https://tivim-chatbot.eyepitv.workers.dev";
+      var currentLang = "de";
+
+      function getItems(data) {
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.items)) return data.items;
+        if (data && Array.isArray(data.filme)) return data.filme;
+        if (data && Array.isArray(data.serien)) return data.serien;
+        return [];
+      }
+
+      function buildPoster(item) {
+        var name = (item && (item.name || item.title)) ? String(item.name || item.title) : "—";
+        var cover = (item && (item.cover || item.image || item.poster)) ? String(item.cover || item.image || item.poster) : "";
+        var wrap = document.createElement("div");
+        wrap.className = "poster-card";
+        wrap.setAttribute("role", "listitem");
+        var img = document.createElement("img");
+        img.className = "poster-img";
+        img.alt = name;
+        img.width = 120;
+        img.height = 180;
+        if (cover) {
+          img.src = cover;
+          img.onerror = function () { img.style.display = "none"; };
+        } else {
+          img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='180' viewBox='0 0 120 180'%3E%3Crect fill='%23374151' width='120' height='180'/%3E%3Ctext fill='%239ca3af' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='14'%3ENo Cover%3C/text%3E%3C/svg%3E";
+        }
+        var title = document.createElement("p");
+        title.className = "poster-title";
+        title.textContent = name;
+        wrap.appendChild(img);
+        wrap.appendChild(title);
+        return wrap;
+      }
+
+      function showLoading(containerId, loadingId) {
+        var container = document.getElementById(containerId);
+        var loadingEl = document.getElementById(loadingId);
+        if (!container) return;
+        container.innerHTML = "";
+        var p = document.createElement("p");
+        p.className = "poster-row-loading";
+        p.id = loadingId;
+        p.textContent = "Lade…";
+        container.appendChild(p);
+      }
+
+      function fillContainer(containerId, loadingId, url) {
+        var container = document.getElementById(containerId);
+        var loadingEl = document.getElementById(containerId).querySelector(".poster-row-loading");
+        if (!container) return;
+
+        fetch(url)
+          .then(function (res) { return res.ok ? res.json() : Promise.reject(new Error("Network error")); })
+          .then(function (data) {
+            var items = getItems(data);
+            var loadNode = container.querySelector(".poster-row-loading");
+            if (loadNode) loadNode.remove();
+            container.innerHTML = "";
+            items.forEach(function (item) {
+              container.appendChild(buildPoster(item));
+            });
+            if (items.length === 0) {
+              var empty = document.createElement("p");
+              empty.className = "poster-row-empty";
+              empty.textContent = "Keine Einträge.";
+              container.appendChild(empty);
+            }
+          })
+          .catch(function () {
+            var loadNode = container.querySelector(".poster-row-loading");
+            if (loadNode) {
+              loadNode.textContent = "Laden fehlgeschlagen. Bitte später erneut versuchen.";
+              loadNode.classList.add("poster-row-error");
+            }
+          });
+      }
+
+      function loadPosters(lang) {
+        currentLang = lang;
+        var filmeUrl = BASE_URL + "/filme?lang=" + lang;
+        var serienUrl = BASE_URL + "/serien?lang=" + lang;
+
+        showLoading("filme-container", "filme-loading");
+        showLoading("serien-container", "serien-loading");
+
+        fillContainer("filme-container", "filme-loading", filmeUrl);
+        fillContainer("serien-container", "serien-loading", serienUrl);
+
+        var deBtn = document.getElementById("lang-de");
+        var trBtn = document.getElementById("lang-tr");
+        if (deBtn) {
+          deBtn.classList.toggle("active", lang === "de");
+          deBtn.setAttribute("aria-pressed", lang === "de" ? "true" : "false");
+        }
+        if (trBtn) {
+          trBtn.classList.toggle("active", lang === "tr");
+          trBtn.setAttribute("aria-pressed", lang === "tr" ? "true" : "false");
+        }
+      }
+
+      window.selectNeuigkeiten = function (appId) {
+        var cards = document.querySelectorAll(".hub-main .app-selector-section .app-selector-card");
+        var contents = document.querySelectorAll(".hub-main .app-content");
+        cards.forEach(function (card) {
+          card.classList.remove("active");
+          card.setAttribute("aria-selected", card.getAttribute("data-app") === appId ? "true" : "false");
+        });
+        contents.forEach(function (content) {
+          content.classList.remove("active");
+        });
+        var activeCard = document.querySelector(".app-selector-card[data-app=\"" + appId + "\"]");
+        var activeContent = document.getElementById("content-" + appId);
+        if (activeCard) activeCard.classList.add("active");
+        if (activeContent) activeContent.classList.add("active");
+      };
+
+      var langDe = document.getElementById("lang-de");
+      var langTr = document.getElementById("lang-tr");
+      if (langDe) langDe.addEventListener("click", function () { loadPosters("de"); });
+      if (langTr) langTr.addEventListener("click", function () { loadPosters("tr"); });
+
+      loadPosters("de");
+
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    })();
+  </script>
+</body>
+</html>

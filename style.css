@@ -1148,6 +1148,16 @@ h1, h2, h3, h4, h5, h6,
   margin-top: 0;
 }
 
+.app-content-title--with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-content-title-icon {
+  flex-shrink: 0;
+}
+
 /* Mobile: Pro links bündig, XC daneben, Purple zum Swipen halb sichtbar */
 @media (max-width: 599px) {
   .app-selector-section {
@@ -1991,6 +2001,131 @@ h1, h2, h3, h4, h5, h6,
 .action-icon[data-lucide] {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+/* ===== Neuigkeiten: horizontale Poster-Reihen (Filme/Serien) ===== */
+.neuigkeiten-main-title {
+  margin-bottom: 1.5rem;
+}
+
+.neuigkeiten-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.75rem;
+}
+
+.poster-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.poster-row::-webkit-scrollbar {
+  display: none;
+}
+
+.poster-card {
+  flex: 0 0 auto;
+  width: 120px;
+  text-align: center;
+}
+
+.poster-img {
+  display: block;
+  width: 120px;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  background: rgba(55, 65, 81, 0.8);
+}
+
+.poster-title {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.poster-row-loading,
+.poster-row-empty {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.poster-row-error {
+  color: #f87171;
+}
+
+/* Sprach-Umschalter (Neuigkeiten) */
+.lang-switcher-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.lang-switcher-label {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 8px;
+}
+
+.lang-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(20, 25, 35, 0.6);
+  color: #9ca3af;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-btn:hover {
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.lang-btn.active {
+  background: rgba(0, 243, 255, 0.15);
+  border-color: rgba(0, 243, 255, 0.5);
+  color: #00f3ff;
+  box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+}
+
+/* System-Updates Platzhalter */
+.updates-placeholder-list {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+  color: #d1d5db;
+  line-height: 1.6;
+}
+
+.updates-placeholder-note {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+  margin-bottom: 0;
 }
 
 .back-home-wrap {
