@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
+  <title>PC &amp; Mac – Tivim Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="app-header">
+      <div class="header-bg-overlay" aria-hidden="true"></div>
+      <div class="header-content">
+        <a href="index.html" class="app-back-button" title="Zurück">
+          <span class="back-arrow" aria-hidden="true">‹</span>
+          <span class="logo-ring">T</span>
+        </a>
+        <div class="header-title-wrapper">
+          <h1 class="page-title">PC &amp; Mac</h1>
+          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Runterladen, klicken, läuft.</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="hub-main">
+      <!-- Reiter: Wähle dein Betriebssystem -->
+      <section class="hub-section app-selector-section pc-tabs-center">
+        <h2 class="hub-section-title">Wähle dein Betriebssystem</h2>
+        <div class="app-selector-grid" role="tablist" aria-label="Betriebssystem auswählen">
+          <button type="button" class="app-selector-card active" data-app="windows" onclick="selectPC('windows')" role="tab" aria-selected="true" aria-controls="install-windows" id="card-pc-windows">
+            <i data-lucide="monitor" class="app-selector-icon icon-cyan" aria-hidden="true"></i>
+            <span class="app-selector-label">Windows</span>
+          </button>
+          <button type="button" class="app-selector-card" data-app="mac" onclick="selectPC('mac')" role="tab" aria-selected="false" aria-controls="install-mac" id="card-pc-mac">
+            <i data-lucide="apple" class="app-selector-icon icon-brand" aria-hidden="true"></i>
+            <span class="app-selector-label">Mac</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Inhalt: Windows -->
+      <div id="install-windows" class="app-content active" role="tabpanel" aria-labelledby="card-pc-windows">
+        <h3 class="app-content-title">Windows (PC &amp; Laptop)</h3>
+        <div class="hub-card">
+          <p class="hub-card-intro">Lade dir einfach unsere vorgefertigte Windows-App herunter, starte die Installation und logge dich mit deinen Daten ein. Das war's!</p>
+          <a href="https://drive.google.com/file/d/1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG/view?usp=sharing" class="primary-btn download-btn pc-download-btn" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="download" aria-hidden="true"></i> Download für Windows
+          </a>
+          <p class="pc-install-hint">💡 Wichtiger Hinweis zur Installation: Da unsere App brandneu ist, zeigt Windows beim ersten Start eventuell eine blaue Sicherheitswarnung an („Der Computer wurde durch Windows geschützt“). Klicke in diesem Fenster einfach auf <strong>Weitere Informationen</strong> und danach auf <strong>Trotzdem ausführen</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Inhalt: Mac (Purple Player – wie iOS-Box) -->
+      <div id="install-mac" class="app-content" role="tabpanel" aria-labelledby="card-pc-mac">
+        <div class="hub-card">
+          <h3 class="app-content-title">Installation für Mac (MacBook &amp; iMac)</h3>
+          <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" target="_blank" rel="noopener noreferrer" class="primary-btn appstore-btn"><i data-lucide="apple" class="icon-brand" aria-hidden="true"></i> Purple Player im Mac App Store öffnen</a>
+          <ol class="step-list">
+            <li>Lade die App herunter und <strong>öffne</strong> sie.</li>
+            <li>Klicke auf <strong>Consent</strong> (Zustimmen).</li>
+            <li>Wähle die Sprache <strong>German</strong> und klicke auf <strong>akzeptieren</strong>.</li>
+            <li>Klicke auf <strong>überspringen</strong>.</li>
+            <li>Wähle <strong>NEUE PLAYLIST hinzufügen</strong>.</li>
+            <li>Scrolle ganz nach unten und tippe auf <strong>MIT CODE anmelden</strong>.</li>
+            <li>Gib exakt diesen Code ein: <span class="highlight-code">FA69EV</span></li>
+            <li>Gib nun deine <strong>TIVIM-Daten</strong> (Username &amp; Passwort) ein und klicke auf <strong>absenden</strong>.</li>
+            <li>Klicke auf <strong>Load</strong>. Live-TV, Filme und Serien werden nun geladen.</li>
+            <li><strong>Fertig!</strong> <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
+          </ol>
+          <div class="alert-box warning-minimal mt-15" role="alert">
+            <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
+            <p><strong>Wichtig:</strong> Falls ein Wiedergabefehler erscheint, kontaktiere bitte deinen Ansprechpartner inkl. deines Benutzernamens für die Freigabe deines Accounts.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-home-wrap">
+        <a href="index.html" class="back-home-link">
+          <i data-lucide="arrow-left" aria-hidden="true"></i> Zurück zur Startseite
+        </a>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    function selectPC(appId) {
+      var cards = document.querySelectorAll('.app-selector-section .app-selector-card');
+      var contents = document.querySelectorAll('.hub-main .app-content');
+      cards.forEach(function (card) {
+        card.classList.remove('active');
+        card.setAttribute('aria-selected', card.getAttribute('data-app') === appId ? 'true' : 'false');
+      });
+      contents.forEach(function (content) {
+        content.classList.remove('active');
+      });
+      var activeCard = document.querySelector('.app-selector-card[data-app="' + appId + '"]');
+      var activeContent = document.getElementById('install-' + appId);
+      if (activeCard) activeCard.classList.add('active');
+      if (activeContent) activeContent.classList.add('active');
+    }
+  </script>
+</body>
+</html>
