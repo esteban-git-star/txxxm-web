@@ -116,7 +116,9 @@
       { title: "Purple Player (iOS)", desc: "Installation für iPhone & iPad", link: "mobile-install.html", keywords: "apple ios iphone ipad purple" },
       { title: "TV Installation (Fire TV & Google TV)", desc: "Tivim Pro & XC Schritt für Schritt", link: "tivim.html", keywords: "android fire tv stick google tv installieren pro xc" },
       { title: "Handy / Tablet", desc: "App für Android & iOS", link: "mobile-install.html", keywords: "handy tablet android apk mobile" },
+      { title: "PC & Mac", desc: "Installation für Windows & macOS", link: "pc.html", keywords: "windows pc mac macbook laptop apple exe .exe computer desktop" },
       { title: "Störungen prüfen", desc: "Aktuelle Server-Ausfälle checken", link: "news.html", keywords: "störung ausfall server offline kaputt" },
+      { title: "Server-Status", desc: "Live-Status: Online oder Wartung", link: "index.html#server-status", keywords: "status server online offline störung ausfall" },
       { title: "Support kontaktieren", desc: "Hilfe anfordern & Checkliste", link: "kontakt.html", keywords: "support hilfe kontakt whatsapp anschreiben" }
     ];
 
