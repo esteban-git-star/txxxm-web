@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -55,6 +56,7 @@
             <button type="button" class="lang-btn" data-lang="tr" id="lang-tr" aria-pressed="false">🇹🇷 TR</button>
           </div>
         </div>
+        <button type="button" id="open-poll-btn" class="tivim-btn">📊 Aktuelle Umfrage</button>
 
         <section class="hub-section neuigkeiten-section" aria-labelledby="filme-heading">
           <h3 id="filme-heading" class="neuigkeiten-section-title">🍿 Neueste Filme</h3>
@@ -94,6 +96,16 @@
         </a>
       </div>
     </main>
+  </div>
+
+  <!-- Umfrage-Modal (Coming Soon Platzhalter) -->
+  <div id="poll-modal" class="modal-overlay hidden" aria-hidden="true" role="dialog" aria-labelledby="poll-modal-title">
+    <div class="modal-content">
+      <button type="button" class="modal-close" id="poll-modal-close" aria-label="Schließen">✕</button>
+      <h2 id="poll-modal-title" class="modal-title">Bald geht's los! 🚀</h2>
+      <p class="modal-text">Wir bereiten gerade die ersten Umfragen vor, um Tivim für dich noch besser zu machen. Schau in Kürze wieder vorbei!</p>
+      <button type="button" id="close-poll-info" class="poll-btn">Alles klar!</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
@@ -223,6 +235,33 @@
       if (langTr) langTr.addEventListener("click", function () { loadPosters("tr"); });
 
       loadPosters("de");
+
+      // Umfrage-Modal (Coming Soon – nur Öffnen/Schließen)
+      var pollModal = document.getElementById("poll-modal");
+      var openPollBtn = document.getElementById("open-poll-btn");
+      var pollModalClose = document.getElementById("poll-modal-close");
+      var closePollInfo = document.getElementById("close-poll-info");
+
+      function openPollModal() {
+        if (!pollModal) return;
+        pollModal.classList.remove("hidden");
+        pollModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closePollModal() {
+        if (!pollModal) return;
+        pollModal.classList.add("hidden");
+        pollModal.setAttribute("aria-hidden", "true");
+      }
+
+      if (openPollBtn) openPollBtn.addEventListener("click", openPollModal);
+      if (pollModalClose) pollModalClose.addEventListener("click", closePollModal);
+      if (closePollInfo) closePollInfo.addEventListener("click", closePollModal);
+      if (pollModal) {
+        pollModal.addEventListener("click", function (e) {
+          if (e.target === pollModal) closePollModal();
+        });
+      }
 
       if (typeof lucide !== "undefined") lucide.createIcons();
     })();
