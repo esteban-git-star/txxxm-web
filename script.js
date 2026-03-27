@@ -33,7 +33,7 @@
   }
 
   // Live-Server-Status
-  var SERVER_STATUS_URL = "https://tivim-chatbot.eyepitv.workers.dev/";
+  var SERVER_STATUS_URL = "/api/status";
 
   async function checkServerStatus() {
     var dot = document.getElementById("status-dot");
