@@ -67,6 +67,27 @@
       </form>
 
       <section class="admin-list">
+        <p class="admin-list-label">Installation &amp; Downloads</p>
+        <p class="admin-list-hint">Downloader-Codes erscheinen in der TV-Anleitung. Android-Downloads nutzen automatisch go.aftvnews.com/CODE.</p>
+        <form id="downloadsForm" class="admin-form admin-form--compact">
+          <label class="admin-field">
+            <span>Tivim Pro – Downloader-Code</span>
+            <input type="text" id="codePro" inputmode="numeric" pattern="[0-9]*" maxlength="12" placeholder="5276912" />
+          </label>
+          <label class="admin-field">
+            <span>Tivim XC – Downloader-Code</span>
+            <input type="text" id="codeXc" inputmode="numeric" pattern="[0-9]*" maxlength="12" placeholder="2853690" />
+          </label>
+          <label class="admin-field">
+            <span>Windows (.exe) – Download-URL</span>
+            <input type="url" id="dlPc" placeholder="https://drive.google.com/file/d/…" />
+          </label>
+          <p class="admin-hint" id="dlHint"></p>
+          <button type="submit" class="cta cta--ghost">Speichern</button>
+        </form>
+      </section>
+
+      <section class="admin-list">
         <p class="admin-list-label">Aktuelle Einträge</p>
         <p class="admin-list-hint">Oben fixieren = bleibt ganz oben · Ein/Aus = sichtbar · Löschen = weg</p>
         <div id="itemsList"></div>
@@ -187,6 +208,47 @@
           });
       }
 
+      function loadDownloads() {
+        var dlHint = document.getElementById("dlHint");
+        if (!API || !token()) return Promise.resolve();
+        return postUpdate({ action: "get-downloads" })
+          .then(function (data) {
+            var d = (data && data.downloads) || {};
+            document.getElementById("codePro").value = d["pro-code"] || "";
+            document.getElementById("codeXc").value = d["xc-code"] || "";
+            document.getElementById("dlPc").value = d["pc-app"] || "";
+            if (dlHint) dlHint.textContent = "";
+          })
+          .catch(function () {
+            if (dlHint) dlHint.textContent = "Einstellungen konnten nicht geladen werden.";
+          });
+      }
+
+      var downloadsForm = document.getElementById("downloadsForm");
+      if (downloadsForm) {
+        downloadsForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var dlHint = document.getElementById("dlHint");
+          postUpdate({
+            action: "set-downloads",
+            proCode: document.getElementById("codePro").value.trim(),
+            xcCode: document.getElementById("codeXc").value.trim(),
+            pcApp: document.getElementById("dlPc").value.trim()
+          })
+            .then(function () {
+              if (dlHint) {
+                dlHint.textContent = "Gespeichert – TV-Anleitung und Downloads sind aktualisiert.";
+              }
+            })
+            .catch(function (err) {
+              if (dlHint) {
+                dlHint.textContent =
+                  err && err.message === "auth" ? "Passwort falsch." : "Speichern fehlgeschlagen.";
+              }
+            });
+        });
+      }
+
       function postUpdate(payload) {
         if (!API) {
           alert("Live-Post braucht den Cloudflare Worker (/admin/updates). Alternativ updates.json im Repo bearbeiten.");
@@ -213,6 +275,7 @@
             adminNote.innerHTML =
               "<strong>Verbunden</strong><p>Posts gehen direkt live auf die Startseite.</p>";
             loadItems();
+            loadDownloads();
           })
           .catch(function (err) {
             setToken("");
@@ -415,6 +478,7 @@
       if (token()) {
         showEditor(true);
         loadItems();
+        loadDownloads();
       }
     })();
   </script>

@@ -2,140 +2,112 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
+  <meta name="theme-color" content="#0c0d10" />
   <title>Handy &amp; Tablet – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=1" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="support.css?v=6" />
   <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
-  <div class="page">
-    <header class="app-header">
-      <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="header-content">
-        <a href="index.html" class="app-back-button" title="Zurück">
-          <span class="back-arrow" aria-hidden="true">‹</span>
-          <span class="logo-ring">T</span>
-        </a>
-        <div class="header-title-wrapper">
-          <h1 class="page-title">Handy &amp; Tablet</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <a class="back" id="mobileBack" href="install.html">Zurück</a>
+
+    <header class="hero">
+      <h1 class="q">Handy &amp; Tablet</h1>
+      <p class="hint">App wählen, runterladen, einloggen – fertig.</p>
     </header>
 
-    <main class="hub-main">
-      <div class="alert-box warning-minimal mobile-install-parallel-warning" role="alert">
-        <i data-lucide="octagon-alert" class="icon-danger" aria-hidden="true"></i>
-        <p>
-          <strong>Achtung: Niemals gleichzeitig nutzen!</strong><br>
-          Bitte nutze die App auf dem Handy niemals zeitgleich mit deinem Fernseher. Eine parallele Nutzung führt zur automatischen <strong>Sperrung deines Accounts!</strong><br><br>
-          <span class="alert-box-note"><em>Du möchtest auf zwei Geräten gleichzeitig schauen? Bitte kontaktiere deinen Ansprechpartner für die Freischaltung einer Zweit-Verbindung.</em></span>
-        </p>
-      </div>
+    <div class="warn" role="alert">
+      <strong>Nicht parallel zum TV nutzen</strong>
+      <p>Handy und Fernseher gleichzeitig = Account-Sperre. Zweit-Gerät? Deinen Ansprechpartner fragen.</p>
+    </div>
 
-      <!-- App-Auswahl -->
-      <section class="hub-section app-selector-section">
-        <h2 class="hub-section-title">Wähle dein Betriebssystem</h2>
-        <div class="app-selector-grid" role="tablist" aria-label="Betriebssystem auswählen">
-          <button type="button" class="app-selector-card active" data-app="pro" onclick="selectInstall('pro')" role="tab" aria-selected="true" aria-controls="install-pro" id="card-install-pro">
-            <i data-lucide="smartphone" class="app-selector-icon icon-brand" aria-hidden="true"></i>
-            <span class="app-selector-label">Tivim Pro (Android)</span>
-          </button>
-          <button type="button" class="app-selector-card" data-app="xc" onclick="selectInstall('xc')" role="tab" aria-selected="false" aria-controls="install-xc" id="card-install-xc">
-            <i data-lucide="zap" class="app-selector-icon icon-cyan" aria-hidden="true"></i>
-            <span class="app-selector-label">Tivim XC (Android)</span>
-          </button>
-          <button type="button" class="app-selector-card" data-app="purple" onclick="selectInstall('purple')" role="tab" aria-selected="false" aria-controls="install-purple" id="card-install-purple">
-            <i data-lucide="apple" class="app-selector-icon icon-brand" aria-hidden="true"></i>
-            <span class="app-selector-label">Purple Player (iOS)</span>
-          </button>
-        </div>
-      </section>
+    <p class="step-n">1 · App wählen</p>
+    <div class="doors install-pick" role="tablist" aria-label="App wählen">
+      <button type="button" class="door door--rec is-on" data-app="pro" role="tab" aria-selected="true" aria-controls="install-pro" id="tab-pro">
+        <i data-lucide="smartphone" aria-hidden="true"></i>
+        <strong>Tivim Pro</strong>
+        <em>Android</em>
+      </button>
+      <button type="button" class="door" data-app="xc" role="tab" aria-selected="false" aria-controls="install-xc" id="tab-xc">
+        <i data-lucide="zap" aria-hidden="true"></i>
+        <strong>Tivim XC</strong>
+        <em>Android</em>
+      </button>
+      <button type="button" class="door" data-app="purple" role="tab" aria-selected="false" aria-controls="install-purple" id="tab-purple">
+        <i data-lucide="apple" aria-hidden="true"></i>
+        <strong>Purple Player</strong>
+        <em>iPhone &amp; iPad</em>
+      </button>
+    </div>
 
-      <!-- Inhalt: Tivim Pro (Android) -->
-      <div id="install-pro" class="app-content active" role="tabpanel" aria-labelledby="card-install-pro">
-        <h3 class="app-content-title">Tivim Pro für Android</h3>
-        <div class="hub-card">
-          <a href="#" data-dl="pro-apk" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer"><i data-lucide="download" class="icon-brand" aria-hidden="true"></i> App herunterladen</a>
-          <ol class="hub-steps">
-            <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
-            <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
-            <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
-            <li>Öffne die App und logge dich mit deinen Daten ein. <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
-          </ol>
-        </div>
-      </div>
+    <div id="install-pro" class="install-panel is-on" role="tabpanel" aria-labelledby="tab-pro">
+      <p class="step-n">2 · Tivim Pro installieren</p>
+      <a href="#" data-dl="pro-apk" class="cta" target="_blank" rel="noopener noreferrer">
+        <i data-lucide="download" aria-hidden="true"></i> App herunterladen
+      </a>
+      <ol class="list install-steps">
+        <li>Button tippen – die APK landet in deinen Downloads.</li>
+        <li>Datei öffnen und installieren.</li>
+        <li>Falls gefragt: Installation aus <strong>unbekannten Quellen</strong> erlauben.</li>
+        <li>App starten und mit deinen Tivim-Daten einloggen.</li>
+      </ol>
+    </div>
 
-      <!-- Inhalt: Tivim XC (Android) -->
-      <div id="install-xc" class="app-content" role="tabpanel" aria-labelledby="card-install-xc">
-        <h3 class="app-content-title">Tivim XC für Android</h3>
-        <div class="hub-card">
-          <a href="#" data-dl="xc-apk" class="primary-btn download-btn" target="_blank" rel="noopener noreferrer"><i data-lucide="download" class="icon-brand" aria-hidden="true"></i> App herunterladen</a>
-          <ol class="hub-steps">
-            <li>Klicke auf den Button oben, um die Installationsdatei (APK) herunterzuladen.</li>
-            <li>Öffne die heruntergeladene Datei auf deinem Handy.</li>
-            <li><strong>Wichtig:</strong> Falls dein Handy fragt, erlaube die Installation aus „unbekannten Quellen“.</li>
-            <li>Öffne die App und logge dich mit deinen Daten ein. <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
-          </ol>
-        </div>
-      </div>
+    <div id="install-xc" class="install-panel" role="tabpanel" aria-labelledby="tab-xc">
+      <p class="step-n">2 · Tivim XC installieren</p>
+      <a href="#" data-dl="xc-apk" class="cta" target="_blank" rel="noopener noreferrer">
+        <i data-lucide="download" aria-hidden="true"></i> App herunterladen
+      </a>
+      <ol class="list install-steps">
+        <li>Button tippen – die APK landet in deinen Downloads.</li>
+        <li>Datei öffnen und installieren.</li>
+        <li>Falls gefragt: Installation aus <strong>unbekannten Quellen</strong> erlauben.</li>
+        <li>App starten und mit deinen Tivim-Daten einloggen.</li>
+      </ol>
+    </div>
 
-      <!-- Inhalt: Purple Player (iOS) -->
-      <div id="install-purple" class="app-content" role="tabpanel" aria-labelledby="card-install-purple">
-        <div class="hub-card">
-          <h3 class="app-content-title">Installation für iOS (iPhone &amp; iPad)</h3>
-          <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" target="_blank" rel="noopener noreferrer" class="primary-btn appstore-btn"><i data-lucide="apple" class="icon-brand" aria-hidden="true"></i> Purple Player im App Store öffnen</a>
-          <ol class="step-list">
-            <li>Lade die App herunter und <strong>öffne</strong> sie.</li>
-            <li>Klicke auf <strong>Consent</strong> (Zustimmen).</li>
-            <li>Wähle die Sprache <strong>German</strong> und klicke auf <strong>akzeptieren</strong>.</li>
-            <li>Klicke auf <strong>überspringen</strong>.</li>
-            <li>Wähle <strong>NEUE PLAYLIST hinzufügen</strong>.</li>
-            <li>Scrolle ganz nach unten und tippe auf <strong>MIT CODE anmelden</strong>.</li>
-            <li>Gib exakt diesen Code ein: <span class="highlight-code">FA69EV</span></li>
-            <li>Gib nun deine <strong>TIVIM-Daten</strong> (Username &amp; Passwort) ein und klicke auf <strong>absenden</strong>.</li>
-            <li>Klicke auf <strong>Load</strong>. Live-TV, Filme und Serien werden nun geladen.</li>
-            <li><strong>Fertig!</strong> <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
-          </ol>
-          <div class="alert-box warning-minimal mt-15" role="alert">
-            <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
-            <p><strong>Wichtig:</strong> Falls ein Wiedergabefehler erscheint, kontaktiere bitte deinen Ansprechpartner inkl. deines Benutzernamens für die Freigabe deines Accounts.</p>
-          </div>
-        </div>
+    <div id="install-purple" class="install-panel" role="tabpanel" aria-labelledby="tab-purple">
+      <p class="step-n">2 · Purple Player einrichten</p>
+      <a href="https://apps.apple.com/de/app/purple-playlist-player/id1547219704" class="cta cta--ghost" target="_blank" rel="noopener noreferrer">
+        <i data-lucide="apple" aria-hidden="true"></i> Im App Store öffnen
+      </a>
+      <ol class="list install-steps">
+        <li>App installieren und öffnen.</li>
+        <li><strong>Consent</strong> → Sprache <strong>German</strong> → <strong>akzeptieren</strong> → <strong>überspringen</strong>.</li>
+        <li><strong>Neue Playlist hinzufügen</strong> → ganz unten <strong>Mit Code anmelden</strong>.</li>
+        <li>Code eingeben: <span class="code">FA69EV</span></li>
+        <li>Tivim-Benutzername &amp; Passwort → <strong>Absenden</strong> → <strong>Load</strong>.</li>
+      </ol>
+      <div class="note">
+        <strong>Wiedergabefehler?</strong>
+        <p>Deinen Ansprechpartner schreiben – mit Benutzernamen, damit der Account freigeschaltet werden kann.</p>
       </div>
-    </main>
+    </div>
   </div>
 
-  <script src="script.js"></script>
   <script>
-    function selectInstall(appId) {
-      var cards = document.querySelectorAll('.app-selector-card');
-      var contents = document.querySelectorAll('.app-content');
-      cards.forEach(function (card) {
-        card.classList.remove('active');
-        card.setAttribute('aria-selected', card.getAttribute('data-app') === appId ? 'true' : 'false');
-      });
-      contents.forEach(function (content) {
-        content.classList.remove('active');
-      });
-      var activeCard = document.querySelector('.app-selector-card[data-app="' + appId + '"]');
-      var activeContent = document.getElementById('install-' + appId);
-      if (activeCard) activeCard.classList.add('active');
-      if (activeContent) activeContent.classList.add('active');
-    }
+    if (typeof lucide !== "undefined") lucide.createIcons();
+    (function () {
+      var back = document.getElementById("mobileBack");
+      if (back && document.referrer) {
+        back.addEventListener("click", function (e) {
+          e.preventDefault();
+          history.back();
+        });
+      }
+    })();
   </script>
   <script src="api-config.js"></script>
-  <script src="dl-links.js"></script>
+  <script src="dl-links.js?v=3"></script>
+  <script src="install-tabs.js?v=1"></script>
   <script src="site-nav.js?v=3"></script>
 </body>
 </html>

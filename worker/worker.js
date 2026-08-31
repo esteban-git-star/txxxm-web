@@ -6,6 +6,8 @@
  * 2. Bindings → R2 → Variable name: UPDATE_IMAGES (Bucket z.B. tivim-update-images)
  * 3. Settings → Secrets:
  *    ADMIN_SECRET, DOWNLOAD_PRO_APK, DOWNLOAD_XC_APK, DOWNLOAD_PC_APP
+ *    WISHBOX_TO (Empfänger – nie ins Repo!)
+ *    Optional: WISHBOX_FROM = wunschbox@tivim-web.com (Absender für Mailchannels)
  *    (bestehend: XTREAM_URL, XTREAM_USER, XTREAM_PASS, OPENAI_API_KEY)
  *
  * Deploy: Code einfügen → Save and Deploy
@@ -95,6 +97,24 @@ export default {
           return json({ ok: true }, 200, corsHeaders);
         }
 
+        if (body.action === "get-downloads") {
+          return json({ ok: true, downloads: await readDownloads(env) }, 200, corsHeaders);
+        }
+
+        if (body.action === "set-downloads") {
+          var proCode = sanitizeInstallCode(body.proCode || body["pro-code"]);
+          var xcCode = sanitizeInstallCode(body.xcCode || body["xc-code"]);
+          var dl = {
+            "pro-code": proCode,
+            "xc-code": xcCode,
+            "pro-apk": proCode ? "https://go.aftvnews.com/" + proCode : "",
+            "xc-apk": xcCode ? "https://go.aftvnews.com/" + xcCode : "",
+            "pc-app": String(body.pcApp || body["pc-app"] || "").trim().slice(0, 500),
+          };
+          await writeDownloads(env, dl);
+          return json({ ok: true, downloads: dl }, 200, corsHeaders);
+        }
+
         if (body.action === "create") {
           const imagePath = sanitizeImagePath(body.image, url.origin);
           const item = {
@@ -169,6 +189,47 @@ export default {
     }
 
     // ==========================================
+    // Wunschbox (POST) – Empfänger nur in Secret WISHBOX_TO
+    // ==========================================
+    if (path === "/wishbox" && request.method === "POST") {
+      if (!env.WISHBOX_TO) {
+        return json({ error: "not configured" }, 503, corsHeaders);
+      }
+
+      try {
+        const body = await request.json();
+        if (body.website) {
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
+        const message = String(body.message || "").trim();
+        const name = String(body.name || "").trim().slice(0, 80);
+        const contact = String(body.contact || "").trim().slice(0, 120);
+
+        if (message.length < 10) {
+          return json({ error: "too short" }, 400, corsHeaders);
+        }
+        if (message.length > 2000) {
+          return json({ error: "too long" }, 400, corsHeaders);
+        }
+        if (contact && !isValidEmail(contact)) {
+          return json({ error: "invalid email" }, 400, corsHeaders);
+        }
+
+        const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+        const allowed = await checkWishboxRate(env, ip);
+        if (!allowed) {
+          return json({ error: "rate limit" }, 429, corsHeaders);
+        }
+
+        await sendWishboxEmail(env, { message, name, contact, ip });
+        return json({ ok: true }, 200, corsHeaders);
+      } catch (e) {
+        return json({ error: "send failed" }, 500, corsHeaders);
+      }
+    }
+
+    // ==========================================
     // GET: Updates, Downloads, Status, Filme, Serien
     // ==========================================
     if (request.method === "GET") {
@@ -195,14 +256,19 @@ export default {
         return json(store, 200, corsHeaders);
       }
 
-      // APK-Downloads (URLs nur in Cloudflare Secrets)
+      // Downloader-Codes für TV-Anleitung (tivim.html)
+      if (path === "/install-codes") {
+        const codes = await readInstallCodes(env);
+        return json(codes, 200, corsHeaders);
+      }
+
+      // APK-Downloads (Secrets oder KV „downloads“)
       if (path.startsWith("/dl/")) {
-        const map = {
-          "/dl/xc-apk": env.DOWNLOAD_XC_APK,
-          "/dl/pro-apk": env.DOWNLOAD_PRO_APK,
-          "/dl/pc-app": env.DOWNLOAD_PC_APP,
-        };
-        const target = map[path];
+        var slug = path.slice("/dl/".length).replace(/\/$/, "");
+        if (!slug || slug.includes("/")) {
+          return new Response("Not found", { status: 404, headers: corsHeaders });
+        }
+        const target = await resolveDownload(env, slug);
         if (!target) {
           return new Response("Not found", { status: 404, headers: corsHeaders });
         }
@@ -378,6 +444,49 @@ async function writeStore(env, data) {
   await env.UPDATES.put("broadcast", JSON.stringify(data));
 }
 
+async function readDownloads(env) {
+  if (!env.UPDATES) return {};
+  return (await env.UPDATES.get("downloads", "json")) || {};
+}
+
+async function writeDownloads(env, data) {
+  await env.UPDATES.put("downloads", JSON.stringify(data));
+}
+
+var DEFAULT_INSTALL_CODES = { pro: "5276912", xc: "2853690" };
+
+function sanitizeInstallCode(raw) {
+  return String(raw || "")
+    .trim()
+    .replace(/\D/g, "")
+    .slice(0, 12);
+}
+
+async function readInstallCodes(env) {
+  var cfg = env.UPDATES ? await readDownloads(env) : {};
+  return {
+    pro: cfg["pro-code"] || DEFAULT_INSTALL_CODES.pro,
+    xc: cfg["xc-code"] || DEFAULT_INSTALL_CODES.xc,
+  };
+}
+
+async function resolveDownload(env, slug) {
+  var secretMap = {
+    "pro-apk": env.DOWNLOAD_PRO_APK,
+    "xc-apk": env.DOWNLOAD_XC_APK,
+    "pc-app": env.DOWNLOAD_PC_APP,
+  };
+  var fromSecret = secretMap[slug];
+  if (fromSecret && String(fromSecret).trim()) return String(fromSecret).trim();
+  var kv = await readDownloads(env);
+  var fromKv = kv[slug];
+  if (fromKv && String(fromKv).trim()) return String(fromKv).trim();
+  var codes = await readInstallCodes(env);
+  if (slug === "pro-apk" && codes.pro) return "https://go.aftvnews.com/" + codes.pro;
+  if (slug === "xc-apk" && codes.xc) return "https://go.aftvnews.com/" + codes.xc;
+  return null;
+}
+
 function sanitizeImagePath(raw, origin) {
   if (!raw) return "";
   var s = String(raw).trim();
@@ -386,4 +495,68 @@ function sanitizeImagePath(raw, origin) {
     return s.slice(origin.length).slice(0, 200);
   }
   return "";
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+async function checkWishboxRate(env, ip) {
+  if (!env.UPDATES) return true;
+  var key = "wish_rl:" + ip;
+  var raw = await env.UPDATES.get(key);
+  var now = Date.now();
+  var windowMs = 3600000;
+  var max = 5;
+  var entries = raw ? JSON.parse(raw) : [];
+  entries = entries.filter(function (t) {
+    return now - t < windowMs;
+  });
+  if (entries.length >= max) return false;
+  entries.push(now);
+  await env.UPDATES.put(key, JSON.stringify(entries), { expirationTtl: 3600 });
+  return true;
+}
+
+function buildWishboxText(payload) {
+  var lines = ["Neuer Wunsch über tivim-web.com", ""];
+  if (payload.name) lines.push("Name: " + payload.name);
+  if (payload.contact) lines.push("Kontakt: " + payload.contact);
+  lines.push("", payload.message);
+  if (payload.ip && payload.ip !== "unknown") {
+    lines.push("", "—", "IP (Rate-Limit): " + payload.ip);
+  }
+  return lines.join("\n");
+}
+
+function parseWishboxFrom(raw) {
+  var fallback = { email: "wunschbox@tivim-web.com", name: "Tivim Wunschbox" };
+  if (!raw) return fallback;
+  var s = String(raw).trim();
+  var m = s.match(/^(.+?)\s*<([^>]+)>$/);
+  if (m) return { name: m[1].trim(), email: m[2].trim() };
+  if (s.indexOf("@") !== -1) return { name: fallback.name, email: s };
+  return fallback;
+}
+
+async function sendWishboxEmail(env, payload) {
+  var to = env.WISHBOX_TO;
+  var from = parseWishboxFrom(env.WISHBOX_FROM);
+  var subject = "Neuer Wunsch – Tivim";
+  var text = buildWishboxText(payload);
+
+  var body = {
+    personalizations: [{ to: [{ email: to }] }],
+    from: { email: from.email, name: from.name },
+    subject: subject,
+    content: [{ type: "text/plain", value: text }],
+  };
+  if (payload.contact) body.reply_to = { email: payload.contact };
+
+  var res = await fetch("https://api.mailchannels.net/tx/v1/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("mail failed");
 }

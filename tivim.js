@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var APP_CODES = { xc: "2853690", pro: "5276912" };
+  var APP_CODES = { xc: "", pro: "" };
   var selectedDevice = null;
   var selectedApp = null;
   var stepHistory = [];
@@ -122,8 +122,29 @@
 
   function syncCodeDisplay() {
     if (codeDisplay) {
-      codeDisplay.textContent = selectedApp && APP_CODES[selectedApp] ? APP_CODES[selectedApp] : "—";
+      var code = selectedApp && APP_CODES[selectedApp] ? APP_CODES[selectedApp] : "";
+      codeDisplay.textContent = code || "…";
     }
+  }
+
+  function loadInstallCodes() {
+    var api = window.TIVIM_API || "";
+    if (!api) {
+      syncCodeDisplay();
+      return Promise.resolve();
+    }
+    return fetch(api + "/install-codes", { cache: "no-store" })
+      .then(function (res) {
+        return res.ok ? res.json() : null;
+      })
+      .then(function (data) {
+        if (data && data.pro) APP_CODES.pro = String(data.pro);
+        if (data && data.xc) APP_CODES.xc = String(data.xc);
+        syncCodeDisplay();
+      })
+      .catch(function () {
+        syncCodeDisplay();
+      });
   }
 
   function bindAppSelection() {
@@ -201,6 +222,7 @@
     bindBtnGFinish();
     bindNextButtons();
     bindBackButtons();
+    loadInstallCodes();
   }
 
   if (document.readyState === "loading") {

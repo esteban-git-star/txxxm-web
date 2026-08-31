@@ -396,3 +396,109 @@ body {
   font-size: 1.06rem;
   font-weight: 700;
 }
+
+.wishbox-form {
+  margin-top: 8px;
+}
+.wishbox-field {
+  display: block;
+  margin-bottom: 14px;
+}
+.wishbox-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.wishbox-field span em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--muted-2);
+}
+.wishbox-field input,
+.wishbox-field textarea {
+  width: 100%;
+  padding: 14px 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  resize: vertical;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+}
+.wishbox-field textarea {
+  min-height: 140px;
+  line-height: 1.45;
+}
+.wishbox-field input:focus,
+.wishbox-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.wishbox-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.wishbox-status {
+  min-height: 1.25em;
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-align: center;
+}
+.wishbox-status.is-ok { color: var(--ok, #4ade80); }
+.wishbox-status.is-error { color: var(--danger, #f87171); }
+
+/* Installation (Handy, PC) */
+.install-pick {
+  margin-top: 10px;
+}
+.install-pick .door {
+  width: 100%;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.install-pick .door.is-on {
+  border-color: rgba(74, 143, 184, 0.4);
+  background: var(--accent-soft);
+}
+.install-pick .door.is-on svg {
+  stroke: #a8cce3;
+}
+.install-panel {
+  display: none;
+  margin-top: 20px;
+}
+.install-panel.is-on {
+  display: block;
+}
+.install-panel .cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0;
+}
+.install-panel .cta svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+.install-steps {
+  margin-top: 14px;
+}
+.install-panel .note,
+.install-panel .warn {
+  margin-top: 14px;
+}

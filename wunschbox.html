@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0c0d10" />
+  <title>Wunschbox – Tivim Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=5" />
+  <link rel="stylesheet" href="site-nav.css?v=3" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1 class="q">Wunschbox</h1>
+      <p class="hint">Was fehlt dir? Neuer Film, besserer Sender, Idee für die Seite – schreib’s kurz.</p>
+    </header>
+
+    <form class="wishbox-form" id="wishboxForm" novalidate>
+      <label class="wishbox-field">
+        <span>Dein Name <em>(optional)</em></span>
+        <input type="text" name="name" maxlength="80" autocomplete="name" placeholder="Wie dürfen wir dich nennen?" />
+      </label>
+
+      <label class="wishbox-field">
+        <span>E-Mail für Rückfragen <em>(optional)</em></span>
+        <input type="email" name="contact" maxlength="120" autocomplete="email" placeholder="nur wenn du Antwort willst" />
+      </label>
+
+      <label class="wishbox-field">
+        <span>Dein Wunsch</span>
+        <textarea name="message" rows="6" required minlength="10" maxlength="2000" placeholder="Bitte Wunschfilm oder Serie hier eintragen"></textarea>
+      </label>
+
+      <input type="text" name="website" class="wishbox-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <p class="wishbox-status" id="wishboxStatus" role="status" aria-live="polite"></p>
+
+      <button type="submit" class="cta" id="wishboxSubmit">Abschicken</button>
+    </form>
+
+    <div class="note">
+      <strong>Hinweis</strong>
+      <p>Kein Support-Ticket – nur Wünsche und Ideen. Bei Problemen zuerst die <a href="kontakt.html">Support-Checkliste</a>.</p>
+      <p>Serien wie GZSZ mit tausenden Folgen bitte nicht anfragen – wird abgelehnt.</p>
+    </div>
+  </div>
+  <script>
+    if (typeof lucide !== "undefined") lucide.createIcons();
+  </script>
+  <script src="api-config.js?v=1"></script>
+  <script src="wunschbox.js?v=1"></script>
+  <script src="site-nav.js?v=3"></script>
+</body>
+</html>
