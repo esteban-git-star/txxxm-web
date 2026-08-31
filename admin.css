@@ -1,12 +1,12 @@
-.admin-page {
-  padding: 0;
+/* Admin Cockpit – eigenständig, kein support.css nötig */
+
+body.admin-page {
+  padding: 0 !important;
+  margin: 0;
   min-height: 100vh;
   min-height: 100dvh;
-}
-
-.admin-page .wrap {
-  max-width: none;
-  padding: 0;
+  overflow-x: hidden;
+  background: var(--bg);
 }
 
 /* Login */
@@ -37,202 +37,249 @@
 .dash-login-card .hint {
   margin-top: 10px;
   text-align: center;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
-.dash-login-card form {
-  margin-top: 22px;
-}
+.dash-login-card form { margin-top: 22px; }
 
-/* Dashboard shell */
-.dash-app {
-  display: flex;
-  flex-direction: column;
+/* Shell */
+.cockpit {
+  display: none;
   min-height: 100vh;
   min-height: 100dvh;
 }
-.dash-app.is-hide {
-  display: none;
+.cockpit.is-on {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-.dash-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
-  padding-top: max(12px, env(safe-area-inset-top));
-  border-bottom: 1px solid var(--line-strong);
-  background: var(--surface);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-.dash-topbar-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.dash-topbar-logout {
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  border-radius: var(--radius-pill);
-  padding: 8px 14px;
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.dash-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 10px 12px;
-  overflow-x: auto;
-  border-bottom: 1px solid var(--line-strong);
-  background: rgba(12, 13, 16, 0.96);
-  -webkit-overflow-scrolling: touch;
-}
-.dash-tabs::-webkit-scrollbar {
+/* Desktop rail */
+.cockpit-rail {
   display: none;
-}
-.dash-tab {
-  flex-shrink: 0;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--muted);
-  border-radius: var(--radius-pill);
-  padding: 9px 16px;
-  font: inherit;
-  font-size: 0.84rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.dash-tab.is-active {
-  border-color: rgba(74, 143, 184, 0.4);
-  background: var(--accent-soft);
-  color: #a8cce3;
-}
-.dash-tab-badge {
-  display: inline-block;
-  min-width: 1.25em;
-  margin-left: 6px;
-  padding: 1px 6px;
-  border-radius: var(--radius-pill);
-  background: rgba(74, 143, 184, 0.25);
-  color: #a8cce3;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-align: center;
-}
-.dash-tab-badge.is-hide {
-  display: none;
-}
-
-.dash-body {
-  flex: 1;
-  display: flex;
-  min-height: 0;
-}
-
-.dash-sidebar {
-  display: none;
-  width: 220px;
-  flex-shrink: 0;
-  padding: 20px 14px;
+  flex-direction: column;
+  padding: 24px 16px;
   border-right: 1px solid var(--line-strong);
   background: var(--surface);
-  flex-direction: column;
-  gap: 8px;
 }
-.dash-sidebar-brand {
-  margin: 0 0 16px 8px;
+.cockpit-brand {
+  margin: 0 0 6px 10px;
   font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
-.dash-nav-btn {
+.cockpit-brand-sub {
+  margin: 0 0 28px 10px;
+  font-size: 0.78rem;
+  color: var(--muted-2);
+}
+.cockpit-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.cockpit-nav-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   width: 100%;
   border: 1px solid transparent;
   background: transparent;
   color: var(--muted);
   border-radius: var(--radius-md);
-  padding: 12px 14px;
+  padding: 13px 14px;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
 }
-.dash-nav-btn.is-active {
+.cockpit-nav-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.65;
+  flex-shrink: 0;
+  stroke: var(--muted);
+}
+.cockpit-nav-btn.is-active {
   border-color: rgba(74, 143, 184, 0.35);
   background: var(--accent-soft);
   color: #a8cce3;
 }
-.dash-sidebar-spacer {
+.cockpit-nav-btn.is-active svg {
+  stroke: #a8cce3;
+}
+.cockpit-nav-label {
   flex: 1;
 }
-.dash-sidebar-logout {
-  margin-top: 12px;
+.cockpit-badge {
+  min-width: 1.4em;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(74, 143, 184, 0.22);
+  color: #a8cce3;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+.cockpit-badge.is-hide { display: none; }
+.cockpit-logout {
+  margin-top: 16px;
   width: 100%;
   border: 1px solid var(--line);
   background: transparent;
   color: var(--muted);
   border-radius: var(--radius-md);
-  padding: 11px 14px;
+  padding: 12px 14px;
   font: inherit;
   font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
 }
 
-.dash-main {
-  flex: 1;
+/* Stage */
+.cockpit-stage {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
-  padding: 20px 16px 32px;
-  padding-bottom: max(32px, env(safe-area-inset-bottom));
+  min-height: 0;
+  overflow: hidden;
 }
-.dash-panel {
-  display: none;
-  max-width: 1100px;
-  margin: 0 auto;
+.cockpit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  padding-top: max(14px, env(safe-area-inset-top));
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--surface);
 }
-.dash-panel.is-active {
-  display: block;
-}
-.dash-panel-head {
-  margin-bottom: 18px;
-}
-.dash-panel-head h2 {
+.cockpit-header h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 700;
 }
-.dash-panel-head p {
+.cockpit-header-logout {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  border-radius: var(--radius-pill);
+  padding: 7px 13px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cockpit-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 24px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile dock */
+.cockpit-dock {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line-strong);
+  background: var(--surface);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.cockpit-dock-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 58px;
+  border: 0;
+  background: transparent;
+  color: var(--muted-2);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.cockpit-dock-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.65;
+}
+.cockpit-dock-btn.is-active {
+  color: #a8cce3;
+}
+.cockpit-dock-btn.is-active svg {
+  stroke: #a8cce3;
+}
+.cockpit-dock-badge {
+  position: absolute;
+  top: 8px;
+  right: calc(50% - 22px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #4a8fb8;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+.cockpit-dock-badge.is-hide { display: none; }
+
+/* Panels */
+.cockpit-view {
+  display: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: cockpit-in 0.15s ease;
+}
+.cockpit-view.is-active {
+  display: block;
+}
+@keyframes cockpit-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.cockpit-view-head {
+  margin-bottom: 18px;
+}
+.cockpit-view-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.cockpit-view-head p {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.45;
 }
 
-.dash-grid-2 {
-  display: grid;
-  gap: 20px;
-}
-.dash-card {
+.cockpit-card {
   padding: 18px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
-.dash-card-title {
+.cockpit-card + .cockpit-card {
+  margin-top: 14px;
+}
+.cockpit-card-title {
   margin: 0 0 14px;
   font-size: 0.72rem;
   letter-spacing: 0.1em;
@@ -241,10 +288,32 @@
   font-weight: 700;
 }
 
-/* Wishes table (desktop) / cards (mobile) */
-.wish-table-wrap {
-  overflow-x: auto;
+/* Updates sub-nav (mobile) */
+.cockpit-subnav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
 }
+.cockpit-subnav-btn {
+  flex: 1;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cockpit-subnav-btn.is-active {
+  border-color: rgba(74, 143, 184, 0.4);
+  background: var(--accent-soft);
+  color: #a8cce3;
+}
+
+/* Wishes */
+.wish-table-wrap { overflow-x: auto; }
 .wish-table {
   width: 100%;
   border-collapse: collapse;
@@ -264,67 +333,23 @@
   padding: 14px 12px;
   vertical-align: top;
   border-bottom: 1px solid var(--line);
-  color: var(--text);
 }
 .wish-table td.wish-msg {
-  max-width: 420px;
   white-space: pre-wrap;
   line-height: 1.45;
-  color: var(--text);
+  min-width: 200px;
 }
 .wish-table td.wish-meta {
   color: var(--muted);
   font-size: 0.84rem;
   white-space: nowrap;
 }
-.wish-table tr:last-child td {
-  border-bottom: none;
-}
-.wish-mobile-list {
-  display: none;
-}
+.wish-cards { display: none; }
 
-@media (max-width: 767px) {
-  .wish-table-wrap {
-    display: none;
-  }
-  .wish-mobile-list {
-    display: block;
-  }
-}
-
-@media (min-width: 768px) {
-  .dash-topbar {
-    display: none;
-  }
-  .dash-tabs {
-    display: none;
-  }
-  .dash-sidebar {
-    display: flex;
-  }
-  .dash-main {
-    padding: 28px 32px 40px;
-  }
-  .dash-grid-2 {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-  .dash-grid-2--updates {
-    grid-template-columns: minmax(280px, 380px) 1fr;
-  }
-}
-
-@media (min-width: 1024px) {
-  .dash-sidebar {
-    width: 240px;
-  }
-}
-
-/* Shared admin form bits */
+/* Forms */
 .admin-field {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .admin-field span {
   display: block;
@@ -336,6 +361,7 @@
 .admin-field input,
 .admin-field textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: 14px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
@@ -361,34 +387,24 @@
   font-weight: 600;
   cursor: pointer;
 }
-.admin-format-btn:active {
-  background: var(--surface-hover);
-  color: var(--text);
-}
 .admin-format-hint {
   margin: 8px 0 0;
   font-size: 0.74rem;
   color: var(--muted);
-  line-height: 1.4;
 }
 .admin-check {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 14px 0 18px;
+  margin: 12px 0 16px;
   color: var(--muted);
   font-size: 0.92rem;
 }
 .admin-hint {
   margin: 0 0 12px;
   font-size: 0.82rem;
-  color: var(--bad);
+  color: var(--bad, #f87171);
   min-height: 1.2em;
-}
-.admin-field input[type="file"] {
-  width: 100%;
-  font-size: 0.88rem;
-  color: var(--muted);
 }
 .admin-preview {
   display: block;
@@ -399,9 +415,7 @@
   border-radius: 8px;
   border: 1px solid var(--line);
 }
-.admin-preview.is-hide {
-  display: none;
-}
+.admin-preview.is-hide { display: none; }
 .admin-item {
   margin-bottom: 10px;
   padding: 14px;
@@ -411,7 +425,6 @@
 }
 .admin-item--pinned {
   border-color: rgba(74, 143, 184, 0.32);
-  box-shadow: 0 0 18px rgba(74, 143, 184, 0.1);
 }
 .admin-item strong {
   display: block;
@@ -431,15 +444,7 @@
   font-size: 0.88rem;
   line-height: 1.45;
 }
-.admin-item-body .live-update-h {
-  margin: 8px 0 4px;
-  font-size: 0.92rem;
-  color: var(--text);
-}
-.admin-item-body a {
-  color: #9ec5dd;
-  text-decoration: underline;
-}
+.admin-item-body a { color: #9ec5dd; }
 .admin-item-meta {
   display: flex;
   align-items: center;
@@ -456,19 +461,16 @@
   justify-content: flex-end;
 }
 .admin-thumb {
-  display: block;
   width: 100%;
   max-height: 120px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 8px;
-  border: 1px solid var(--line);
 }
 .admin-tag {
   font-style: normal;
   font-size: 0.72rem;
   color: #9ec5dd;
-  font-weight: 600;
 }
 .admin-toggle {
   border: 1px solid var(--line);
@@ -494,17 +496,90 @@
   text-align: center;
   color: var(--muted);
   font-size: 0.9rem;
-  padding: 24px 12px;
+  padding: 28px 12px;
 }
 .admin-status {
   margin-bottom: 16px;
   padding: 12px 14px;
   background: var(--surface);
-  border: 1px solid var(--line-strong);
+  border: 1px solid rgba(74, 143, 184, 0.25);
   border-radius: var(--radius-md);
   font-size: 0.88rem;
   color: var(--muted);
 }
-.admin-status strong {
-  color: var(--ok, #4ade80);
+.admin-status strong { color: var(--ok, #4ade80); }
+
+.cta {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: var(--shadow-accent);
+}
+
+/* Mobile – Wünsche & Updates-Tabs */
+@media (max-width: 899px) {
+  .wish-table-wrap { display: none; }
+  .wish-cards { display: block; }
+  .cockpit-updates-grid .cockpit-subview-list {
+    display: none;
+  }
+  .cockpit-updates-grid.is-list .cockpit-subview-write {
+    display: none;
+  }
+  .cockpit-updates-grid.is-list .cockpit-subview-list {
+    display: block;
+  }
+}
+
+/* Desktop cockpit */
+@media (min-width: 900px) {
+  .cockpit.is-on {
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 1fr;
+  }
+  .cockpit-rail {
+    display: flex;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+  .cockpit-dock,
+  .cockpit-header {
+    display: none;
+  }
+  .cockpit-main {
+    padding: 32px 40px 48px;
+    height: 100vh;
+    height: 100dvh;
+  }
+  .cockpit-subnav {
+    display: none;
+  }
+  .cockpit-updates-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 400px) 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .cockpit-install-grid {
+    max-width: 520px;
+  }
+  .wish-table-wrap { display: block; }
+  .wish-cards { display: none; }
+}
+
+@media (min-width: 1200px) {
+  .cockpit.is-on {
+    grid-template-columns: 280px 1fr;
+  }
 }
