@@ -12,6 +12,8 @@
   var guideActions = document.getElementById("guideActions");
   var backBtn = document.getElementById("btnBack");
   var chips = document.getElementById("chips");
+  var navStack = [];
+  var navSnapshot = null;
 
   function normalize(s) {
     return String(s || "")
@@ -84,23 +86,91 @@
     return { best: best.intent, alts: alts };
   }
 
+  function notifyGuideToggle() {
+    window.dispatchEvent(new Event("tivim:guide-toggle"));
+  }
+
   function showHome() {
     home.classList.remove("is-hide");
     guide.classList.add("is-hide");
-    backBtn.classList.remove("is-on");
+    if (backBtn) backBtn.classList.remove("is-on");
     guideBody.innerHTML = "";
     guideActions.innerHTML = "";
+    navStack = [];
+    navSnapshot = null;
+    document.body.classList.remove("guide-open");
+    notifyGuideToggle();
     window.scrollTo(0, 0);
   }
 
   function showGuide() {
     home.classList.add("is-hide");
     guide.classList.remove("is-hide");
-    backBtn.classList.add("is-on");
+    if (backBtn) backBtn.classList.add("is-on");
+    document.body.classList.add("guide-open");
+    notifyGuideToggle();
     window.scrollTo(0, 0);
   }
 
-  function renderChoices(title, lead, intents) {
+  function pushNavSnapshot() {
+    if (navSnapshot) navStack.push(navSnapshot);
+  }
+
+  function addGuideBackButton() {
+    var back = document.createElement("button");
+    back.type = "button";
+    back.className = "cta cta--ghost nav-step-back";
+    back.textContent = "‹ Zurück";
+    back.addEventListener("click", guideBack);
+    guideActions.insertBefore(back, guideActions.firstChild);
+  }
+
+  function guideBack() {
+    if (
+      navSnapshot &&
+      navSnapshot.kind === "steps" &&
+      navSnapshot.canStepBack &&
+      navSnapshot.canStepBack()
+    ) {
+      navSnapshot.stepBack();
+      return;
+    }
+
+    var prev = navStack.pop();
+    if (prev) {
+      navSnapshot = prev;
+      if (prev.kind === "choose") {
+        renderChoices(prev.title, prev.lead, prev.intents, true);
+      } else if (prev.kind === "steps") {
+        renderSteps(prev.intent, true);
+      } else if (prev.kind === "link") {
+        renderLink(prev.intent, true);
+      } else {
+        showHome();
+      }
+      return;
+    }
+
+    if (input) input.value = "";
+    showHome();
+  }
+
+  window.__tivimGuideBack = function () {
+    if (!document.body.classList.contains("guide-open")) return false;
+    guideBack();
+    return true;
+  };
+
+  window.__tivimGoHome = function () {
+    if (input) input.value = "";
+    showHome();
+    return true;
+  };
+
+  function renderChoices(title, lead, intents, isRestore) {
+    if (!isRestore) pushNavSnapshot();
+    navSnapshot = { kind: "choose", title: title, lead: lead, intents: intents };
+
     guideTitle.textContent = title;
     guideLead.textContent = lead || "";
     guideBody.innerHTML = "";
@@ -125,6 +195,7 @@
       list.appendChild(btn);
     });
     guideBody.appendChild(list);
+    addGuideBackButton();
     showGuide();
   }
 
@@ -155,7 +226,7 @@
         var help = document.createElement("button");
         help.type = "button";
         help.className = "cta cta--ghost";
-        help.textContent = "Bei mir geht trotzdem nichts";
+        help.textContent = "Bei mir geht trotzdem nix";
         help.addEventListener("click", function () {
           openIntent(byId("probleme-app"));
         });
@@ -175,7 +246,7 @@
 
     var fetchFn = window.TIVIM_fetchStatus;
     if (!fetchFn) {
-      finish("", "Status unklar", "Prüfung gerade nicht möglich.", true);
+      finish("", "Kann ich grad nicht prüfen", "Versuch’s gleich nochmal – oder tipp unten, was bei dir hakt.", true);
       return;
     }
 
@@ -184,33 +255,38 @@
         finish(
           "online",
           "Server online",
-          "Bei uns läuft’s. Wenn bei dir trotzdem nichts geht: meist die Strecke zu dir (VPN abends), App neu starten – oder ein Fehlercode.",
+          "Bei uns läuft’s. Geht bei dir trotzdem nix? Meist VPN abends, App neu starten – oder ein Fehlercode.",
           true
         );
       } else if (result.state === "offline") {
         finish(
           "offline",
           "Wartungsarbeiten",
-          "Gerade Pause bei uns. App nicht zurücksetzen – in ein paar Minuten nochmal versuchen.",
+          "Gerade Pause bei uns. App nicht zurücksetzen – kurz warten und nochmal probieren.",
           false
         );
       } else {
         finish(
           "",
           "Status unklar",
-          "Die Prüfung hat nicht geklappt. Wenn bei dir nichts geht, wähl unten „Bei mir geht trotzdem nichts“.",
+          "Check hat nicht geklappt. Geht bei dir nix? Tipp unten drauf.",
           true
         );
       }
     });
   }
 
-  function renderLink(intent) {
+  function renderLink(intent, isRestore) {
+    if (!isRestore) pushNavSnapshot();
+    navSnapshot = { kind: "link", intent: intent };
+
     guideTitle.textContent = intent.title;
     guideLead.textContent = intent.summary || "";
     guideBody.innerHTML =
-      '<p class="guide-note">Ich öffne die passende Anleitung für dich. Die Schritte dort sind geprüft – nichts Freies vom Netz.</p>';
+      '<p class="guide-note">Hier geht’s zur Anleitung – Schritt für Schritt, wie wir’s auf dem Stick machen.</p>';
     guideActions.innerHTML = "";
+
+    addGuideBackButton();
 
     var a = document.createElement("a");
     a.className = "cta";
@@ -220,7 +296,9 @@
     showGuide();
   }
 
-  function renderSteps(intent) {
+  function renderSteps(intent, isRestore) {
+    if (!isRestore) pushNavSnapshot();
+
     guideTitle.textContent = intent.title;
     guideLead.textContent = intent.summary || "";
     guideBody.innerHTML = "";
@@ -237,17 +315,36 @@
     card.className = "step-focus";
     guideBody.appendChild(card);
 
+    var state = { kind: "steps", intent: intent, idx: 0 };
+    navSnapshot = state;
+
     function paint() {
+      state.idx = idx;
       progress.textContent = "Schritt " + (idx + 1) + " von " + total;
       card.innerHTML = buildStepHtml(intent.steps[idx], idx + 1);
 
       guideActions.innerHTML = "";
 
+      if (idx > 0) {
+        var prev = document.createElement("button");
+        prev.type = "button";
+        prev.className = "cta cta--ghost nav-step-back";
+        prev.textContent = "‹ Zurück";
+        prev.addEventListener("click", function () {
+          idx -= 1;
+          paint();
+          window.scrollTo(0, 0);
+        });
+        guideActions.appendChild(prev);
+      } else {
+        addGuideBackButton();
+      }
+
       if (idx < total - 1) {
         var next = document.createElement("button");
         next.type = "button";
         next.className = "cta";
-        next.textContent = "Erledigt – weiter";
+        next.textContent = "Ok, weiter";
         next.addEventListener("click", function () {
           idx += 1;
           paint();
@@ -260,7 +357,7 @@
         ok.className = "cta";
         ok.textContent = "Geht wieder";
         ok.addEventListener("click", function () {
-          input.value = "";
+          if (input) input.value = "";
           showHome();
         });
         guideActions.appendChild(ok);
@@ -268,10 +365,21 @@
         var bad = document.createElement("a");
         bad.className = "cta cta--ghost";
         bad.href = "kontakt.html";
-        bad.textContent = "Immer noch tot – Support";
+        bad.textContent = "Geht immer noch nicht – Support";
         guideActions.appendChild(bad);
       }
     }
+
+    state.canStepBack = function () {
+      return idx > 0;
+    };
+    state.stepBack = function () {
+      if (idx > 0) {
+        idx -= 1;
+        paint();
+        window.scrollTo(0, 0);
+      }
+    };
 
     paint();
     showGuide();
@@ -365,7 +473,7 @@
         };
       });
       renderChoices(intent.title, intent.summary || "", intents);
-    } else renderChoices("Was genau?", "", [intent]);
+    } else renderChoices("Was genau?", "Kurz antippen – dann geht’s los.", [intent]);
   }
 
   function ask(query) {
@@ -376,8 +484,8 @@
 
     if (!result) {
       renderChoices(
-        "Hab ich so nicht gefunden",
-        "Nimm einen der Punkte – oder formuliere kürzer, z.B. „Fehlercode 401“.",
+        "Hmm, so kenn ich’s nicht",
+        "Tipp auf was Passendes – oder schreib kürzer, z.B. „401“.",
         KB.filter(function (i) {
           return (
             ["status", "probleme", "pro-401", "pro-403", "xc-empty", "vpn", "install-tv", "support"].indexOf(
@@ -391,8 +499,8 @@
 
     if (!result.best && result.alts.length) {
       renderChoices(
-        "Was meinst du?",
-        "Mehrere Treffer – tipp kurz drauf.",
+        "Welches meinst du?",
+        "Mehrere Treffer – einmal antippen.",
         result.alts
       );
       return;
@@ -433,9 +541,7 @@
   }
 
   if (backBtn) {
-    backBtn.addEventListener("click", function () {
-      showHome();
-    });
+    backBtn.addEventListener("click", guideBack);
   }
 
   // Deep-Link: index.html#pro-401

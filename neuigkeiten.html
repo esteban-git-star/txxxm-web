@@ -8,34 +8,25 @@
   <meta name="theme-color" content="#0c0d10" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Tivim Support" />
-  <title>Neuigkeiten &amp; Updates – Tivim Support</title>
+  <title>Neue Inhalte – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="support.css?v=2" />
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=4" />
   <link rel="stylesheet" href="neuigkeiten.css?v=1" />
+  <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="wrap">
     <a class="back" id="neuBack" href="index.html">Zurück</a>
     <header class="hero">
-      <h1 class="q">Neuigkeiten &amp; Updates</h1>
-      <p class="hint">Neue Filme &amp; Serien · System-Meldungen</p>
+      <h1 class="q">Neue Inhalte</h1>
+      <p class="hint">Neue Filme &amp; Serien</p>
     </header>
 
-    <div class="neu-tabs" role="tablist" aria-label="Bereich auswählen">
-      <button type="button" class="neu-tab active" data-app="inhalte" onclick="selectNeuigkeiten('inhalte')" role="tab" aria-selected="true" aria-controls="content-inhalte" id="tab-inhalte">
-        <span class="neu-tab-icon" aria-hidden="true">🍿</span>
-        <span class="neu-tab-label">Neue Inhalte</span>
-      </button>
-      <button type="button" class="neu-tab" data-app="updates" onclick="selectNeuigkeiten('updates')" role="tab" aria-selected="false" aria-controls="content-updates" id="tab-updates">
-        <span class="neu-tab-icon" aria-hidden="true">📢</span>
-        <span class="neu-tab-label">System-Updates</span>
-      </button>
-    </div>
-
-    <div id="content-inhalte" class="neu-panel active" role="tabpanel" aria-labelledby="tab-inhalte">
+    <div id="content-inhalte" class="neu-panel active">
       <div class="lang-switcher-wrap">
         <span class="lang-switcher-label">Sprache:</span>
         <div class="lang-switcher" role="group" aria-label="Sprache der Poster">
@@ -58,21 +49,6 @@
           <p class="poster-row-loading" id="serien-loading">Lade aktuelle Inhalte…</p>
         </div>
       </section>
-    </div>
-
-    <div id="content-updates" class="neu-panel" role="tabpanel" aria-labelledby="tab-updates">
-      <article class="news-card">
-        <h2>Bericht zu Problemen am 15.04.2026</h2>
-        <p><strong>Bayern - Real - 21 Uhr - DAZN 1</strong></p>
-        <p>Zuerst möchten wir uns aufrichtig für die Probleme entschuldigen. Uns ist wichtig, alles offen und transparent mit euch zu kommunizieren.</p>
-        <p>Das Problem lag nicht direkt an unserem System: Unsere Plattform war online, und auch die Sender waren erreichbar.</p>
-        <p>Die Hauptursache war dieses Mal sehr starkes Routing (Netz-Stau).</p>
-        <p>Da das Spiel gestern auf DAZN lief, war die Netzauslastung in Deutschland extrem hoch. Je stärker Telekom, Vodafone usw. ausgelastet sind, desto schwieriger wird die stabile Route zu unseren Streams. Ein VPN hilft oft, aber gestern waren teilweise auch viele VPN-Anbieter überlastet. Wir mussten selbst mehrere Länder testen, bis eine stabile Umleitung funktioniert hat.</p>
-        <p>Wir testen in den kommenden Tagen zusätzliche Maßnahmen im Hintergrund. Unter anderem prüfen wir Testsender mit niedrigerer Qualität, damit bei starkem Engpass wenigstens ein stabiles Bild ankommt. Die Bildqualität ist dann geringer, aber besser als ein kompletter Ausfall. Unsere Streams sind sehr ressourcenintensiv, daher kann das an solchen Tagen eine sinnvolle Alternative sein.</p>
-        <p>Für heute Abend testen wir RTL Raw ebenfalls mit niedrigerer Qualität. Wenn es auf der Route von euch zu uns und zurück wieder zu Engpässen kommt, kann das helfen.</p>
-        <p>Wir verstehen, dass sich so etwas frustrierend anfühlt. Niemand ist verpflichtet, den Weg mit uns weiterzugehen. Wir nehmen Kritik nicht persönlich und arbeiten weiter daran, die Stabilität auch an Ausnahmetagen zu verbessern. Bei einer Technik mit so vielen Faktoren kann es leider in seltenen Fällen trotzdem zu Problemen kommen.</p>
-        <p><strong>PS.:</strong> Wir laufen aktuell bei etwa 50 % Auslastung und haben damit weiterhin deutliche Reserven. Genügend Kapazität ist also vorhanden.</p>
-      </article>
     </div>
   </div>
 
@@ -193,19 +169,6 @@
         }
       }
 
-      window.selectNeuigkeiten = function (appId) {
-        document.querySelectorAll(".neu-tab").forEach(function (tab) {
-          var on = tab.getAttribute("data-app") === appId;
-          tab.classList.toggle("active", on);
-          tab.setAttribute("aria-selected", on ? "true" : "false");
-        });
-        document.querySelectorAll(".neu-panel").forEach(function (panel) {
-          panel.classList.remove("active");
-        });
-        var activeContent = document.getElementById("content-" + appId);
-        if (activeContent) activeContent.classList.add("active");
-      };
-
       var langDe = document.getElementById("lang-de");
       var langTr = document.getElementById("lang-tr");
       if (langDe) langDe.addEventListener("click", function () { loadPosters("de"); });
@@ -242,5 +205,6 @@
       if (typeof lucide !== "undefined") lucide.createIcons();
     })();
   </script>
+  <script src="site-nav.js?v=3"></script>
 </body>
 </html>

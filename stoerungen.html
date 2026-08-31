@@ -10,15 +10,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="support.css?v=2" />
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=4" />
+  <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <button type="button" class="back" id="btnBack">Zurück</button>
+    <button type="button" class="flow-back" id="btnBack">‹ Zurück</button>
     <header class="hero">
       <h1 class="q" id="flowTitle">Geht gar nichts?</h1>
-      <p class="hint" id="flowLead">Erst das grüne Licht. Dann deine App.</p>
+      <p class="hint" id="flowLead">Erst das grüne Licht checken. Dann deine App.</p>
     </header>
 
     <main id="flowMain">
@@ -276,6 +278,8 @@
         current = id;
         titleEl.textContent = next.getAttribute("data-title") || "";
         leadEl.textContent = next.getAttribute("data-lead") || "";
+        var backBtn = document.getElementById("btnBack");
+        if (backBtn) backBtn.classList.toggle("is-on", stack.length > 0);
         window.scrollTo(0, 0);
       }
 
@@ -301,5 +305,6 @@
     })();
   </script>
   <script src="script.js?v=20260831-8"></script>
+  <script src="site-nav.js?v=3"></script>
 </body>
 </html>

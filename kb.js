@@ -5,8 +5,8 @@
 window.TIVIM_KB = [
   {
     id: "install-tv",
-    title: "Tivim auf dem TV einrichten",
-    summary: "Fire TV oder Google TV – Tivim XC und Tivim Pro.",
+    title: "Tivim auf dem TV",
+    summary: "Fire TV oder Google TV – XC und Pro drauf.",
     keywords: [
       "installieren", "einrichten", "neu", "tv", "fire", "firetv", "amazon",
       "google", "chromecast", "stick", "fernseher", "setup", "tivim pro tv",
@@ -14,33 +14,33 @@ window.TIVIM_KB = [
     ],
     type: "link",
     href: "tivim.html",
-    cta: "TV-Anleitung starten"
+    cta: "TV-Anleitung"
   },
   {
     id: "install-mobile",
-    title: "Tivim auf Handy oder Tablet",
-    summary: "Android: Tivim XC und Tivim Pro. iPhone: Purple Player.",
+    title: "Tivim auf Handy & Tablet",
+    summary: "Android: XC & Pro. iPhone: Purple Player.",
     keywords: [
       "handy", "tablet", "android", "iphone", "ipad", "ios", "purple",
       "mobile", "apk", "samsung", "xiaomi"
     ],
     type: "link",
     href: "mobile-install.html",
-    cta: "Handy-Anleitung starten"
+    cta: "Handy-Anleitung"
   },
   {
     id: "install-pc",
-    title: "Tivim auf PC oder Laptop",
-    summary: "Windows oder Mac.",
+    title: "Tivim am PC",
+    summary: "Windows oder Mac – kurz erklärt.",
     keywords: ["pc", "laptop", "windows", "mac", "macbook", "computer", "desktop"],
     type: "link",
     href: "pc.html",
-    cta: "PC-Anleitung starten"
+    cta: "PC-Anleitung"
   },
   {
     id: "pro-401",
     title: "Fehlercode 401",
-    summary: "In Tivim Pro fehlt der User-Agent.",
+    summary: "In Pro fehlt der User-Agent TivimPlayer.",
     keywords: [
       "401", "fehlercode 401", "fehler 401", "useragent", "user-agent",
       "user agent", "tivimplayer", "pro 401"
@@ -57,7 +57,7 @@ window.TIVIM_KB = [
   {
     id: "pro-403",
     title: "Fehlercode 403",
-    summary: "Kommt der Fehler immer – oder nur bei manchen Inhalten?",
+    summary: "Kommt der Fehler immer – oder nur bei manchen Filmen?",
     keywords: [
       "403", "fehlercode 403", "fehler 403", "abo", "abgelaufen",
       "parallel", "gesperrt", "sperrung", "zwei geräte", "pro 403",
@@ -110,7 +110,7 @@ window.TIVIM_KB = [
   {
     id: "pro-codec",
     title: "CodecException",
-    summary: "Ein Fehler ist aufgetreten: CodecException – kommt vom Player in Tivim Pro.",
+    summary: "Player meckert in Pro – meist kein Abo-Problem.",
     keywords: [
       "codec", "codecexception", "codec exception", "codec fehler",
       "ein fehler ist aufgetreten", "erneut versuchen", "player fehler", "pro codec",
@@ -153,7 +153,7 @@ window.TIVIM_KB = [
   {
     id: "xc-empty",
     title: "Tivim XC – Listen leer",
-    summary: "Keine Sender, keine Filme – die App zeigt nichts.",
+    summary: "XC zeigt nix – keine Sender, keine Filme.",
     keywords: [
       "listen leer", "liste leer", "leer", "keine sender", "keine filme",
       "inhalt", "lädt nicht", "xc leer", "nichts angezeigt", "update xc",
@@ -183,7 +183,7 @@ window.TIVIM_KB = [
   {
     id: "vpn",
     title: "VPN – wenn’s abends ruckelt",
-    summary: "Meist die Strecke zu dir, kein Tivim-Ausfall.",
+    summary: "Meist deine Leitung, nicht dass Tivim down ist.",
     keywords: [
       "vpn", "ruckelt", "ruckeln", "abends", "hakelt", "lag", "stau",
       "telekom", "privado", "proton", "langsam", "hängt"
@@ -195,7 +195,7 @@ window.TIVIM_KB = [
   {
     id: "status",
     title: "Läuft Tivim gerade?",
-    summary: "Live-Check – ob bei uns was down ist.",
+    summary: "Schauen wir live nach, ob bei uns was hängt.",
     keywords: [
       "ist tivim down", "tivim down", "geht tivim", "läuft tivim", "ist tivim online",
       "server down", "server online", "server offline", "ausfall", "störung server",
@@ -206,8 +206,8 @@ window.TIVIM_KB = [
   },
   {
     id: "probleme",
-    title: "Probleme – wobei?",
-    summary: "Ohne Details können wir nicht helfen. Was trifft zu?",
+    title: "Was hakt bei dir?",
+    summary: "Ohne Details können wir nicht helfen – was trifft zu?",
     keywords: [
       "habt ihr probleme", "habt ihr ein problem", "habt ihr störungen",
       "probleme", "problem", "geht nicht", "funktioniert nicht", "geht bei mir nicht",
@@ -218,15 +218,15 @@ window.TIVIM_KB = [
     options: [
       { title: "Läuft Tivim bei euch?", summary: "Server-Check live", intent: "status" },
       { title: "Bei mir geht was nicht", summary: "App hängt, schwarz, Login", intent: "probleme-app" },
-      { title: "Fehlercode auf dem Bildschirm", summary: "401, 403, CodecException", intent: "probleme-code" },
-      { title: "Ruckelt / hakt abends", summary: "Meist VPN, kein Ausfall", intent: "vpn" },
-      { title: "Listen leer (XC)", summary: "Keine Sender, keine Filme", intent: "xc-empty" }
+      { title: "Fehlercode auf dem Screen", summary: "401, 403, CodecException", intent: "probleme-code" },
+      { title: "Ruckelt abends", summary: "Meist VPN", intent: "vpn" },
+      { title: "Listen leer (XC)", summary: "Nix zu sehen", intent: "xc-empty" }
     ]
   },
   {
     id: "probleme-app",
     title: "Welche App?",
-    summary: "Dann gehen wir Schritt für Schritt.",
+    summary: "Dann Schritt für Schritt.",
     keywords: [],
     type: "choose",
     options: [
@@ -238,7 +238,7 @@ window.TIVIM_KB = [
   {
     id: "probleme-code",
     title: "Welcher Fehlercode?",
-    summary: "Steht auf dem Bildschirm – genau so wählen.",
+    summary: "Steht genau so auf dem Bildschirm.",
     keywords: [],
     type: "choose",
     options: [
@@ -386,7 +386,7 @@ window.TIVIM_KB = [
   {
     id: "tipps",
     title: "Tipps & Tricks",
-    summary: "Sortierung, Update, Favoriten und mehr.",
+    summary: "Sortieren, updaten, Favoriten – kurz erklärt.",
     keywords: [
       "tipps", "tricks", "tipps und tricks", "kniff", "kniffe", "smarte",
       "tipp", "hilfe app", "sortierung filme"
@@ -408,6 +408,6 @@ window.TIVIM_KB = [
     keywords: ["filme", "serien", "neuigkeiten", "neu", "blockbuster"],
     type: "link",
     href: "neuigkeiten.html",
-    cta: "Neuigkeiten öffnen"
+    cta: "Neue Inhalte"
   }
 ];

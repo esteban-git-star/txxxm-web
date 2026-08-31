@@ -9,9 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="support.css?v=2" />
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=4" />
 </head>
-<body>
+<body data-site-nav="off">
   <div class="wrap">
     <a class="back" href="index.html">Zurück</a>
     <header class="hero">
@@ -42,15 +43,26 @@
           <span>Text</span>
           <textarea id="postBody" rows="5" required maxlength="1200" placeholder="Kurz und klar – was Nutzer wissen müssen."></textarea>
         </label>
+        <label class="admin-field">
+          <span>Bild (optional, max. 800 KB, JPG/PNG/WebP)</span>
+          <input type="file" id="postImage" accept="image/jpeg,image/png,image/webp" />
+          <img id="postImagePreview" class="admin-preview is-hide" alt="" />
+        </label>
+        <label class="admin-check">
+          <input type="checkbox" id="postHighlight" />
+          <span>Oben fixieren (Startseite – mit Glow)</span>
+        </label>
         <label class="admin-check">
           <input type="checkbox" id="postActive" checked />
-          <span>Sichtbar auf der Startseite</span>
+          <span>Einblenden auf der Startseite</span>
         </label>
+        <p class="admin-hint" id="uploadHint"></p>
         <button type="submit" class="cta">Veröffentlichen</button>
       </form>
 
       <section class="admin-list">
         <p class="admin-list-label">Aktuelle Einträge</p>
+        <p class="admin-list-hint">Oben fixieren = bleibt ganz oben · Ein/Aus = sichtbar · Löschen = weg</p>
         <div id="itemsList"></div>
       </section>
 
@@ -106,13 +118,21 @@
         }
         itemsList.innerHTML = items
           .map(function (item) {
-            var state = item.active === false ? "Aus" : "An";
+            var state = item.active === false ? "Ausgeblendet" : "Live";
+            var img =
+              item.image && API
+                ? '<img class="admin-thumb" src="' + API + escapeHtml(item.image) + '" alt="" />'
+                : "";
             return (
-              '<article class="admin-item" data-id="' +
+              '<article class="admin-item' +
+              (item.highlight ? " admin-item--pinned" : "") +
+              '" data-id="' +
               escapeHtml(item.id || "") +
               '">' +
+              img +
               "<strong>" +
               escapeHtml(item.title || "Ohne Titel") +
+              (item.highlight ? ' <em class="admin-tag">Oben fixiert</em>' : "") +
               "</strong>" +
               '<p>' +
               escapeHtml(item.body || "") +
@@ -121,12 +141,22 @@
               "<span>" +
               state +
               "</span>" +
-              '<button type="button" class="admin-toggle" data-id="' +
+              '<div class="admin-item-actions">' +
+              '<button type="button" class="admin-toggle' +
+              (item.highlight ? " admin-toggle--on" : "") +
+              '" data-action="toggle-highlight" data-id="' +
               escapeHtml(item.id || "") +
               '">' +
-              (item.active === false ? "Einschalten" : "Ausblenden") +
+              (item.highlight ? "Fixierung aus" : "Oben fixieren") +
               "</button>" +
-              "</div></article>"
+              '<button type="button" class="admin-toggle" data-action="toggle-active" data-id="' +
+              escapeHtml(item.id || "") +
+              '">' +
+              (item.active === false ? "Einblenden" : "Ausblenden") +
+              "</button>" +
+              '<button type="button" class="admin-toggle admin-toggle--danger" data-action="delete" data-id="' +
+              escapeHtml(item.id || "") +
+              '">Löschen</button></div></div></article>'
             );
           })
           .join("");
@@ -185,18 +215,74 @@
           });
       });
 
+      function uploadImage(file) {
+        if (!file) return Promise.resolve("");
+        var form = new FormData();
+        form.append("image", file);
+        return fetch(API + "/admin/upload-image", {
+          method: "POST",
+          headers: { Authorization: "Bearer " + token() },
+          body: form
+        })
+          .then(function (res) {
+            if (res.status === 401) throw new Error("auth");
+            if (res.status === 503) throw new Error("no-r2");
+            if (!res.ok) throw new Error("upload");
+            return res.json();
+          })
+          .then(function (data) {
+            return data.image || "";
+          });
+      }
+
+      var postImage = document.getElementById("postImage");
+      var postImagePreview = document.getElementById("postImagePreview");
+      var uploadHint = document.getElementById("uploadHint");
+
+      if (postImage) {
+        postImage.addEventListener("change", function () {
+          var file = postImage.files && postImage.files[0];
+          if (!file) {
+            postImagePreview.classList.add("is-hide");
+            postImagePreview.removeAttribute("src");
+            return;
+          }
+          if (file.size > 800000) {
+            uploadHint.textContent = "Bild zu groß (max. 800 KB).";
+            postImage.value = "";
+            return;
+          }
+          uploadHint.textContent = "";
+          postImagePreview.src = URL.createObjectURL(file);
+          postImagePreview.classList.remove("is-hide");
+        });
+      }
+
       postForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        var payload = {
-          action: "create",
-          title: document.getElementById("postTitle").value.trim(),
-          body: document.getElementById("postBody").value.trim(),
-          active: document.getElementById("postActive").checked
-        };
-        postUpdate(payload)
+        var file = postImage && postImage.files && postImage.files[0];
+        var submitBtn = postForm.querySelector(".cta");
+        if (submitBtn) submitBtn.disabled = true;
+
+        uploadImage(file)
+          .then(function (imagePath) {
+            return postUpdate({
+              action: "create",
+              title: document.getElementById("postTitle").value.trim(),
+              body: document.getElementById("postBody").value.trim(),
+              active: document.getElementById("postActive").checked,
+              highlight: document.getElementById("postHighlight").checked,
+              image: imagePath || undefined
+            });
+          })
           .then(function () {
             postForm.reset();
             document.getElementById("postActive").checked = true;
+            if (postImagePreview) {
+              postImagePreview.classList.add("is-hide");
+              postImagePreview.removeAttribute("src");
+            }
+            if (uploadHint) uploadHint.textContent = "";
             loadItems();
           })
           .catch(function (err) {
@@ -206,18 +292,56 @@
               alert("Session abgelaufen – bitte neu anmelden.");
               return;
             }
+            if (err && err.message === "no-r2") {
+              alert(
+                "Bild-Upload braucht R2-Binding UPDATE_IMAGES in Cloudflare. Meldung ohne Bild posten oder R2 einrichten."
+              );
+              return;
+            }
+            if (err && err.message === "upload") {
+              alert("Bild-Upload fehlgeschlagen.");
+              return;
+            }
             alert("Veröffentlichen fehlgeschlagen.");
+          })
+          .finally(function () {
+            if (submitBtn) submitBtn.disabled = false;
           });
       });
 
       itemsList.addEventListener("click", function (e) {
         var btn = e.target.closest(".admin-toggle");
         if (!btn) return;
-        postUpdate({ action: "toggle", id: btn.getAttribute("data-id") })
-          .then(loadItems)
-          .catch(function () {
-            alert("Konnte nicht aktualisiert werden.");
-          });
+        var id = btn.getAttribute("data-id");
+        var action = btn.getAttribute("data-action");
+
+        if (action === "delete") {
+          if (!confirm("Meldung wirklich löschen?")) return;
+          postUpdate({ action: "delete", id: id })
+            .then(loadItems)
+            .catch(function () {
+              alert("Löschen fehlgeschlagen.");
+            });
+          return;
+        }
+
+        if (action === "toggle-highlight") {
+          postUpdate({ action: "toggle-highlight", id: id })
+            .then(loadItems)
+            .catch(function () {
+              alert("Fixieren konnte nicht gespeichert werden.");
+            });
+          return;
+        }
+
+        if (action === "toggle-active") {
+          postUpdate({ action: "toggle-active", id: id })
+            .then(loadItems)
+            .catch(function () {
+              alert("Sichtbarkeit konnte nicht geändert werden.");
+            });
+          return;
+        }
       });
 
       document.getElementById("btnLogout").addEventListener("click", function () {
@@ -265,12 +389,19 @@
     .admin-form { margin-top: 22px; }
     .admin-list { margin-top: 28px; }
     .admin-list-label {
-      margin: 0 0 10px;
+      margin: 0 0 6px;
       font-size: 0.72rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #6b7280;
       font-weight: 600;
+      text-align: center;
+    }
+    .admin-list-hint {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
       text-align: center;
     }
     .admin-item {
@@ -279,6 +410,10 @@
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
+    }
+    .admin-item--pinned {
+      border-color: rgba(74, 143, 184, 0.32);
+      box-shadow: 0 0 18px rgba(74, 143, 184, 0.1);
     }
     .admin-item strong {
       display: block;
@@ -296,8 +431,51 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       margin-top: 10px;
       font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .admin-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .admin-thumb {
+      display: block;
+      width: 100%;
+      max-height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid var(--line);
+    }
+    .admin-preview {
+      display: block;
+      width: 100%;
+      max-height: 140px;
+      object-fit: cover;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .admin-preview.is-hide { display: none; }
+    .admin-tag {
+      font-style: normal;
+      font-size: 0.72rem;
+      color: #9ec5dd;
+      font-weight: 600;
+    }
+    .admin-hint {
+      margin: 0 0 12px;
+      font-size: 0.82rem;
+      color: var(--bad);
+      min-height: 1.2em;
+    }
+    .admin-field input[type="file"] {
+      width: 100%;
+      font-size: 0.88rem;
       color: var(--muted);
     }
     .admin-toggle {
@@ -309,6 +487,15 @@
       font: inherit;
       font-size: 0.78rem;
       cursor: pointer;
+    }
+    .admin-toggle--on {
+      border-color: rgba(74, 143, 184, 0.45);
+      color: #a8cce3;
+      background: var(--accent-soft);
+    }
+    .admin-toggle--danger {
+      border-color: rgba(201, 106, 106, 0.45);
+      color: #e8a0a0;
     }
     .admin-empty {
       text-align: center;

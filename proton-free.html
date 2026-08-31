@@ -12,12 +12,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="support.css?v=2" />
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=4" />
+  <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <button type="button" class="back" id="btnBack">Zurück</button>
+    <button type="button" class="flow-back" id="btnBack">‹ Zurück</button>
     <p class="step-n" id="stepN">Schritt 1 von 6</p>
     <header class="hero">
       <h1 class="q" id="flowTitle">Zuerst am Handy</h1>
@@ -131,6 +133,7 @@
         titleEl.textContent = screen.getAttribute("data-title") || "";
         leadEl.textContent = screen.getAttribute("data-lead") || "";
         stepEl.textContent = "Schritt " + n + " von 6";
+        if (backBtn) backBtn.classList.toggle("is-on", n > 1);
         window.scrollTo(0, 0);
       }
 
@@ -166,5 +169,6 @@
       if (typeof lucide !== "undefined") lucide.createIcons();
     })();
   </script>
+  <script src="site-nav.js?v=3"></script>
 </body>
 </html>

@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <title>Tivim Support</title>
-  <meta name="description" content="Frag einfach – Installation, Fehlercodes, VPN. Feste Anleitungen, kein Raten." />
+  <meta name="description" content="Schreib’s wie an WhatsApp – Installation, Fehlercodes, VPN. Feste Anleitungen, kein Raten." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Tivim Support" />
-  <meta property="og:description" content="Frag einfach – wir führen dich Schritt für Schritt." />
+  <meta property="og:description" content="Schreib einfach, was los ist. Wir führen dich durch unsere Anleitung." />
   <meta property="og:url" content="https://tivim-web.com/" />
   <meta property="og:image" content="https://tivim-web.com/preview.jpg" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0c0d10" />
+  <meta name="theme-color" content="#090a0c" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Tivim" />
@@ -20,426 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0c0d10;
-      --surface: #16181d;
-      --surface-2: #1c1f26;
-      --line: rgba(255, 255, 255, 0.1);
-      --text: #f2f3f5;
-      --muted: #9aa0a8;
-      --accent: #3d7ea6;
-      --accent-soft: rgba(61, 126, 166, 0.16);
-      --ok: #3d9a6a;
-      --bad: #c45c5c;
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { font-size: 20px; -webkit-font-smoothing: antialiased; }
-    body {
-      margin: 0;
-      min-height: 100dvh;
-      font-family: "DM Sans", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 0 18px 48px;
-      padding-bottom: max(48px, env(safe-area-inset-bottom));
-    }
-    h1, .door, .cta, .back, .chip { font-family: "Outfit", sans-serif; }
-    .wrap { width: 100%; max-width: 430px; margin: 0 auto; }
-
-    .back {
-      display: none;
-      width: 100%;
-      margin: 10px 0 0;
-      padding: 10px 0;
-      border: 0;
-      background: none;
-      color: var(--muted);
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-    }
-    .back::before { content: "‹ "; }
-    .back.is-on { display: block; }
-
-    .server-status-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      margin: 14px auto 0;
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .server-status-container .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #6b7280;
-      flex-shrink: 0;
-    }
-    .server-status-container .status-dot.online { background: var(--ok); }
-    .server-status-container .status-dot.offline { background: var(--bad); }
-
-    .hero { text-align: center; padding: 36px 0 4px; }
-    .logo {
-      width: 52px;
-      height: 52px;
-      margin: 0 auto 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      font-family: "Outfit", sans-serif;
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: var(--text);
-      background: var(--surface);
-    }
-    .q {
-      margin: 0;
-      font-size: 1.65rem;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-    }
-    .hint {
-      margin: 12px 0 0;
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.45;
-      max-width: 22em;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .ask {
-      margin-top: 28px;
-      display: flex;
-      gap: 8px;
-      padding: 8px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-    }
-    .ask input {
-      flex: 1;
-      min-width: 0;
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      font: inherit;
-      font-size: 1rem;
-      padding: 14px 12px;
-      outline: none;
-    }
-    .ask input::placeholder { color: #6b7280; }
-    .ask button[type="submit"] {
-      flex-shrink: 0;
-      border: 0;
-      border-radius: 12px;
-      padding: 14px 18px;
-      background: var(--accent);
-      color: #fff;
-      font-family: "Outfit", sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-      justify-content: center;
-    }
-    .chip {
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 11px 14px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .chip:active { background: var(--surface); color: var(--text); }
-
-    .more { margin-top: 36px; }
-    .more p {
-      margin: 0 0 12px;
-      text-align: center;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #6b7280;
-      font-weight: 600;
-    }
-    .more-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .more a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 56px;
-      padding: 14px 10px;
-      text-align: center;
-      text-decoration: none;
-      color: var(--text);
-      font-size: 0.9rem;
-      font-weight: 650;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-
-    .is-hide { display: none !important; }
-
-    .guide-head { text-align: center; padding: 12px 0 4px; }
-    .guide-note {
-      margin: 22px 0 0;
-      padding: 18px 16px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .doors {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 22px;
-    }
-    .door {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 92px;
-      padding: 20px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--text);
-      text-align: center;
-      font: inherit;
-      cursor: pointer;
-    }
-    .door:active { background: var(--surface-2); }
-    .door strong {
-      display: block;
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-    .door em {
-      display: block;
-      margin-top: 6px;
-      font-style: normal;
-      font-size: 0.88rem;
-      color: var(--muted);
-      font-weight: 400;
-      line-height: 1.35;
-    }
-
-    .step-progress {
-      margin: 22px 0 0;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #6b7280;
-    }
-    .step-focus {
-      margin-top: 12px;
-      padding: 22px 18px;
-      min-height: 120px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-    }
-    .step-focus-top {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .step-focus .step-num {
-      flex-shrink: 0;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent-soft);
-      color: #9ec5dd;
-      font-family: "Outfit", sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-    .step-text,
-    .step-lead {
-      margin: 4px 0 0;
-      font-size: 1.05rem;
-      line-height: 1.5;
-      color: var(--text);
-      font-weight: 500;
-    }
-    .step-lead { margin-bottom: 4px; }
-    .step-taps {
-      margin: 16px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-    .tap-item {
-      padding: 14px 14px;
-      background: var(--surface-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-    }
-    .tap-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .tap-item:not(:last-child) {
-      margin-bottom: 0;
-    }
-    .tap-item:not(:last-child)::after {
-      content: "↓";
-      display: block;
-      text-align: center;
-      color: var(--muted);
-      font-size: 1.1rem;
-      line-height: 1;
-      padding: 10px 0 2px;
-    }
-    .tap-dot {
-      flex-shrink: 0;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .tap-label {
-      font-size: 1rem;
-      line-height: 1.4;
-      color: var(--text);
-      font-weight: 600;
-    }
-    .code {
-      color: #9ec5dd;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
-
-    .cta {
-      display: block;
-      width: 100%;
-      margin-top: 16px;
-      padding: 18px 16px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      background: var(--accent);
-      border: 0;
-      border-radius: 14px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .cta--ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--line);
-      margin-top: 10px;
-    }
-
-    .foot {
-      margin-top: 36px;
-      text-align: center;
-      font-size: 0.72rem;
-      color: #6b7280;
-      line-height: 1.4;
-    }
-
-    .live-updates {
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .live-update {
-      padding: 14px 16px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      text-align: left;
-    }
-    .live-update strong {
-      display: block;
-      font-family: "Outfit", sans-serif;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .live-update p {
-      margin: 0;
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .guide-status {
-      margin-top: 22px;
-      padding: 22px 18px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      text-align: center;
-    }
-    .guide-status-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .guide-status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #6b7280;
-      flex-shrink: 0;
-    }
-    .guide-status-dot.online { background: var(--ok); }
-    .guide-status-dot.offline { background: var(--bad); }
-    .guide-status-label {
-      font-family: "Outfit", sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .guide-status-note {
-      margin: 14px 0 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-  </style>
+  <link rel="stylesheet" href="theme.css?v=1" />
+  <link rel="stylesheet" href="support.css?v=4" />
+  <link rel="stylesheet" href="app.css?v=3" />
+  <link rel="stylesheet" href="site-nav.css?v=3" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -448,11 +33,11 @@
     <div id="homeView">
       <header class="hero">
         <div class="logo" aria-hidden="true">T</div>
-        <h1 class="q">Hi, was steht an?</h1>
-        <p class="hint">Schreib’s wie an WhatsApp. Wir führen dich mit unseren Anleitungen – ohne Raten.</p>
+        <h1 class="q">Hi – brauchst du Hilfe?</h1>
+        <p class="hint">Schreib einfach, was los ist. Wir führen dich durch unsere Anleitung.</p>
         <div class="server-status-container" id="server-status">
           <span id="status-dot" class="status-dot"></span>
-          <span id="status-text" class="status-text">Status wird geprüft...</span>
+          <span id="status-text" class="status-text">Schauen wir nach…</span>
         </div>
       </header>
 
@@ -461,34 +46,32 @@
           id="askInput"
           type="text"
           enterkeyhint="go"
-          placeholder="z.B. Ist Tivim down? oder Fehlercode 401"
+          placeholder="z.B. geht nix / Fehler 401 / ist down?"
           aria-label="Frage eingeben"
         />
         <button type="submit">Los</button>
       </form>
 
       <div class="chips" id="chips">
-        <button type="button" class="chip" data-intent="status">Läuft Tivim?</button>
-        <button type="button" class="chip" data-intent="install-tv">TV einrichten</button>
-        <button type="button" class="chip" data-intent="pro-401">Fehlercode 401</button>
-        <button type="button" class="chip" data-intent="pro-403">Fehlercode 403</button>
-        <button type="button" class="chip" data-intent="pro-codec">CodecException</button>
-        <button type="button" class="chip" data-intent="xc-empty">Listen leer</button>
-        <button type="button" class="chip" data-intent="vpn">Ruckelt abends</button>
-        <button type="button" class="chip" data-intent="install-mobile">Handy</button>
+        <button type="button" class="chip" data-intent="status"><i data-lucide="activity" class="chip-ico" aria-hidden="true"></i> Läuft Tivim?</button>
+        <button type="button" class="chip" data-intent="install-tv"><i data-lucide="tv" class="chip-ico" aria-hidden="true"></i> TV einrichten</button>
+        <button type="button" class="chip" data-intent="pro-401"><i data-lucide="key-round" class="chip-ico" aria-hidden="true"></i> Fehler 401</button>
+        <button type="button" class="chip" data-intent="pro-403"><i data-lucide="ban" class="chip-ico" aria-hidden="true"></i> Fehler 403</button>
+        <button type="button" class="chip" data-intent="pro-codec"><i data-lucide="film" class="chip-ico" aria-hidden="true"></i> CodecException</button>
+        <button type="button" class="chip" data-intent="xc-empty"><i data-lucide="list-x" class="chip-ico" aria-hidden="true"></i> Listen leer</button>
+        <button type="button" class="chip" data-intent="vpn"><i data-lucide="shield" class="chip-ico" aria-hidden="true"></i> Ruckelt abends</button>
+        <button type="button" class="chip" data-intent="install-mobile"><i data-lucide="smartphone" class="chip-ico" aria-hidden="true"></i> Handy</button>
       </div>
 
       <nav class="more">
-        <p>Sonstiges</p>
+        <p>Noch was?</p>
         <div class="more-grid">
-          <a href="neuigkeiten.html">Neue Inhalte</a>
-          <a href="kontakt.html">Support</a>
+          <a href="install.html"><i data-lucide="download" aria-hidden="true"></i> Installation</a>
+          <a href="mehr.html"><i data-lucide="ellipsis" aria-hidden="true"></i> Mehr</a>
         </div>
       </nav>
 
       <div id="liveUpdates" class="live-updates is-hide" aria-live="polite"></div>
-
-      <p class="foot">Antworten kommen aus unserer festen Hilfe – kein freies KI-Raten.</p>
     </div>
 
     <div id="guideView" class="is-hide">
@@ -502,9 +85,13 @@
   </div>
 
   <script src="api-config.js?v=1"></script>
-  <script src="kb.js?v=20260831-10"></script>
-  <script src="assistant.js?v=20260831-10"></script>
-  <script src="script.js?v=20260831-10"></script>
-  <script src="updates.js?v=1"></script>
+  <script src="kb.js?v=20260831-12"></script>
+  <script src="assistant.js?v=20260831-13"></script>
+  <script src="script.js?v=20260831-11"></script>
+  <script src="updates.js?v=4"></script>
+  <script src="site-nav.js?v=3"></script>
+  <script>
+    if (typeof lucide !== "undefined") lucide.createIcons();
+  </script>
 </body>
 </html>

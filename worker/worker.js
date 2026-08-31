@@ -3,7 +3,8 @@
  *
  * Cloudflare Dashboard einrichten:
  * 1. Bindings → KV → Variable name: UPDATES
- * 2. Settings → Secrets:
+ * 2. Bindings → R2 → Variable name: UPDATE_IMAGES (Bucket z.B. tivim-update-images)
+ * 3. Settings → Secrets:
  *    ADMIN_SECRET, DOWNLOAD_PRO_APK, DOWNLOAD_XC_APK, DOWNLOAD_PC_APP
  *    (bestehend: XTREAM_URL, XTREAM_USER, XTREAM_PASS, OPENAI_API_KEY)
  *
@@ -18,6 +19,13 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     };
 
+    const MAX_IMAGE_BYTES = 800000;
+    const ALLOWED_IMAGE_TYPES = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+    };
+
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
@@ -25,6 +33,47 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
     const lang = url.searchParams.get("lang")?.toUpperCase() || "DE";
+
+    // ==========================================
+    // ADMIN: Bild-Upload (POST multipart)
+    // ==========================================
+    if (path === "/admin/upload-image" && request.method === "POST") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_SECRET || auth !== "Bearer " + env.ADMIN_SECRET) {
+        return json({ error: "unauthorized" }, 401, corsHeaders);
+      }
+      if (!env.UPDATE_IMAGES) {
+        return json({ error: "R2 binding UPDATE_IMAGES fehlt" }, 503, corsHeaders);
+      }
+
+      try {
+        const form = await request.formData();
+        const file = form.get("image");
+        if (!file || typeof file.arrayBuffer !== "function") {
+          return json({ error: "no image" }, 400, corsHeaders);
+        }
+        const mime = file.type || "image/jpeg";
+        const ext = ALLOWED_IMAGE_TYPES[mime];
+        if (!ext) {
+          return json({ error: "invalid type" }, 400, corsHeaders);
+        }
+        const buf = await file.arrayBuffer();
+        if (buf.byteLength > MAX_IMAGE_BYTES) {
+          return json({ error: "too large" }, 413, corsHeaders);
+        }
+
+        const id = "img_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+        const key = id + "." + ext;
+        await env.UPDATE_IMAGES.put(key, buf, {
+          httpMetadata: { contentType: mime, cacheControl: "public, max-age=86400" },
+        });
+
+        const imagePath = "/updates/img/" + key;
+        return json({ ok: true, image: imagePath, url: url.origin + imagePath }, 200, corsHeaders);
+      } catch (e) {
+        return json({ error: "upload failed" }, 500, corsHeaders);
+      }
+    }
 
     // ==========================================
     // ADMIN: Live-Updates (POST)
@@ -47,25 +96,67 @@ export default {
         }
 
         if (body.action === "create") {
+          const imagePath = sanitizeImagePath(body.image, url.origin);
           const item = {
             id: "u_" + Date.now().toString(36),
             title: String(body.title || "").slice(0, 120),
             body: String(body.body || "").slice(0, 1200),
             active: body.active !== false,
+            highlight: body.highlight === true,
             created: new Date().toISOString(),
           };
+          if (imagePath) item.image = imagePath;
           store.items = [item, ...(store.items || [])].slice(0, 20);
           await writeStore(env, store);
           return json({ ok: true, item }, 200, corsHeaders);
         }
 
-        if (body.action === "toggle" && body.id) {
+        if (body.action === "toggle-active" && body.id) {
+          store.items = (store.items || []).map(function (item) {
+            if (item.id !== body.id) return item;
+            var isActive = item.active !== false;
+            return Object.assign({}, item, {
+              active: !isActive,
+              updated: new Date().toISOString(),
+            });
+          });
+          await writeStore(env, store);
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
+        if (body.action === "toggle-highlight" && body.id) {
           store.items = (store.items || []).map(function (item) {
             if (item.id !== body.id) return item;
             return Object.assign({}, item, {
-              active: !item.active,
+              highlight: !item.highlight,
               updated: new Date().toISOString(),
             });
+          });
+          await writeStore(env, store);
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
+        // Legacy: alter Admin-Code
+        if (body.action === "toggle" && body.id) {
+          store.items = (store.items || []).map(function (item) {
+            if (item.id !== body.id) return item;
+            var next = Object.assign({}, item, {
+              updated: new Date().toISOString(),
+            });
+            if (body.field === "highlight") {
+              next.highlight = !item.highlight;
+            } else {
+              next.active = item.active === false;
+            }
+            return next;
+          });
+          await writeStore(env, store);
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
+        if (body.action === "delete" && body.id) {
+          store.items = (store.items || []).filter(function (item) {
+            return item.id !== body.id;
           });
           await writeStore(env, store);
           return json({ ok: true }, 200, corsHeaders);
@@ -81,6 +172,23 @@ export default {
     // GET: Updates, Downloads, Status, Filme, Serien
     // ==========================================
     if (request.method === "GET") {
+      // Bilder für Meldungen
+      if (path.startsWith("/updates/img/") && env.UPDATE_IMAGES) {
+        const key = path.slice("/updates/img/".length);
+        if (!key || key.includes("..") || key.includes("/")) {
+          return new Response("Not found", { status: 404, headers: corsHeaders });
+        }
+        const obj = await env.UPDATE_IMAGES.get(key);
+        if (!obj) {
+          return new Response("Not found", { status: 404, headers: corsHeaders });
+        }
+        const headers = Object.assign({}, corsHeaders, {
+          "Content-Type": obj.httpMetadata?.contentType || "image/jpeg",
+          "Cache-Control": "public, max-age=86400",
+        });
+        return new Response(obj.body, { headers });
+      }
+
       // Live-Updates für Startseite
       if (path === "/updates") {
         const store = env.UPDATES ? await readStore(env) : { items: [] };
@@ -268,4 +376,14 @@ async function readStore(env) {
 
 async function writeStore(env, data) {
   await env.UPDATES.put("broadcast", JSON.stringify(data));
+}
+
+function sanitizeImagePath(raw, origin) {
+  if (!raw) return "";
+  var s = String(raw).trim();
+  if (s.indexOf("/updates/img/") === 0) return s.slice(0, 200);
+  if (origin && s.indexOf(origin + "/updates/img/") === 0) {
+    return s.slice(origin.length).slice(0, 200);
+  }
+  return "";
 }

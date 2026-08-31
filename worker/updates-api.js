@@ -76,10 +76,41 @@ export async function handleUpdatesRoutes(request, env) {
       return json({ ok: true, item });
     }
 
+    if (body.action === "toggle-active" && body.id) {
+      store.items = (store.items || []).map(function (item) {
+        if (item.id !== body.id) return item;
+        var isActive = item.active !== false;
+        return { ...item, active: !isActive, updated: new Date().toISOString() };
+      });
+      await writeStore(env, store);
+      return json({ ok: true });
+    }
+
+    if (body.action === "toggle-highlight" && body.id) {
+      store.items = (store.items || []).map(function (item) {
+        if (item.id !== body.id) return item;
+        return { ...item, highlight: !item.highlight, updated: new Date().toISOString() };
+      });
+      await writeStore(env, store);
+      return json({ ok: true });
+    }
+
     if (body.action === "toggle" && body.id) {
       store.items = (store.items || []).map(function (item) {
         if (item.id !== body.id) return item;
-        return { ...item, active: !item.active, updated: new Date().toISOString() };
+        if (body.field === "highlight") {
+          return { ...item, highlight: !item.highlight, updated: new Date().toISOString() };
+        }
+        var isActive = item.active !== false;
+        return { ...item, active: !isActive, updated: new Date().toISOString() };
+      });
+      await writeStore(env, store);
+      return json({ ok: true });
+    }
+
+    if (body.action === "delete" && body.id) {
+      store.items = (store.items || []).filter(function (item) {
+        return item.id !== body.id;
       });
       await writeStore(env, store);
       return json({ ok: true });

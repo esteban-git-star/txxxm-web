@@ -94,6 +94,15 @@
     showStep(prevId);
   }
 
+  window.__tivimWizardBack = function () {
+    if (stepHistory.length > 0) {
+      goBack();
+      return true;
+    }
+    window.location.href = "install.html";
+    return true;
+  };
+
   function bindStep1() {
     document.querySelectorAll("#step-1 [data-device]").forEach(function (btn) {
       btn.addEventListener("click", function () {
