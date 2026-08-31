@@ -2,93 +2,137 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0c0d10" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Tivim Support" />
-  <title>PrivadoVPN Setup – Tivim Support</title>
+  <title>Privado einrichten – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="support.css?v=2" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
-  <div class="page">
-    <header class="app-header">
-      <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="header-content">
-        <a href="vpn.html" class="app-back-button" title="Zurück">
-          <span class="back-arrow" aria-hidden="true">‹</span>
-          <span class="logo-ring">T</span>
-        </a>
-        <div class="header-title-wrapper">
-          <h1 class="page-title">PrivadoVPN Setup</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> In 5 Minuten startklar</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <button type="button" class="back" id="btnBack">Zurück</button>
+    <p class="step-n" id="stepN">Schritt 1 von 6</p>
+    <header class="hero">
+      <h1 class="q" id="flowTitle">Zuerst am Handy</h1>
+      <p class="hint" id="flowLead">Nicht am Fernseher. 24 Monate für 30&nbsp;€ (1,25&nbsp;€/Monat).</p>
     </header>
 
-    <main class="hub-main vpn-guide-main">
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">1</div>
-          <h3>Konto erstellen (Am Handy)</h3>
+    <main id="flowMain">
+      <section class="screen is-on" id="screen-1" data-title="Zuerst am Handy" data-lead="Nicht am Fernseher. 24 Monate für 30 € (1,25 €/Monat)." data-n="1">
+        <div class="doors">
+          <a class="door door--rec" href="https://privadovpn.com/de/" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="external-link" aria-hidden="true"></i>
+            <strong>Privado öffnen</strong>
+            <em>24-Monate-Plan wählen und bezahlen</em>
+          </a>
+          <button type="button" class="door door--action" data-next="2">
+            <strong>Ist bezahlt – weiter</strong>
+          </button>
         </div>
-        <p>Mach das am besten kurz auf dem Smartphone. Klicke auf den Button unten, wähle den <strong>24-Monate-Plan</strong> (bestes Preis-Leistungs-Verhältnis) und schließe die Zahlung ab.</p>
-        <a href="https://privadovpn.com/getprivadovpn/#a_aid=sakasolutions" target="_blank" rel="noopener noreferrer" class="primary-btn download-btn mt-10">🔗 PrivadoVPN hier öffnen</a>
-      </div>
+      </section>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">2</div>
-          <h3>Zugangsdaten prüfen</h3>
+      <section class="screen" id="screen-2" data-title="Mail da?" data-lead="Von Privado. Darin stehen Name und Passwort – beides merken, brauchst du gleich am TV." data-n="2">
+        <div class="doors">
+          <button type="button" class="door door--action" data-next="3">
+            <strong>Mail ist da – weiter</strong>
+          </button>
         </div>
-        <p>Öffne dein E-Mail-Postfach und suche nach der Bestätigung von „Privado“. Darin findest du deinen <strong>Username</strong> und dein <strong>Passwort</strong>. Notiere dir diese Daten.</p>
-      </div>
+      </section>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">3</div>
-          <h3>Auf dem Fernseher installieren</h3>
-        </div>
-        <ol class="step-list">
-          <li>Gehe im Hauptmenü deines Fire TV auf die <strong>Lupe (Suche)</strong>.</li>
-          <li>Tippe <strong>Privado</strong> ein und wähle die App aus.</li>
-          <li>Klicke auf <strong>Herunterladen</strong> und danach auf <strong>Öffnen</strong>.</li>
+      <section class="screen" id="screen-3" data-title="App auf den TV" data-lead="Jetzt die Fernbedienung. Fire TV:" data-n="3">
+        <ol class="list">
+          <li>Lupe (Suche) öffnen</li>
+          <li><strong>Privado</strong> eintippen und die App wählen</li>
+          <li><strong>Herunterladen</strong>, danach <strong>Öffnen</strong></li>
         </ol>
-      </div>
+        <div class="doors">
+          <button type="button" class="door door--action" data-next="4">
+            <strong>App ist offen – weiter</strong>
+          </button>
+        </div>
+      </section>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">4</div>
-          <h3>Einloggen &amp; Verbinden</h3>
+      <section class="screen" id="screen-4" data-title="Einloggen" data-lead="Name und Passwort aus der Mail." data-n="4">
+        <div class="warn">
+          <strong>Wenn der TV fragt: Verbindungsanfrage zulassen?</strong>
+          <span>Unbedingt auf OK / Zulassen. Sonst läuft nichts.</span>
         </div>
-        <p>Gib nun deine Daten aus der E-Mail ein. Wähle anschließend einen Server aus unserer Empfehlungsliste:</p>
-        <div class="pill-row mb-10">
-          <span class="server-pill best">🇳🇱 Niederlande</span>
-          <span class="server-pill best">🇧🇪 Belgien</span>
-          <span class="server-pill good">🇨🇭 Schweiz</span>
-          <span class="server-pill good">🇦🇹 Österreich</span>
+        <div class="doors">
+          <button type="button" class="door door--action" data-next="5">
+            <strong>Eingeloggt und zugelassen</strong>
+          </button>
         </div>
-        <div class="alert-box warning-minimal" role="alert">
-          <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
-          <p><strong>Der wichtigste Klick:</strong> Wenn der TV fragt „Verbindungsanfrage zulassen?“, drücke unbedingt auf <strong>OK / Zulassen</strong>!</p>
-        </div>
-      </div>
+      </section>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">5</div>
-          <h3>Zurücklehnen</h3>
+      <section class="screen" id="screen-5" data-title="Land wählen" data-lead="Nicht irgendwas. In dieser Reihenfolge:" data-n="5">
+        <ol class="list">
+          <li><strong>Niederlande</strong> – zuerst die</li>
+          <li>Ruckelt es noch: <strong>Belgien</strong></li>
+        </ol>
+        <div class="doors">
+          <button type="button" class="door door--ok" data-next="6">
+            <strong>Steht auf verbunden</strong>
+          </button>
         </div>
-        <p>Wenn die App „Verbunden“ anzeigt (grünes Symbol), bist du geschützt. Drücke die <strong>Haus-Taste</strong> auf deiner Fernbedienung, öffne deine Tivim-App und genieße das flüssige Bild!</p>
-        <p class="step-tip"><em>Tipp: Falls es doch mal ruckelt, wechsle einfach in der Privado-App auf ein anderes Land.</em></p>
-      </div>
+      </section>
+
+      <section class="screen" id="screen-6" data-title="Fertig" data-lead="Grünes Symbol = VPN an. Haus-Taste, dann Tivim öffnen." data-n="6">
+        <div class="doors">
+          <a class="door door--ok" href="vpn.html">
+            <i data-lucide="check" aria-hidden="true"></i>
+            <strong>Zurück zur VPN-Seite</strong>
+          </a>
+        </div>
+      </section>
     </main>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+      var current = 1;
+      var titleEl = document.getElementById("flowTitle");
+      var leadEl = document.getElementById("flowLead");
+      var stepEl = document.getElementById("stepN");
+      var backBtn = document.getElementById("btnBack");
+
+      function show(n) {
+        current = n;
+        var screen = document.getElementById("screen-" + n);
+        if (!screen) return;
+        document.querySelectorAll(".screen").forEach(function (el) {
+          el.classList.toggle("is-on", el === screen);
+        });
+        titleEl.textContent = screen.getAttribute("data-title") || "";
+        leadEl.textContent = screen.getAttribute("data-lead") || "";
+        stepEl.textContent = "Schritt " + n + " von 6";
+        window.scrollTo(0, 0);
+      }
+
+      document.getElementById("flowMain").addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-next]");
+        if (!btn) return;
+        show(parseInt(btn.getAttribute("data-next"), 10));
+      });
+
+      backBtn.addEventListener("click", function () {
+        if (current > 1) {
+          show(current - 1);
+          return;
+        }
+        if (document.referrer) history.back();
+        else window.location.href = "vpn.html";
+      });
+
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    })();
+  </script>
 </body>
 </html>

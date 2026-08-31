@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
+  <meta name="theme-color" content="#0c0d10" />
+  <title>Updates – Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="support.css?v=2" />
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">Zurück</a>
+    <header class="hero">
+      <h1 class="q">Live-Updates</h1>
+      <p class="hint">Erscheinen unten auf der Startseite. Passwort liegt nur im Cloudflare Worker – nie im GitHub-Code.</p>
+    </header>
+
+    <div class="note" id="adminNote">
+      <strong>So geht’s</strong>
+      <p>Mit Worker: hier posten → sofort live. Ohne Worker: <code>updates.json</code> im Repo bearbeiten und pushen (1–2 Minuten).</p>
+    </div>
+
+    <form id="loginForm" class="doors" autocomplete="off">
+      <label class="admin-field">
+        <span>Admin-Passwort</span>
+        <input type="password" id="adminPass" required autocomplete="current-password" />
+      </label>
+      <button type="submit" class="cta">Anmelden</button>
+    </form>
+
+    <div id="editor" class="is-hide">
+      <form id="postForm" class="admin-form">
+        <label class="admin-field">
+          <span>Titel</span>
+          <input type="text" id="postTitle" required maxlength="120" placeholder="z.B. Wartung heute Abend" />
+        </label>
+        <label class="admin-field">
+          <span>Text</span>
+          <textarea id="postBody" rows="5" required maxlength="1200" placeholder="Kurz und klar – was Nutzer wissen müssen."></textarea>
+        </label>
+        <label class="admin-check">
+          <input type="checkbox" id="postActive" checked />
+          <span>Sichtbar auf der Startseite</span>
+        </label>
+        <button type="submit" class="cta">Veröffentlichen</button>
+      </form>
+
+      <section class="admin-list">
+        <p class="admin-list-label">Aktuelle Einträge</p>
+        <div id="itemsList"></div>
+      </section>
+
+      <button type="button" class="cta cta--ghost" id="btnLogout">Abmelden</button>
+    </div>
+  </div>
+
+  <script src="api-config.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var API = window.TIVIM_API || "";
+      var SESSION_KEY = "tivim_admin_token";
+      var loginForm = document.getElementById("loginForm");
+      var editor = document.getElementById("editor");
+      var postForm = document.getElementById("postForm");
+      var itemsList = document.getElementById("itemsList");
+      var adminNote = document.getElementById("adminNote");
+
+      function token() {
+        return sessionStorage.getItem(SESSION_KEY) || "";
+      }
+
+      function setToken(value) {
+        if (value) sessionStorage.setItem(SESSION_KEY, value);
+        else sessionStorage.removeItem(SESSION_KEY);
+      }
+
+      function showEditor(on) {
+        loginForm.classList.toggle("is-hide", on);
+        editor.classList.toggle("is-hide", !on);
+      }
+
+      function authHeaders() {
+        return {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token()
+        };
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderList(items) {
+        if (!items.length) {
+          itemsList.innerHTML = '<p class="admin-empty">Noch keine Einträge.</p>';
+          return;
+        }
+        itemsList.innerHTML = items
+          .map(function (item) {
+            var state = item.active === false ? "Aus" : "An";
+            return (
+              '<article class="admin-item" data-id="' +
+              escapeHtml(item.id || "") +
+              '">' +
+              "<strong>" +
+              escapeHtml(item.title || "Ohne Titel") +
+              "</strong>" +
+              '<p>' +
+              escapeHtml(item.body || "") +
+              "</p>" +
+              '<div class="admin-item-meta">' +
+              "<span>" +
+              state +
+              "</span>" +
+              '<button type="button" class="admin-toggle" data-id="' +
+              escapeHtml(item.id || "") +
+              '">' +
+              (item.active === false ? "Einschalten" : "Ausblenden") +
+              "</button>" +
+              "</div></article>"
+            );
+          })
+          .join("");
+      }
+
+      function loadItems() {
+        var url = API ? API + "/updates" : "updates.json";
+        return fetch(url, { cache: "no-store" })
+          .then(function (res) {
+            return res.ok ? res.json() : { items: [] };
+          })
+          .then(function (data) {
+            renderList((data && data.items) || []);
+          })
+          .catch(function () {
+            itemsList.innerHTML = '<p class="admin-empty">Liste konnte nicht geladen werden.</p>';
+          });
+      }
+
+      function postUpdate(payload) {
+        if (!API) {
+          alert("Live-Post braucht den Cloudflare Worker (/admin/updates). Alternativ updates.json im Repo bearbeiten.");
+          return Promise.reject(new Error("no api"));
+        }
+        return fetch(API + "/admin/updates", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        }).then(function (res) {
+          if (res.status === 401) throw new Error("auth");
+          if (!res.ok) throw new Error("fail");
+          return res.json();
+        });
+      }
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var pass = document.getElementById("adminPass").value;
+        setToken(pass);
+        postUpdate({ action: "ping" })
+          .then(function () {
+            showEditor(true);
+            adminNote.innerHTML =
+              "<strong>Verbunden</strong><p>Posts gehen direkt live auf die Startseite.</p>";
+            loadItems();
+          })
+          .catch(function (err) {
+            setToken("");
+            if (err && err.message === "auth") {
+              alert("Passwort falsch.");
+              return;
+            }
+            alert(
+              "Worker antwortet noch nicht auf /admin/updates. Bis dahin updates.json im GitHub-Repo bearbeiten."
+            );
+          });
+      });
+
+      postForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var payload = {
+          action: "create",
+          title: document.getElementById("postTitle").value.trim(),
+          body: document.getElementById("postBody").value.trim(),
+          active: document.getElementById("postActive").checked
+        };
+        postUpdate(payload)
+          .then(function () {
+            postForm.reset();
+            document.getElementById("postActive").checked = true;
+            loadItems();
+          })
+          .catch(function (err) {
+            if (err && err.message === "auth") {
+              setToken("");
+              showEditor(false);
+              alert("Session abgelaufen – bitte neu anmelden.");
+              return;
+            }
+            alert("Veröffentlichen fehlgeschlagen.");
+          });
+      });
+
+      itemsList.addEventListener("click", function (e) {
+        var btn = e.target.closest(".admin-toggle");
+        if (!btn) return;
+        postUpdate({ action: "toggle", id: btn.getAttribute("data-id") })
+          .then(loadItems)
+          .catch(function () {
+            alert("Konnte nicht aktualisiert werden.");
+          });
+      });
+
+      document.getElementById("btnLogout").addEventListener("click", function () {
+        setToken("");
+        showEditor(false);
+      });
+
+      if (token()) {
+        showEditor(true);
+        loadItems();
+      }
+    })();
+  </script>
+  <style>
+    .admin-field {
+      display: block;
+      margin-bottom: 12px;
+    }
+    .admin-field span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .admin-field input,
+    .admin-field textarea {
+      width: 100%;
+      padding: 14px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.95rem;
+    }
+    .admin-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .admin-form { margin-top: 22px; }
+    .admin-list { margin-top: 28px; }
+    .admin-list-label {
+      margin: 0 0 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6b7280;
+      font-weight: 600;
+      text-align: center;
+    }
+    .admin-item {
+      margin-bottom: 10px;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+    }
+    .admin-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .admin-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .admin-item-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .admin-toggle {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .admin-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    code {
+      color: #9ec5dd;
+      font-size: 0.85em;
+    }
+  </style>
+</body>
+</html>

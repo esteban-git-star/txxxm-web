@@ -2,90 +2,54 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
-  <title>Neuigkeiten &amp; Updates – Tivim Support</title>
+  <meta name="theme-color" content="#0c0d10" />
+  <title>Läuft Tivim? – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="support.css?v=2" />
 </head>
 <body>
-  <div class="page">
-    <header class="app-header">
-      <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="header-content">
-        <a href="index.html" class="app-back-button" title="Zurück">
-          <span class="back-arrow" aria-hidden="true">‹</span>
-          <span class="logo-ring">T</span>
-        </a>
-        <div class="header-title-wrapper">
-          <h1 class="page-title">Neuigkeiten</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Alle Systeme operativ</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <a class="back" id="newsBack" href="index.html">Zurück</a>
+    <header class="hero">
+      <h1 class="q">Läuft Tivim?</h1>
+      <p class="hint">Grünes Licht = Server ok. Dann liegt es meist an der App oder deiner Leitung.</p>
     </header>
 
-    <main class="news-main">
-      <div class="smart-timeline">
-        <div class="timeline-item">
-          <div class="timeline-marker" aria-hidden="true"></div>
-          <div class="timeline-date">14. März 2026</div>
-          <details class="hub-card news-card" open>
-            <summary class="news-summary">
-              <div class="news-header-top">
-                <span class="news-badge badge-warning"><i data-lucide="alert-triangle" class="icon-warning icon-inline" aria-hidden="true"></i> Wichtig</span>
-              </div>
-              <h3 class="news-title">Wiedergabe-Probleme seit 13.03.</h3>
-              <span class="chevron" aria-hidden="true"></span>
-            </summary>
-            <div class="news-content">
-              <p>Für alle Tivim XC &amp; Tivim Pro Nutzer, die seit dem 13.03. keine Inhalte abspielen können, hier die schnelle Lösung:</p>
-              <h4 class="app-subtitel">🔹 Tivim Pro</h4>
-              <ol class="step-list compact-list">
-                <li>Einstellungen öffnen</li>
-                <li>Wiedergabelisten → Tivim auswählen</li>
-                <li>Auf Löschen klicken</li>
-                <li>App einmal beenden</li>
-                <li>Danach einfach erneut anmelden <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
-              </ol>
-              <hr class="news-divider" />
-              <h4 class="app-subtitel">🔹 Tivim XC</h4>
-              <ol class="step-list compact-list">
-                <li>Settings öffnen</li>
-                <li>Sign out (Abmelden)</li>
-                <li>App einmal beenden</li>
-                <li>Sign In (Anmelden) → Deine Daten müssten noch gespeichert sein</li>
-                <li>Fertig <i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i></li>
-              </ol>
-            </div>
-          </details>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-marker" aria-hidden="true"></div>
-          <div class="timeline-date">10. März 2026</div>
-          <details class="hub-card news-card">
-            <summary class="news-summary">
-              <div class="news-header-top">
-                <span class="news-badge badge-info">ℹ️ Info</span>
-              </div>
-              <h3 class="news-title">Server-Wartung erfolgreich beendet</h3>
-              <span class="chevron" aria-hidden="true"></span>
-            </summary>
-            <div class="news-content">
-              <p>Die nächtlichen Wartungsarbeiten wurden erfolgreich abgeschlossen. Alle Systeme laufen wieder auf Hochtouren.</p>
-            </div>
-          </details>
-        </div>
+    <div class="panel">
+      <div class="server-status-container" id="server-status">
+        <span id="status-dot" class="status-dot"></span>
+        <span id="status-text" class="status-text">Status wird geprüft...</span>
       </div>
-    </main>
+      <p id="status-explain"></p>
+    </div>
+
+    <div id="status-next" class="is-hide doors">
+      <a class="door" href="stoerungen.html">
+        <strong>Weiter zur Ersten Hilfe</strong>
+        <em>App beenden, ggf. neu anmelden</em>
+      </a>
+      <a class="door" href="vpn.html">
+        <strong>Ruckelt nur abends?</strong>
+        <em>Dann eher VPN als Server-Ausfall</em>
+      </a>
+    </div>
   </div>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260831-8"></script>
+  <script>
+    (function () {
+      var back = document.getElementById("newsBack");
+      if (back && document.referrer) {
+        back.addEventListener("click", function (e) {
+          e.preventDefault();
+          history.back();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

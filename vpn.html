@@ -2,98 +2,70 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0c0d10" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Tivim Support" />
-  <title>VPN &amp; Umleitung – Tivim Support</title>
+  <title>Ruckelt abends? – VPN – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="support.css?v=2" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
-  <div class="page">
-    <header class="app-header">
-      <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="header-content">
-        <a href="index.html" class="app-back-button" title="Zurück">
-          <span class="back-arrow" aria-hidden="true">‹</span>
-          <span class="logo-ring">T</span>
-        </a>
-        <div class="header-title-wrapper">
-          <h1 class="page-title">VPN &amp; Umleitung</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Sicher surfen</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <a class="back" id="vpnBack" href="index.html">Zurück</a>
+
+    <header class="hero">
+      <h1 class="q">Ruckelt abends?</h1>
+      <p class="hint">Dein Internetanbieter (oft Telekom) macht abends Stau. Ein VPN ist die Umleitung – dann läuft das Bild wieder.</p>
     </header>
 
-    <main class="hub-main">
-      <div class="alert-box warning-minimal vpn-alert" role="alert">
-        <i data-lucide="alert-triangle" class="icon-warning" aria-hidden="true"></i>
-        <p><strong>Wichtig für Telekom-Kunden:</strong> Abends kommt es oft zu künstlichen Staus beim Provider. Ein VPN ist hier zwingend nötig für ein flüssiges Bild!</p>
-      </div>
+    <div class="doors">
+      <a class="door door--rec door--tall" href="privado.html">
+        <span class="badge badge--hot">Empfohlen</span>
+        <i data-lucide="shield" aria-hidden="true"></i>
+        <strong>Privado</strong>
+        <em>Schnell – große Serverauswahl – 24 Monate für 30&nbsp;€ (1,25&nbsp;€/Monat)</em>
+      </a>
+      <a class="door door--tall" href="proton-free.html">
+        <span class="badge badge--free">Kostenlos</span>
+        <i data-lucide="leaf" aria-hidden="true"></i>
+        <strong>Proton Free</strong>
+        <em>Kostet nichts. Teils hohe Auslastung – max. 3 Server zur Wahl</em>
+      </a>
+    </div>
 
-      <section class="hub-section">
-        <h2 class="hub-section-title">Warum ruckelt mein TV abends?</h2>
-        <div class="vpn-explainer-grid">
-          <div class="hub-card">
-            <span class="vpn-card-icon" aria-hidden="true">🚧</span>
-            <p class="hub-card-intro">Dein Anbieter (z.&nbsp;B. Telekom) drosselt abends oft die Verbindungen zu Streaming-Servern. Es entsteht ein Stau auf der Daten-Autobahn.</p>
-          </div>
-          <div class="hub-card">
-            <span class="vpn-card-icon" aria-hidden="true">🛡️</span>
-            <p class="hub-card-intro">Ein VPN ist wie eine unsichtbare Umleitung. Es verschlüsselt deine Daten und leitet sie am Stau vorbei. Ergebnis: Flüssiges Bild.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="hub-section">
-        <h2 class="hub-section-title">Wähle dein VPN</h2>
-        <div class="vpn-choice-grid">
-          <div class="hub-card vpn-choice-card">
-            <h3 class="vpn-choice-title">PrivadoVPN (Premium)</h3>
-            <ul class="vpn-features">
-              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Sehr schnell &amp; stabil</li>
-              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Fire TV App</li>
-              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Extrem günstig</li>
-            </ul>
-            <a href="privado.html" class="primary-btn download-btn">Anleitung öffnen</a>
-          </div>
-          <div class="hub-card vpn-choice-card">
-            <h3 class="vpn-choice-title">Proton VPN (Kostenlos)</h3>
-            <ul class="vpn-features">
-              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Dauerhaft kostenlos</li>
-              <li><i data-lucide="check-circle-2" class="icon-success icon-inline" aria-hidden="true"></i> Keine Limits</li>
-              <li><i data-lucide="alert-triangle" class="icon-warning icon-inline" aria-hidden="true"></i> Abends oft etwas voller</li>
-            </ul>
-            <a href="proton-free.html" class="primary-btn vpn-btn-free">Anleitung öffnen</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="hub-section">
-        <h2 class="hub-section-title">Häufige Fragen</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>Muss ich das VPN immer anlassen?</summary>
-            <p class="faq-answer">Nicht unbedingt. Morgens läuft meist alles flüssig. Aber abends oder bei Live-Sport ist es dein Rettungsanker.</p>
-          </details>
-          <details class="faq-item">
-            <summary>Kostet ein VPN Geld?</summary>
-            <p class="faq-answer">Kostenlose VPNs (wie Proton) reichen oft aus, können aber abends voll sein. Gute Premium-Anbieter (wie Privado) kosten ca. 2–4 € im Monat und bieten absolute Stabilität.</p>
-          </details>
-          <details class="faq-item">
-            <summary>Kann ich damit im Urlaub deutsches TV schauen?</summary>
-            <p class="faq-answer">Ja! Stell das VPN im Ausland einfach auf „Deutschland“. So umgehst du Sperren am Hotel-Pool.</p>
-          </details>
-        </div>
-      </section>
-    </main>
+    <section class="faq">
+      <p>Kurz erklärt</p>
+      <details>
+        <summary>Muss das VPN immer an sein?</summary>
+        <p>Nein. Morgens oft unnötig. Anmachen abends und bei Live-Sport.</p>
+      </details>
+      <details>
+        <summary>Warum nicht einfach kostenlos?</summary>
+        <p>Proton reicht oft. Abends sind die Free-Server voll – dann ruckelt es trotzdem. Privado ist stabiler.</p>
+      </details>
+      <details>
+        <summary>Geht das auch im Urlaub?</summary>
+        <p>Ja. VPN auf Deutschland stellen, dann läuft deutsches TV auch im Hotel.</p>
+      </details>
+    </section>
   </div>
-  <script src="script.js"></script>
+  <script>
+    (function () {
+      var back = document.getElementById("vpnBack");
+      if (back && document.referrer) {
+        back.addEventListener("click", function (e) {
+          e.preventDefault();
+          history.back();
+        });
+      }
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    })();
+  </script>
 </body>
 </html>

@@ -2,78 +2,64 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Tivim Support" />
-  <title>Support anfragen – Tivim Support</title>
+  <meta name="theme-color" content="#0c0d10" />
+  <title>Support – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="support.css?v=2" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
-  <div class="page">
-    <header class="app-header">
-      <div class="header-bg-overlay" aria-hidden="true"></div>
-      <div class="header-content">
-        <a href="index.html" class="app-back-button" title="Zurück">
-          <span class="back-arrow" aria-hidden="true">‹</span>
-          <span class="logo-ring">T</span>
-        </a>
-        <div class="header-title-wrapper">
-          <h1 class="page-title">Support anfragen</h1>
-          <div class="status-indicator"><span class="status-dot pulsing-green" aria-hidden="true"></span> Wir helfen dir gerne</div>
-        </div>
-      </div>
+  <div class="wrap">
+    <a class="back" id="kontaktBack" href="index.html">Zurück</a>
+    <header class="hero">
+      <h1 class="q">Bevor du schreibst</h1>
+      <p class="hint">Drei kurze Checks. Danach wissen wir, woran’s liegt – und du wartest nicht unnötig.</p>
     </header>
 
-    <main class="hub-main vpn-guide-main">
-      <div class="hub-card kontakt-intro mb-20">
-        <h3>Bevor du uns schreibst… <i data-lucide="octagon-alert" class="icon-danger icon-inline" aria-hidden="true"></i></h3>
-        <p>Um dir schnell helfen zu können, prüfe bitte diese 3 Punkte. <strong>90 % aller Probleme</strong> lassen sich damit in 2 Minuten selbst lösen!</p>
+    <div class="status-panel">
+      <p class="label">1. Grünes Licht</p>
+      <div class="server-status-container" id="server-status">
+        <span id="status-dot" class="status-dot"></span>
+        <span id="status-text" class="status-text">Status wird geprüft...</span>
       </div>
+      <p id="status-explain"></p>
+    </div>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge step-badge--warning" aria-hidden="true">1</div>
-          <h3>Stecker gezogen?</h3>
-        </div>
-        <p>Hast du deinen Fernseher/Stick UND deinen WLAN-Router für <strong>5 Minuten komplett vom Strom</strong> genommen? (Ein einfacher Neustart reicht oft nicht).</p>
-      </div>
+    <div class="doors">
+      <a class="door" href="stoerungen.html">
+        <i data-lucide="rotate-cw" aria-hidden="true"></i>
+        <strong>2. App neu, ggf. neu anmelden</strong>
+        <em>App zu und wieder auf. Hilft das nicht: Playlist löschen bzw. Sign out / Sign in.</em>
+      </a>
+      <a class="door" href="vpn.html">
+        <i data-lucide="shield" aria-hidden="true"></i>
+        <strong>3. Nur abends ruckeln?</strong>
+        <em>Dann VPN, nicht Support. Das liegt an der Strecke zu dir.</em>
+      </a>
+    </div>
 
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge step-badge--warning" aria-hidden="true">2</div>
-          <h3>Störung gecheckt?</h3>
-        </div>
-        <p>Hast du auf unserer <a href="news.html" class="inline-link">Neuigkeiten-Seite</a> nachgesehen, ob aktuell eine allgemeine Server-Wartung stattfindet? Falls ja, bitte einfach abwarten.</p>
-      </div>
-
-      <div class="hub-card step-card">
-        <div class="step-header">
-          <div class="step-badge step-badge--warning" aria-hidden="true">3</div>
-          <h3>Ruckelt es abends?</h3>
-        </div>
-        <p>Wenn es nur abends ruckelt, liegt es meist an deinem Internetanbieter (oft Telekom). Hast du unsere <a href="vpn.html" class="inline-link">VPN-Lösung</a> schon ausprobiert?</p>
-      </div>
-
-      <div class="hub-card kontakt-cta mt-30">
-        <h3>Alles geprüft und es geht immer noch nicht?</h3>
-        <p>Kein Problem! Bitte melde dich jetzt direkt bei dem <strong>Ansprechpartner, von dem du deine Tivim-Zugangsdaten erhalten hast</strong> (z.&nbsp;B. per WhatsApp oder Telegram).</p>
-        <div class="action-box mt-15">
-          <i data-lucide="camera" class="action-icon icon-cyan" aria-hidden="true"></i>
-          <div class="action-text">
-            <strong>WICHTIG FÜR DEINE NACHRICHT:</strong><br>
-            Schick bitte sofort ein <strong>Foto vom Bildschirm / der Fehlermeldung</strong> mit, damit wir nicht raten müssen und dir direkt helfen können!
-          </div>
-        </div>
-      </div>
-    </main>
+    <div class="note">
+      <strong>Immer noch tot?</strong>
+      <p>Schreib der Person, von der du die Zugangsdaten hast. Mit Foto vom Bildschirm oder der Fehlermeldung – sonst raten wir.</p>
+    </div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    (function () {
+      var back = document.getElementById("kontaktBack");
+      if (back && document.referrer) {
+        back.addEventListener("click", function (e) {
+          e.preventDefault();
+          history.back();
+        });
+      }
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    })();
+  </script>
+  <script src="script.js?v=20260831-8"></script>
 </body>
 </html>

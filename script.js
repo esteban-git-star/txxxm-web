@@ -33,29 +33,70 @@
   }
 
   // Live-Server-Status
-  var SERVER_STATUS_URL = "https://tivim-chatbot.eyepitv.workers.dev/";
+  var SERVER_STATUS_URL = (window.TIVIM_API || "https://tivim-chatbot.eyepitv.workers.dev") + "/";
+
+  window.TIVIM_fetchStatus = async function () {
+    try {
+      var res = await fetch(SERVER_STATUS_URL, { method: "GET" });
+      var data = res.ok ? await res.json() : null;
+      if (data && data.status === "online") return { state: "online", data: data };
+      if (data) return { state: "offline", data: data };
+      return { state: "unknown" };
+    } catch (e) {
+      return { state: "unknown" };
+    }
+  };
 
   async function checkServerStatus() {
     var dot = document.getElementById("status-dot");
     var text = document.getElementById("status-text");
     if (!dot || !text) return;
 
+    var explain = document.getElementById("status-explain");
+    var next = document.getElementById("status-next");
+
+    function apply(kind, label, extra, showNext) {
+      dot.classList.remove("online", "offline");
+      if (kind) dot.classList.add(kind);
+      text.textContent = label;
+      if (explain) explain.textContent = extra || "";
+      if (next) {
+        if (showNext) next.classList.remove("is-hide");
+        else next.classList.add("is-hide");
+      }
+    }
+
     try {
-      var res = await fetch(SERVER_STATUS_URL, { method: "GET" });
-      var data = res.ok ? await res.json() : null;
-      if (data && data.status === "online") {
-        dot.classList.remove("offline");
-        dot.classList.add("online");
-        text.textContent = "Server online";
+      var result = await window.TIVIM_fetchStatus();
+      if (result.state === "online") {
+        apply(
+          "online",
+          "Server online",
+          "Bei uns läuft’s. Wenn bei dir trotzdem nichts geht, liegt’s fast immer an der Strecke zu dir – nicht daran, dass Tivim down ist.",
+          true
+        );
+      } else if (result.state === "offline") {
+        apply(
+          "offline",
+          "Wartungsarbeiten",
+          "Gerade Pause bei uns. App nicht zurücksetzen – später nochmal versuchen.",
+          false
+        );
       } else {
-        dot.classList.remove("online");
-        dot.classList.add("offline");
-        text.textContent = "Wartungsarbeiten";
+        apply(
+          "",
+          "Status unklar",
+          "Die Prüfung hat nicht geklappt. Du kannst trotzdem die Erste Hilfe machen.",
+          true
+        );
       }
     } catch (e) {
-      dot.classList.remove("online");
-      dot.classList.add("offline");
-      text.textContent = "Wartungsarbeiten";
+      apply(
+        "",
+        "Status unklar",
+        "Die Prüfung hat nicht geklappt. Du kannst trotzdem die Erste Hilfe machen.",
+        true
+      );
     }
   }
 
@@ -118,7 +159,10 @@
       { title: "Handy / Tablet", desc: "App für Android & iOS", link: "mobile-install.html", keywords: "handy tablet android apk mobile" },
       { title: "PC & Mac", desc: "Installation für Windows & macOS", link: "pc.html", keywords: "windows pc mac macbook laptop apple exe .exe computer desktop" },
       { title: "Störungen prüfen", desc: "Aktuelle Server-Ausfälle checken", link: "news.html", keywords: "störung ausfall server offline kaputt" },
-      { title: "Server-Status", desc: "Live-Status: Online oder Wartung", link: "index.html#server-status", keywords: "status server online offline störung ausfall" },
+      { title: "Fehlercode 401", desc: "User-Agent fehlt in Tivim Pro", link: "index.html#pro-401", keywords: "401 useragent user-agent tivimplayer pro fehlercode" },
+      { title: "Fehlercode 403", desc: "Abo abgelaufen oder Tivim läuft parallel", link: "index.html#pro-403", keywords: "403 abo abgelaufen parallel handy fernseher gesperrt pro" },
+      { title: "Tivim XC lädt nicht", desc: "Listen leer: keine Sender, keine Filme", link: "index.html#xc-empty", keywords: "xc leer inhalt update ablehnen erlauben listen filme sender" },
+      { title: "Server-Status", desc: "Live-Status: Online oder Wartung", link: "news.html", keywords: "status server online offline störung ausfall" },
       { title: "Support kontaktieren", desc: "Hilfe anfordern & Checkliste", link: "kontakt.html", keywords: "support hilfe kontakt whatsapp anschreiben" }
     ];
 
