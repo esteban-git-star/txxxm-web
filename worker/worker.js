@@ -115,6 +115,19 @@ export default {
           return json({ ok: true, downloads: dl }, 200, corsHeaders);
         }
 
+        if (body.action === "get-wishes") {
+          return json({ ok: true, wishes: (await readWishes(env)).items || [] }, 200, corsHeaders);
+        }
+
+        if (body.action === "delete-wish" && body.id) {
+          var wishes = await readWishes(env);
+          wishes.items = (wishes.items || []).filter(function (w) {
+            return w.id !== body.id;
+          });
+          await writeWishes(env, wishes);
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
         if (body.action === "create") {
           const imagePath = sanitizeImagePath(body.image, url.origin);
           const item = {
@@ -221,11 +234,23 @@ export default {
         if (!allowed) {
           return json({ error: "rate limit" }, 429, corsHeaders);
         }
+        if (!env.UPDATES) {
+          return json({ error: "not configured" }, 503, corsHeaders);
+        }
 
-        await sendWishboxEmail(env, { message, name, contact, ip });
-        return json({ ok: true }, 200, corsHeaders);
+        await appendWish(env, { message, name, contact, ip });
+
+        var mailed = false;
+        try {
+          await sendWishboxEmail(env, { message, name, contact, ip });
+          mailed = true;
+        } catch (mailErr) {
+          mailed = false;
+        }
+
+        return json({ ok: true, mailed: mailed }, 200, corsHeaders);
       } catch (e) {
-        return json({ error: "send failed" }, 500, corsHeaders);
+        return json({ error: "server error" }, 500, corsHeaders);
       }
     }
 
@@ -451,6 +476,29 @@ async function readDownloads(env) {
 
 async function writeDownloads(env, data) {
   await env.UPDATES.put("downloads", JSON.stringify(data));
+}
+
+async function readWishes(env) {
+  if (!env.UPDATES) return { items: [] };
+  return (await env.UPDATES.get("wishbox", "json")) || { items: [] };
+}
+
+async function writeWishes(env, data) {
+  await env.UPDATES.put("wishbox", JSON.stringify(data));
+}
+
+async function appendWish(env, payload) {
+  var store = await readWishes(env);
+  var item = {
+    id: "w_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 6),
+    message: payload.message,
+    name: payload.name || "",
+    contact: payload.contact || "",
+    created: new Date().toISOString(),
+  };
+  store.items = [item, ...(store.items || [])].slice(0, 50);
+  await writeWishes(env, store);
+  return item;
 }
 
 var DEFAULT_INSTALL_CODES = { pro: "5276912", xc: "2853690" };

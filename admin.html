@@ -67,6 +67,12 @@
       </form>
 
       <section class="admin-list">
+        <p class="admin-list-label">Wunschbox</p>
+        <p class="admin-list-hint">Eingehende Wünsche – auch wenn E-Mail-Versand noch nicht klappt.</p>
+        <div id="wishesList"></div>
+      </section>
+
+      <section class="admin-list">
         <p class="admin-list-label">Installation &amp; Downloads</p>
         <p class="admin-list-hint">Downloader-Codes erscheinen in der TV-Anleitung. Android-Downloads nutzen automatisch go.aftvnews.com/CODE.</p>
         <form id="downloadsForm" class="admin-form admin-form--compact">
@@ -108,6 +114,7 @@
       var editor = document.getElementById("editor");
       var postForm = document.getElementById("postForm");
       var itemsList = document.getElementById("itemsList");
+      var wishesList = document.getElementById("wishesList");
       var adminNote = document.getElementById("adminNote");
 
       function token() {
@@ -224,6 +231,44 @@
           });
       }
 
+      function renderWishes(items) {
+        if (!wishesList) return;
+        if (!items.length) {
+          wishesList.innerHTML = '<p class="admin-empty">Noch keine Wünsche.</p>';
+          return;
+        }
+        wishesList.innerHTML = items
+          .map(function (w) {
+            var meta = [];
+            if (w.name) meta.push(escapeHtml(w.name));
+            if (w.contact) meta.push(escapeHtml(w.contact));
+            if (w.created) meta.push(escapeHtml(w.created.slice(0, 16).replace("T", " ")));
+            return (
+              '<article class="admin-item" data-id="' +
+              escapeHtml(w.id || "") +
+              '"><strong>Wunsch</strong><div class="admin-item-body"><p>' +
+              escapeHtml(w.message || "") +
+              "</p></div><div class=\"admin-item-meta\"><span>" +
+              (meta.join(" · ") || "Anonym") +
+              '</span><div class="admin-item-actions"><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
+              escapeHtml(w.id || "") +
+              '">Erledigt</button></div></div></article>'
+            );
+          })
+          .join("");
+      }
+
+      function loadWishes() {
+        if (!API || !token() || !wishesList) return Promise.resolve();
+        return postUpdate({ action: "get-wishes" })
+          .then(function (data) {
+            renderWishes((data && data.wishes) || []);
+          })
+          .catch(function () {
+            wishesList.innerHTML = '<p class="admin-empty">Wünsche konnten nicht geladen werden.</p>';
+          });
+      }
+
       var downloadsForm = document.getElementById("downloadsForm");
       if (downloadsForm) {
         downloadsForm.addEventListener("submit", function (e) {
@@ -276,6 +321,7 @@
               "<strong>Verbunden</strong><p>Posts gehen direkt live auf die Startseite.</p>";
             loadItems();
             loadDownloads();
+            loadWishes();
           })
           .catch(function (err) {
             setToken("");
@@ -470,6 +516,20 @@
         }
       });
 
+      if (wishesList) {
+        wishesList.addEventListener("click", function (e) {
+          var btn = e.target.closest("[data-action='delete-wish']");
+          if (!btn) return;
+          var id = btn.getAttribute("data-id");
+          if (!confirm("Wunsch als erledigt entfernen?")) return;
+          postUpdate({ action: "delete-wish", id: id })
+            .then(loadWishes)
+            .catch(function () {
+              alert("Löschen fehlgeschlagen.");
+            });
+        });
+      }
+
       document.getElementById("btnLogout").addEventListener("click", function () {
         setToken("");
         showEditor(false);
@@ -479,6 +539,7 @@
         showEditor(true);
         loadItems();
         loadDownloads();
+        loadWishes();
       }
     })();
   </script>
