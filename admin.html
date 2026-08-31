@@ -41,7 +41,13 @@
         </label>
         <label class="admin-field">
           <span>Text</span>
-          <textarea id="postBody" rows="5" required maxlength="1200" placeholder="Kurz und klar – was Nutzer wissen müssen."></textarea>
+          <div class="admin-format" role="toolbar" aria-label="Formatierung">
+            <button type="button" class="admin-format-btn" data-fmt="h">Überschrift</button>
+            <button type="button" class="admin-format-btn" data-fmt="b">Fett</button>
+            <button type="button" class="admin-format-btn" data-fmt="link">Link</button>
+          </div>
+          <textarea id="postBody" rows="5" required maxlength="1200" placeholder="Kurz und klar. Zeile mit ## = Zwischenüberschrift. Links: https://… oder [Text](https://…)"></textarea>
+          <p class="admin-format-hint">## Überschrift · **fett** · Links werden automatisch klickbar</p>
         </label>
         <label class="admin-field">
           <span>Bild (optional, max. 800 KB, JPG/PNG/WebP)</span>
@@ -71,6 +77,7 @@
   </div>
 
   <script src="api-config.js"></script>
+  <script src="update-format.js?v=1"></script>
   <script>
     (function () {
       "use strict";
@@ -134,9 +141,13 @@
               escapeHtml(item.title || "Ohne Titel") +
               (item.highlight ? ' <em class="admin-tag">Oben fixiert</em>' : "") +
               "</strong>" +
-              '<p>' +
-              escapeHtml(item.body || "") +
-              "</p>" +
+              (item.body
+                ? '<div class="admin-item-body">' +
+                  (window.TIVIM_formatUpdateBody
+                    ? window.TIVIM_formatUpdateBody(item.body)
+                    : "<p>" + escapeHtml(item.body) + "</p>") +
+                  "</div>"
+                : "") +
               '<div class="admin-item-meta">' +
               "<span>" +
               state +
@@ -238,6 +249,58 @@
       var postImage = document.getElementById("postImage");
       var postImagePreview = document.getElementById("postImagePreview");
       var uploadHint = document.getElementById("uploadHint");
+      var postBody = document.getElementById("postBody");
+
+      function wrapTextarea(ta, before, after, fallback) {
+        if (!ta) return;
+        var start = ta.selectionStart;
+        var end = ta.selectionEnd;
+        var val = ta.value;
+        var selected = val.slice(start, end) || fallback || "";
+        ta.value = val.slice(0, start) + before + selected + after + val.slice(end);
+        var pos = start + before.length + selected.length + after.length;
+        ta.focus();
+        ta.setSelectionRange(pos, pos);
+      }
+
+      function prefixLine(ta, prefix) {
+        if (!ta) return;
+        var start = ta.selectionStart;
+        var val = ta.value;
+        var lineStart = val.lastIndexOf("\n", start - 1) + 1;
+        var lineEnd = val.indexOf("\n", start);
+        if (lineEnd === -1) lineEnd = val.length;
+        var line = val.slice(lineStart, lineEnd);
+        if (/^##\s/.test(line)) {
+          line = line.replace(/^##\s+/, "");
+        } else {
+          line = prefix + line.replace(/^#+\s*/, "");
+        }
+        ta.value = val.slice(0, lineStart) + line + val.slice(lineEnd);
+        ta.focus();
+        ta.setSelectionRange(lineStart + line.length, lineStart + line.length);
+      }
+
+      document.querySelectorAll(".admin-format-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var fmt = btn.getAttribute("data-fmt");
+          if (fmt === "h") {
+            prefixLine(postBody, "## ");
+            return;
+          }
+          if (fmt === "b") {
+            wrapTextarea(postBody, "**", "**", "wichtig");
+            return;
+          }
+          if (fmt === "link") {
+            var url = window.prompt("Link (https://…)", "https://");
+            if (!url) return;
+            var label = window.prompt("Link-Text", url);
+            if (label === null) return;
+            wrapTextarea(postBody, "[", "](" + url.trim() + ")", label || url);
+          }
+        });
+      });
 
       if (postImage) {
         postImage.addEventListener("change", function () {
@@ -377,6 +440,48 @@
       color: var(--text);
       font: inherit;
       font-size: 0.95rem;
+    }
+    .admin-format {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .admin-format-btn {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .admin-format-btn:active {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .admin-format-hint {
+      margin: 8px 0 0;
+      font-size: 0.74rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .admin-item-body {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .admin-item-body .live-update-h {
+      margin: 8px 0 4px;
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+    .admin-item-body a {
+      color: #9ec5dd;
+      text-decoration: underline;
     }
     .admin-check {
       display: flex;

@@ -411,6 +411,45 @@ body {
   border: 1px solid var(--line);
 }
 
+.live-update-body {
+  margin-top: 6px;
+}
+
+.live-update-p {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.live-update-p:last-child {
+  margin-bottom: 0;
+}
+
+.live-update-h {
+  margin: 10px 0 6px;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.live-update-h:first-child {
+  margin-top: 0;
+}
+
+.live-update-body a {
+  color: #a8cce3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+
+.live-update-body a:active {
+  opacity: 0.85;
+}
+
 .live-update strong {
   display: block;
   font-family: var(--font-display);

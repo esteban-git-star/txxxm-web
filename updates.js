@@ -52,7 +52,11 @@
         '" alt="" loading="lazy" decoding="async" />'
       : "";
     var body = item.body
-      ? "<p>" + escapeHtml(item.body).replace(/\n/g, "<br>") + "</p>"
+      ? '<div class="live-update-body">' +
+        (window.TIVIM_formatUpdateBody
+          ? window.TIVIM_formatUpdateBody(item.body)
+          : "<p>" + escapeHtml(item.body).replace(/\n/g, "<br>") + "</p>") +
+        "</div>"
       : "";
     return '<article class="' + cls + '">' + pin + imgHtml + title + body + "</article>";
   }
