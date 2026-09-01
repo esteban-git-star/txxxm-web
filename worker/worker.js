@@ -117,7 +117,16 @@ export default {
         }
 
         if (body.action === "get-wishes") {
-          return json({ ok: true, wishes: (await readWishes(env)).items || [] }, 200, corsHeaders);
+          var wishItems = (await readWishes(env)).items || [];
+          wishItems = wishItems.map(function (w) {
+            if (!w.trakt || !w.trakt.type || !w.trakt.id) return w;
+            return Object.assign({}, w, {
+              trakt: Object.assign({}, w.trakt, {
+                poster: posterPublicUrl(url.origin, w.trakt.type, w.trakt.id),
+              }),
+            });
+          });
+          return json({ ok: true, wishes: wishItems }, 200, corsHeaders);
         }
 
         if (body.action === "delete-wish" && body.id) {
@@ -257,6 +266,7 @@ export default {
           if (!trakt) {
             return json({ error: "invalid trakt" }, 400, corsHeaders);
           }
+          trakt.poster = posterPublicUrl(url.origin, trakt.type, trakt.id);
         }
 
         var message = messageRaw;
@@ -346,6 +356,42 @@ export default {
       }
 
       // Trakt-Suche für Wunschbox (Client ID nur im Worker)
+      if (path === "/trakt/img") {
+        var imgType = url.searchParams.get("type");
+        var imgId = parseInt(url.searchParams.get("id") || "", 10);
+        if ((imgType !== "show" && imgType !== "movie") || !imgId) {
+          return new Response("", { status: 400, headers: corsHeaders });
+        }
+        if (!String(env.TRAKT_CLIENT_ID || "").trim()) {
+          return new Response("", { status: 503, headers: corsHeaders });
+        }
+        var imgIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        var imgCacheKey = new Request(url.origin + "/trakt/img?v=1&type=" + imgType + "&id=" + imgId);
+        var imgCached = await caches.default.match(imgCacheKey);
+        if (imgCached) return imgCached;
+
+        var imgClientId = String(env.TRAKT_CLIENT_ID).trim();
+        var posterSrc = await resolveTraktPoster(env, imgClientId, imgType, imgId, imgIp, ctx);
+        if (!posterSrc) {
+          return new Response("", { status: 404, headers: corsHeaders });
+        }
+        var imgResp = await fetch(posterSrc, {
+          headers: { "User-Agent": "Tivim-Wunschbox/1.0 (tivim-web.com)" },
+        });
+        if (!imgResp.ok) {
+          return new Response("", { status: 404, headers: corsHeaders });
+        }
+        var imgOut = new Response(imgResp.body, {
+          headers: {
+            "Content-Type": imgResp.headers.get("Content-Type") || "image/jpeg",
+            "Cache-Control": "public, s-maxage=604800, max-age=604800",
+            ...corsHeaders,
+          },
+        });
+        ctx.waitUntil(caches.default.put(imgCacheKey, imgOut.clone()));
+        return imgOut;
+      }
+
       if (path === "/trakt/search") {
         if (!String(env.TRAKT_CLIENT_ID || "").trim()) {
           return json({ error: "trakt not configured" }, 503, corsHeaders);
@@ -357,7 +403,7 @@ export default {
         }
         var searchIp = request.headers.get("CF-Connecting-IP") || "unknown";
         var cache = caches.default;
-        var cacheKey = new Request(url.origin + "/trakt/search?v=2&q=" + encodeURIComponent(q.toLowerCase()));
+        var cacheKey = new Request(url.origin + "/trakt/search?v=4&q=" + encodeURIComponent(q.toLowerCase()));
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
         if (!(await consumeTraktRate(env, searchIp, "search"))) {
@@ -367,7 +413,7 @@ export default {
           var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
             limit: 10,
-            extended: "full,images",
+            extended: "full",
           });
           if (!searchResp.ok) {
             return json({ error: "trakt unavailable" }, 502, corsHeaders);
@@ -385,7 +431,7 @@ export default {
                 id: item.ids.trakt,
                 title: String(item.title || "").slice(0, 200),
                 year: item.year || null,
-                poster: pickTraktPoster(item) || pickTraktPoster(row),
+                poster: posterPublicUrl(url.origin, kind, item.ids.trakt),
               });
             });
           }
@@ -410,7 +456,7 @@ export default {
         var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
         try {
           var previewCacheKey = new Request(
-            url.origin + "/trakt/preview?v=2&type=" + previewType + "&id=" + previewId
+            url.origin + "/trakt/preview?v=3&type=" + previewType + "&id=" + previewId
           );
           var cachedPreview = await caches.default.match(previewCacheKey);
           if (cachedPreview) return cachedPreview;
@@ -421,6 +467,7 @@ export default {
 
           var preview = await buildTraktPreview(env, previewType, previewId);
           if (!preview) return json({ error: "not found" }, 404, corsHeaders);
+          preview.poster = posterPublicUrl(url.origin, previewType, previewId);
           var previewOut = json(preview, 200, corsHeaders);
           previewOut.headers.set("Cache-Control", "public, s-maxage=1800, max-age=1800");
           ctx.waitUntil(caches.default.put(previewCacheKey, previewOut.clone()));
@@ -788,7 +835,7 @@ async function buildTraktPreview(env, type, id) {
 }
 
 async function buildMoviePreview(clientId, id) {
-  var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full,images" });
+  var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full" });
   var movie = await traktJson(resp);
   if (!movie || !movie.ids || !movie.ids.trakt) return null;
   var released = movie.released ? String(movie.released).slice(0, 10) : "";
@@ -806,7 +853,7 @@ async function buildMoviePreview(clientId, id) {
 }
 
 async function buildShowPreview(clientId, id) {
-  var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full,images" });
+  var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full" });
   var show = await traktJson(showResp);
   if (!show || !show.ids || !show.ids.trakt) return null;
 
@@ -858,14 +905,64 @@ async function buildShowPreview(clientId, id) {
   };
 }
 
+function posterPublicUrl(origin, type, id) {
+  if (!origin || !type || !id) return "";
+  return (
+    origin +
+    "/trakt/img?type=" +
+    encodeURIComponent(type) +
+    "&id=" +
+    encodeURIComponent(String(id))
+  );
+}
+
+function normalizePosterUrl(raw) {
+  if (!raw) return "";
+  var url = String(raw).trim();
+  if (!url) return "";
+  if (url.indexOf("//") === 0) url = "https:" + url;
+  else if (url.indexOf("http") !== 0) url = "https://" + url;
+  return url.slice(0, 500);
+}
+
 function pickTraktPoster(entity) {
   if (!entity || !entity.images) return "";
-  var posters = entity.images.poster;
-  var url = "";
-  if (Array.isArray(posters) && posters[0]) url = String(posters[0]);
-  else if (typeof posters === "string") url = posters;
-  if (!url || url.indexOf("http") !== 0) return "";
-  return url.slice(0, 500);
+  var imgs = entity.images;
+  var keys = ["poster", "thumb", "banner", "fanart"];
+  for (var i = 0; i < keys.length; i++) {
+    var val = imgs[keys[i]];
+    var raw = "";
+    if (Array.isArray(val) && val[0]) raw = val[0];
+    else if (typeof val === "string") raw = val;
+    var url = normalizePosterUrl(raw);
+    if (url) return url;
+  }
+  return "";
+}
+
+async function resolveTraktPoster(env, clientId, type, traktId, ip, ctx) {
+  var cache = caches.default;
+  var cacheKey = new Request("https://poster.cache/trakt/v1/" + type + "/" + traktId);
+  var cached = await cache.match(cacheKey);
+  if (cached) {
+    try {
+      var hit = await cached.json();
+      if (hit && hit.poster) return hit.poster;
+    } catch (e) {
+      /* ignore */
+    }
+  }
+  if (!(await consumeTraktRate(env, ip, "meta"))) return "";
+
+  var path = type === "movie" ? "/movies/" + traktId : "/shows/" + traktId;
+  var resp = await traktFetch(clientId, path, { extended: "full" });
+  var data = await traktJson(resp);
+  var poster = pickTraktPoster(data);
+  var out = json({ poster: poster || "" }, 200, {});
+  out.headers.set("Cache-Control", "public, max-age=604800");
+  if (ctx) ctx.waitUntil(cache.put(cacheKey, out.clone()));
+  else await cache.put(cacheKey, out.clone());
+  return poster;
 }
 
 async function consumeTraktRate(env, ip, kind) {
@@ -873,6 +970,7 @@ async function consumeTraktRate(env, ip, kind) {
   var limits = {
     search: { max: 80, windowMs: 3600000 },
     preview: { max: 40, windowMs: 3600000 },
+    meta: { max: 120, windowMs: 3600000 },
   };
   var cfg = limits[kind] || limits.search;
   var key = "trakt_rl:" + kind + ":" + ip;
