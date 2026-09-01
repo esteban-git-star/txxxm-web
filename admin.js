@@ -137,7 +137,7 @@
     if (w.adminDate) {
       return '<span class="wish-trakt-date wish-trakt-date--legacy">' + escapeHtml(w.adminDate) + "</span>";
     }
-    return '<span class="wish-trakt-date wish-trakt-date--empty">—</span>";
+    return '<span class="wish-trakt-date wish-trakt-date--empty">—</span>';
   }
 
   function renderWishes(items) {
