@@ -102,7 +102,13 @@
       escapeHtml(item.type) +
       '" data-id="' +
       escapeHtml(String(item.id)) +
-      '">' +
+      '" data-title="' +
+      escapeHtml(item.title) +
+      '" data-year="' +
+      escapeHtml(String(item.year || "")) +
+      '"' +
+      (item.poster ? ' data-poster="' + escapeHtml(item.poster) + '"' : "") +
+      ">" +
       poster +
       '<span class="wish-search-item-body">' +
       '<span class="wish-search-item-type wish-search-item-type--' +
@@ -184,9 +190,21 @@
       .catch(function (err) {
         if (err && err.message === "rate") {
           setStatus("Zu viele Anfragen – kurz warten.", "error");
-        } else {
-          setStatus("Details konnten nicht geladen werden.", "error");
+          return;
         }
+        if (btn && btn.getAttribute("data-title")) {
+          showPick({
+            type: type,
+            id: parseInt(id, 10),
+            title: btn.getAttribute("data-title") || "",
+            year: btn.getAttribute("data-year") ? parseInt(btn.getAttribute("data-year"), 10) : null,
+            poster: btn.getAttribute("data-poster") || "",
+            dateLabel: "Termin wird beim Absenden ermittelt",
+          });
+          setStatus("");
+          return;
+        }
+        setStatus("Details konnten nicht geladen werden.", "error");
       })
       .finally(function () {
         if (btn) btn.disabled = false;

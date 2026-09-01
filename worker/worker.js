@@ -412,9 +412,18 @@ export default {
           return json({ error: "rate limit" }, 429, corsHeaders);
         }
         try {
+          var previewCacheKey = new Request(
+            url.origin + "/trakt/preview?v=2&type=" + previewType + "&id=" + previewId
+          );
+          var cachedPreview = await caches.default.match(previewCacheKey);
+          if (cachedPreview) return cachedPreview;
+
           var preview = await buildTraktPreview(env, previewType, previewId);
           if (!preview) return json({ error: "not found" }, 404, corsHeaders);
-          return json(preview, 200, corsHeaders);
+          var previewOut = json(preview, 200, corsHeaders);
+          previewOut.headers.set("Cache-Control", "public, s-maxage=1800, max-age=1800");
+          ctx.waitUntil(caches.default.put(previewCacheKey, previewOut.clone()));
+          return previewOut;
         } catch (previewErr) {
           return json({ error: "trakt error" }, 502, corsHeaders);
         }
@@ -739,6 +748,22 @@ function traktFetch(clientId, path, params) {
   return fetch(target, { headers: traktHeaders(clientId) });
 }
 
+async function traktJson(resp) {
+  if (!resp || !resp.ok) return null;
+  var text = "";
+  try {
+    text = await resp.text();
+  } catch (e) {
+    return null;
+  }
+  if (!text || !String(text).trim()) return null;
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return null;
+  }
+}
+
 function formatTraktDate(iso) {
   if (!iso) return "";
   var d = iso.slice(0, 10);
@@ -763,8 +788,7 @@ async function buildTraktPreview(env, type, id) {
 
 async function buildMoviePreview(clientId, id) {
   var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full,images" });
-  if (!resp.ok) return null;
-  var movie = await resp.json();
+  var movie = await traktJson(resp);
   if (!movie || !movie.ids || !movie.ids.trakt) return null;
   var released = movie.released ? String(movie.released).slice(0, 10) : "";
   return {
@@ -782,19 +806,25 @@ async function buildMoviePreview(clientId, id) {
 
 async function buildShowPreview(clientId, id) {
   var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full,images" });
-  if (!showResp.ok) return null;
-  var show = await showResp.json();
+  var show = await traktJson(showResp);
   if (!show || !show.ids || !show.ids.trakt) return null;
 
-  var nextResp = await traktFetch(clientId, "/shows/" + id + "/next_episode", { extended: "full" });
-  var lastResp = await traktFetch(clientId, "/shows/" + id + "/last_episode", { extended: "full" });
-  var next = nextResp.ok ? await nextResp.json() : null;
-  var last = lastResp.ok ? await lastResp.json() : null;
+  var status = String(show.status || "");
+  var next = null;
+  var last = null;
+
+  if (status !== "ended") {
+    var nextResp = await traktFetch(clientId, "/shows/" + id + "/next_episode", { extended: "full" });
+    next = await traktJson(nextResp);
+  }
+  if (!next || status === "ended") {
+    var lastResp = await traktFetch(clientId, "/shows/" + id + "/last_episode", { extended: "full" });
+    last = await traktJson(lastResp);
+  }
 
   var dateLabel = "Termin unbekannt";
   var dateIso = "";
   var episodeCode = "";
-  var status = String(show.status || "");
 
   if (next && next.first_aired && next.season != null && next.number != null) {
     episodeCode = epCode(next.season, next.number);
@@ -810,6 +840,8 @@ async function buildShowPreview(clientId, id) {
     dateIso = sanitizeAdminDate(last.first_aired);
   } else if (status === "ended") {
     dateLabel = "Beendet";
+  } else if (status === "returning" || status === "in production") {
+    dateLabel = "Läuft · Termin offen";
   }
 
   return {
