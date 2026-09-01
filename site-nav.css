@@ -1,6 +1,6 @@
 /* Site-weite Navigation */
 :root {
-  --site-nav-h: 56px;
+  --site-nav-h: 58px;
   --site-top-h: 48px;
 }
 
@@ -12,9 +12,9 @@ body.has-site-nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(9, 10, 12, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(10, 11, 13, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
   margin: 0 -18px 10px;
   padding: 0 18px;
@@ -61,11 +61,12 @@ body.has-site-nav {
   right: 0;
   bottom: 0;
   z-index: 200;
-  background: rgba(9, 10, 12, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 11, 13, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: none;
 }
 
 .site-bottom-inner {
@@ -87,20 +88,21 @@ body.has-site-nav {
   padding: 4px 2px;
   text-decoration: none;
   color: var(--muted-2);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 500;
+  letter-spacing: 0;
   border-radius: var(--radius-sm);
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.site-nav-item:active { background: rgba(255, 255, 255, 0.04); }
+.site-nav-item:active { background: none; color: var(--text); }
 .site-nav-item.is-active {
   color: var(--text);
-  background: var(--accent-soft);
+  background: none;
+  box-shadow: none;
 }
-.site-nav-item.is-active .site-nav-icon { stroke: #a8cce3; }
+.site-nav-item.is-active .site-nav-icon { stroke: currentColor; }
 
 .site-nav-icon {
   display: flex;

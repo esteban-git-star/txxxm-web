@@ -403,7 +403,7 @@ export default {
         }
         var searchIp = request.headers.get("CF-Connecting-IP") || "unknown";
         var cache = caches.default;
-        var cacheKey = new Request(url.origin + "/trakt/search?v=4&q=" + encodeURIComponent(q.toLowerCase()));
+        var cacheKey = new Request(url.origin + "/trakt/search?v=5&q=" + encodeURIComponent(q.toLowerCase()));
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
         if (!(await consumeTraktRate(env, searchIp, "search"))) {
@@ -412,7 +412,7 @@ export default {
         try {
           var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
-            limit: 10,
+            limit: 8,
           });
           if (!searchResp.ok) {
             return traktErrorResponse(searchResp, corsHeaders);
@@ -781,7 +781,7 @@ function traktHeaders(clientId) {
   };
 }
 
-async function traktFetch(clientId, path, params, allowRetry) {
+async function traktFetch(clientId, path, params) {
   var target = TRAKT_API + path;
   if (params) {
     var parts = [];
@@ -792,17 +792,10 @@ async function traktFetch(clientId, path, params, allowRetry) {
     });
     if (parts.length) target += "?" + parts.join("&");
   }
-  var resp = await fetch(target, { headers: traktHeaders(clientId) });
-  if (allowRetry !== false && resp.status === 429) {
-    var waitSec = parseInt(resp.headers.get("Retry-After") || "3", 10);
-    if (!waitSec || waitSec < 1) waitSec = 3;
-    if (waitSec > 12) waitSec = 12;
-    await new Promise(function (resolve) {
-      setTimeout(resolve, waitSec * 1000);
-    });
-    return traktFetch(clientId, path, params, false);
-  }
-  return resp;
+  return fetch(target, {
+    headers: traktHeaders(clientId),
+    cf: { cacheEverything: true, cacheTtl: 300 },
+  });
 }
 
 function traktErrorResponse(resp, corsHeaders) {

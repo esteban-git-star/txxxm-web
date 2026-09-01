@@ -38,6 +38,8 @@
   var searchTimer = null;
   var searchSeq = 0;
   var lastSearchQuery = "";
+  var searchAbort = null;
+  var posterToken = 0;
 
   function setStatus(text, kind) {
     statusEl.textContent = text || "";
@@ -86,6 +88,7 @@
   }
 
   function hideSearchList() {
+    posterToken++;
     if (searchList) {
       searchList.classList.add("is-hide");
       searchList.innerHTML = "";
@@ -175,16 +178,22 @@
     updateSubmitState();
   }
 
+  function emptyPoster(type) {
+    return (
+      '<span class="wish-search-poster wish-search-poster--empty wish-search-poster--' +
+      escapeHtml(type) +
+      '" aria-hidden="true">' +
+      escapeHtml(typeLabel(type).slice(0, 1)) +
+      "</span>"
+    );
+  }
+
   function renderSearchItem(item) {
     var poster = item.poster
-      ? '<img class="wish-search-poster" src="' +
+      ? '<img class="wish-search-poster" alt="" decoding="async" data-src="' +
         escapeHtml(item.poster) +
-        '" alt="" loading="lazy" decoding="async" />'
-      : '<span class="wish-search-poster wish-search-poster--empty wish-search-poster--' +
-        escapeHtml(item.type) +
-        '" aria-hidden="true">' +
-        escapeHtml(typeLabel(item.type).slice(0, 1)) +
-        "</span>";
+        '" />'
+      : emptyPoster(item.type);
     return (
       '<li><button type="button" class="wish-search-item" data-type="' +
       escapeHtml(item.type) +
@@ -210,6 +219,40 @@
       (item.year ? ' <em>(' + escapeHtml(String(item.year)) + ")</em>" : "") +
       "</span></span></button></li>"
     );
+  }
+
+  function loadSearchPosters() {
+    if (!searchList) return;
+    var token = ++posterToken;
+    var imgs = searchList.querySelectorAll("img.wish-search-poster[data-src]");
+    var queue = Array.prototype.slice.call(imgs);
+    var running = 0;
+
+    function pump() {
+      if (token !== posterToken) return;
+      while (running < 2 && queue.length) {
+        var img = queue.shift();
+        var src = img.getAttribute("data-src");
+        if (!src) continue;
+        running++;
+        img.removeAttribute("data-src");
+        img.addEventListener("error", function () {
+          var btn = img.closest(".wish-search-item");
+          var type = (btn && btn.getAttribute("data-type")) || "show";
+          var hold = document.createElement("div");
+          hold.innerHTML = emptyPoster(type);
+          if (img.parentNode && hold.firstChild) img.parentNode.replaceChild(hold.firstChild, img);
+          running--;
+          pump();
+        });
+        img.addEventListener("load", function () {
+          running--;
+          pump();
+        });
+        img.src = src;
+      }
+    }
+    pump();
   }
 
   function renderSearchResults(items) {
@@ -238,14 +281,20 @@
     }
     searchList.innerHTML = html;
     searchList.classList.remove("is-hide");
+    loadSearchPosters();
   }
 
   function runSearch(q) {
     if (q === lastSearchQuery && searchList && !searchList.classList.contains("is-hide")) return;
     lastSearchQuery = q;
     var seq = ++searchSeq;
+    posterToken++;
+    if (searchAbort) searchAbort.abort();
+    searchAbort = typeof AbortController !== "undefined" ? new AbortController() : null;
     if (searchLoading) searchLoading.classList.remove("is-hide");
-    fetch(API_BASE + "/trakt/search?q=" + encodeURIComponent(q), { cache: "no-store" })
+    fetch(API_BASE + "/trakt/search?q=" + encodeURIComponent(q), {
+      signal: searchAbort ? searchAbort.signal : undefined,
+    })
       .then(function (res) {
         if (seq !== searchSeq) return null;
         if (res.status === 429) throw new Error("rate");
@@ -258,6 +307,7 @@
         renderSearchResults((data && data.results) || []);
       })
       .catch(function (err) {
+        if (err && err.name === "AbortError") return;
         if (seq !== searchSeq) return;
         if (searchLoading) searchLoading.classList.add("is-hide");
         if (err && err.message === "rate") {
@@ -331,7 +381,7 @@
       }
       searchTimer = setTimeout(function () {
         runSearch(q);
-      }, 500);
+      }, 350);
     });
 
     searchInput.addEventListener("focus", function () {
