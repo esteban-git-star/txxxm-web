@@ -104,6 +104,42 @@
     return w.done ? "wish-row wish-row--done" : "wish-row";
   }
 
+  function wishTypeBadge(w) {
+    if (!w.trakt || !w.trakt.type) return "";
+    var label = w.trakt.type === "movie" ? "Film" : "Serie";
+    return (
+      '<span class="wish-type-badge wish-type-badge--' +
+      escapeHtml(w.trakt.type) +
+      '">' +
+      escapeHtml(label) +
+      "</span> "
+    );
+  }
+
+  function wishDisplayMessage(w) {
+    var main = escapeHtml(w.message || "");
+    if (w.userNote) {
+      return main + '<span class="wish-user-note">' + escapeHtml(w.userNote) + "</span>";
+    }
+    return main;
+  }
+
+  function wishDateCell(w) {
+    if (w.trakt && w.trakt.dateLabel) {
+      return (
+        '<span class="wish-trakt-date" title="' +
+        escapeHtml(w.trakt.dateIso || "") +
+        '">' +
+        escapeHtml(w.trakt.dateLabel) +
+        "</span>"
+      );
+    }
+    if (w.adminDate) {
+      return '<span class="wish-trakt-date wish-trakt-date--legacy">' + escapeHtml(w.adminDate) + "</span>";
+    }
+    return '<span class="wish-trakt-date wish-trakt-date--empty">—</span>";
+  }
+
   function renderWishes(items) {
     updateWishBadges(openWishCount(items));
     if (!items.length) {
@@ -124,14 +160,15 @@
           '"><td class="wish-meta">' +
           escapeHtml(formatDate(w.created)) +
           '</td><td class="wish-msg">' +
-          escapeHtml(w.message || "") +
+          wishTypeBadge(w) +
+          wishDisplayMessage(w) +
           '</td><td class="wish-meta">' +
           escapeHtml(contact) +
           '</td><td><input type="text" class="wish-note-input" data-field="note" value="' +
           escapeHtml(w.adminNote || "") +
-          '" placeholder="z.B. erledigt / abgelehnt" maxlength="500" /></td><td><input type="date" class="wish-date-input" data-field="date" value="' +
-          escapeHtml(w.adminDate || "") +
-          '" /></td><td><div class="wish-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          '" placeholder="z.B. erledigt / abgelehnt" maxlength="500" /></td><td class="wish-meta">' +
+          wishDateCell(w) +
+          '</td><td><div class="wish-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
           id +
           '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
           id +
@@ -154,15 +191,16 @@
           id +
           '"><strong>' +
           escapeHtml(formatDate(w.created)) +
-          '</strong><p>' +
-          escapeHtml(w.message || "") +
+          '</strong><p class="wish-msg">' +
+          wishTypeBadge(w) +
+          wishDisplayMessage(w) +
           '</p><span class="wish-meta">' +
           (meta.join(" · ") || "Anonym") +
           '</span><div class="wish-card-fields"><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +
           escapeHtml(w.adminNote || "") +
-          '" placeholder="Interne Notiz" maxlength="500" /></label><label><span>Termin</span><input type="date" class="wish-date-input" data-field="date" value="' +
-          escapeHtml(w.adminDate || "") +
-          '" /></label></div><div class="wish-card-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          '" placeholder="Interne Notiz" maxlength="500" /></label><div class="wish-card-date"><span>Termin</span><p>' +
+          wishDateCell(w) +
+          '</p></div></div><div class="wish-card-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
           id +
           '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
           id +
@@ -176,10 +214,8 @@
 
   function readWishFields(root) {
     var noteEl = root.querySelector('[data-field="note"]');
-    var dateEl = root.querySelector('[data-field="date"]');
     return {
-      note: noteEl ? noteEl.value.trim() : "",
-      date: dateEl ? dateEl.value : ""
+      note: noteEl ? noteEl.value.trim() : ""
     };
   }
 
@@ -189,7 +225,6 @@
       action: "update-wish",
       id: id,
       note: fields.note,
-      date: fields.date,
       done: done === true ? true : undefined
     }).then(loadWishes);
   }

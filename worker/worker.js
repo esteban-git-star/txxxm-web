@@ -8,6 +8,7 @@
  *    ADMIN_SECRET, DOWNLOAD_PRO_APK, DOWNLOAD_XC_APK, DOWNLOAD_PC_APP
  *    WISHBOX_TO (Empfänger – nie ins Repo!)
  *    Optional: WISHBOX_FROM = wunschbox@tivim-web.com (Absender für Mailchannels)
+ *    TRAKT_CLIENT_ID (Trakt-Suche Wunschbox – nur Client ID, kein OAuth nötig)
  *    (bestehend: XTREAM_URL, XTREAM_USER, XTREAM_PASS, OPENAI_API_KEY)
  *
  * Deploy: Code einfügen → Save and Deploy
@@ -241,11 +242,29 @@ export default {
           return json({ ok: true }, 200, corsHeaders);
         }
 
-        const message = String(body.message || "").trim();
+        const messageRaw = String(body.message || "").trim();
         const name = String(body.name || "").trim().slice(0, 80);
         const contact = String(body.contact || "").trim().slice(0, 120);
+        const userNote = String(body.note || "").trim().slice(0, 500);
 
-        if (message.length < 10) {
+        var trakt = null;
+        if (body.trakt && body.trakt.type && body.trakt.id) {
+          try {
+            trakt = await buildTraktPreview(env, body.trakt.type, body.trakt.id);
+          } catch (traktErr) {
+            trakt = null;
+          }
+          if (!trakt) {
+            return json({ error: "invalid trakt" }, 400, corsHeaders);
+          }
+        }
+
+        var message = messageRaw;
+        if (trakt) {
+          message = trakt.title + (trakt.year ? " (" + trakt.year + ")" : "");
+        }
+
+        if (!trakt && message.length < 10) {
           return json({ error: "too short" }, 400, corsHeaders);
         }
         if (message.length > 2000) {
@@ -264,11 +283,11 @@ export default {
           return json({ error: "not configured" }, 503, corsHeaders);
         }
 
-        await appendWish(env, { message, name, contact, ip });
+        await appendWish(env, { message, name, contact, ip, trakt, userNote });
 
         var mailed = false;
         try {
-          await sendWishboxEmail(env, { message, name, contact, ip });
+          await sendWishboxEmail(env, { message, name, contact, ip, trakt: trakt, userNote: userNote });
           mailed = true;
         } catch (mailErr) {
           mailed = false;
@@ -324,6 +343,72 @@ export default {
           return new Response("Not found", { status: 404, headers: corsHeaders });
         }
         return Response.redirect(target, 302);
+      }
+
+      // Trakt-Suche für Wunschbox (Client ID nur im Worker)
+      if (path === "/trakt/search" && env.TRAKT_CLIENT_ID) {
+        var q = String(url.searchParams.get("q") || "").trim().slice(0, 80);
+        if (q.length < 2) {
+          return json({ results: [] }, 200, corsHeaders);
+        }
+        var searchIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        if (!(await checkTraktRate(env, searchIp))) {
+          return json({ error: "rate limit" }, 429, corsHeaders);
+        }
+        var cache = caches.default;
+        var cacheKey = new Request(url.origin + "/trakt/search?q=" + encodeURIComponent(q.toLowerCase()));
+        var cachedSearch = await cache.match(cacheKey);
+        if (cachedSearch) return cachedSearch;
+        try {
+          var searchResp = await traktFetch(env.TRAKT_CLIENT_ID, "/search/movie,show", {
+            query: q,
+            limit: 8,
+          });
+          if (!searchResp.ok) {
+            return json({ error: "trakt unavailable" }, 502, corsHeaders);
+          }
+          var searchRaw = await searchResp.json();
+          var results = [];
+          if (Array.isArray(searchRaw)) {
+            searchRaw.forEach(function (row) {
+              var kind = row.type === "movie" ? "movie" : row.type === "show" ? "show" : null;
+              if (!kind) return;
+              var item = row[kind];
+              if (!item || !item.ids || !item.ids.trakt) return;
+              results.push({
+                type: kind,
+                id: item.ids.trakt,
+                title: String(item.title || "").slice(0, 200),
+                year: item.year || null,
+              });
+            });
+          }
+          var searchOut = json({ results: results }, 200, corsHeaders);
+          searchOut.headers.set("Cache-Control", "public, s-maxage=600, max-age=600");
+          ctx.waitUntil(cache.put(cacheKey, searchOut.clone()));
+          return searchOut;
+        } catch (searchErr) {
+          return json({ error: "trakt error" }, 502, corsHeaders);
+        }
+      }
+
+      if (path === "/trakt/preview" && env.TRAKT_CLIENT_ID) {
+        var previewType = url.searchParams.get("type");
+        var previewId = parseInt(url.searchParams.get("id") || "", 10);
+        if ((previewType !== "show" && previewType !== "movie") || !previewId) {
+          return json({ error: "bad request" }, 400, corsHeaders);
+        }
+        var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        if (!(await checkTraktRate(env, previewIp))) {
+          return json({ error: "rate limit" }, 429, corsHeaders);
+        }
+        try {
+          var preview = await buildTraktPreview(env, previewType, previewId);
+          if (!preview) return json({ error: "not found" }, 404, corsHeaders);
+          return json(preview, 200, corsHeaders);
+        } catch (previewErr) {
+          return json({ error: "trakt error" }, 502, corsHeaders);
+        }
       }
 
       try {
@@ -522,6 +607,8 @@ async function appendWish(env, payload) {
     contact: payload.contact || "",
     created: new Date().toISOString(),
   };
+  if (payload.trakt) item.trakt = payload.trakt;
+  if (payload.userNote) item.userNote = payload.userNote;
   store.items = [item, ...(store.items || [])].slice(0, 50);
   await writeWishes(env, store);
   return item;
@@ -605,11 +692,140 @@ function buildWishboxText(payload) {
   var lines = ["Neuer Wunsch über tivim-web.com", ""];
   if (payload.name) lines.push("Name: " + payload.name);
   if (payload.contact) lines.push("Kontakt: " + payload.contact);
+  if (payload.trakt) {
+    lines.push("Typ: " + (payload.trakt.type === "movie" ? "Film" : "Serie"));
+    if (payload.trakt.dateLabel) lines.push("Termin: " + payload.trakt.dateLabel);
+  }
+  if (payload.userNote) lines.push("Zusatz: " + payload.userNote);
   lines.push("", payload.message);
   if (payload.ip && payload.ip !== "unknown") {
     lines.push("", "—", "IP (Rate-Limit): " + payload.ip);
   }
   return lines.join("\n");
+}
+
+var TRAKT_API = "https://api.trakt.tv";
+
+function traktHeaders(clientId) {
+  return {
+    "Content-Type": "application/json",
+    "trakt-api-version": "2",
+    "trakt-api-key": clientId,
+  };
+}
+
+function traktFetch(clientId, path, params) {
+  var target = TRAKT_API + path;
+  if (params) {
+    var parts = [];
+    Object.keys(params).forEach(function (k) {
+      if (params[k] != null && params[k] !== "") {
+        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(String(params[k])));
+      }
+    });
+    if (parts.length) target += "?" + parts.join("&");
+  }
+  return fetch(target, { headers: traktHeaders(clientId) });
+}
+
+function formatTraktDate(iso) {
+  if (!iso) return "";
+  var d = iso.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return iso.slice(0, 10);
+  var p = d.split("-");
+  return p[2] + "." + p[1] + "." + p[0];
+}
+
+function epCode(season, episode) {
+  return "S" + String(season).padStart(2, "0") + "E" + String(episode).padStart(2, "0");
+}
+
+async function buildTraktPreview(env, type, id) {
+  if (!env.TRAKT_CLIENT_ID) return null;
+  var numId = parseInt(id, 10);
+  if (!numId || numId < 1) return null;
+  if (type === "movie") return buildMoviePreview(env.TRAKT_CLIENT_ID, numId);
+  if (type === "show") return buildShowPreview(env.TRAKT_CLIENT_ID, numId);
+  return null;
+}
+
+async function buildMoviePreview(clientId, id) {
+  var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full" });
+  if (!resp.ok) return null;
+  var movie = await resp.json();
+  if (!movie || !movie.ids || !movie.ids.trakt) return null;
+  var released = movie.released ? String(movie.released).slice(0, 10) : "";
+  return {
+    type: "movie",
+    id: movie.ids.trakt,
+    title: String(movie.title || "").slice(0, 200),
+    year: movie.year || null,
+    status: "",
+    dateLabel: released ? "Release · " + formatTraktDate(released) : "Release unbekannt",
+    dateIso: sanitizeAdminDate(released),
+    episodeCode: "",
+  };
+}
+
+async function buildShowPreview(clientId, id) {
+  var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full" });
+  if (!showResp.ok) return null;
+  var show = await showResp.json();
+  if (!show || !show.ids || !show.ids.trakt) return null;
+
+  var nextResp = await traktFetch(clientId, "/shows/" + id + "/next_episode", { extended: "full" });
+  var lastResp = await traktFetch(clientId, "/shows/" + id + "/last_episode", { extended: "full" });
+  var next = nextResp.ok ? await nextResp.json() : null;
+  var last = lastResp.ok ? await lastResp.json() : null;
+
+  var dateLabel = "Termin unbekannt";
+  var dateIso = "";
+  var episodeCode = "";
+  var status = String(show.status || "");
+
+  if (next && next.first_aired && next.season != null && next.number != null) {
+    episodeCode = epCode(next.season, next.number);
+    dateLabel = "Nächste Folge " + episodeCode + " · " + formatTraktDate(next.first_aired);
+    dateIso = sanitizeAdminDate(next.first_aired);
+  } else if (status === "ended" && last && last.first_aired && last.season != null && last.number != null) {
+    episodeCode = epCode(last.season, last.number);
+    dateLabel = "Beendet · letzte Folge " + episodeCode + " · " + formatTraktDate(last.first_aired);
+    dateIso = sanitizeAdminDate(last.first_aired);
+  } else if (last && last.first_aired && last.season != null && last.number != null) {
+    episodeCode = epCode(last.season, last.number);
+    dateLabel = "Letzte Folge " + episodeCode + " · " + formatTraktDate(last.first_aired);
+    dateIso = sanitizeAdminDate(last.first_aired);
+  } else if (status === "ended") {
+    dateLabel = "Beendet";
+  }
+
+  return {
+    type: "show",
+    id: show.ids.trakt,
+    title: String(show.title || "").slice(0, 200),
+    year: show.year || null,
+    status: status,
+    dateLabel: dateLabel,
+    dateIso: dateIso,
+    episodeCode: episodeCode,
+  };
+}
+
+async function checkTraktRate(env, ip) {
+  if (!env.UPDATES) return true;
+  var key = "trakt_rl:" + ip;
+  var raw = await env.UPDATES.get(key);
+  var now = Date.now();
+  var windowMs = 3600000;
+  var max = 60;
+  var entries = raw ? JSON.parse(raw) : [];
+  entries = entries.filter(function (t) {
+    return now - t < windowMs;
+  });
+  if (entries.length >= max) return false;
+  entries.push(now);
+  await env.UPDATES.put(key, JSON.stringify(entries), { expirationTtl: 3600 });
+  return true;
 }
 
 function parseWishboxFrom(raw) {

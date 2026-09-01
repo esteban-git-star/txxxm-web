@@ -458,6 +458,110 @@ body {
 .wishbox-status.is-ok { color: var(--ok, #4ade80); }
 .wishbox-status.is-error { color: var(--danger, #f87171); }
 
+.wishbox-field--search { position: relative; z-index: 2; }
+.wish-search { position: relative; }
+.wish-search input[type="search"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+.wish-search input[type="search"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.wish-search-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+.wish-search-list.is-hide { display: none; }
+.wish-search-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.wish-search-item:hover { background: rgba(255, 255, 255, 0.06); }
+.wish-search-item strong { flex: 1; font-weight: 600; }
+.wish-search-item em { color: var(--muted); font-style: normal; font-size: 0.9em; }
+.wish-search-item-type {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  min-width: 42px;
+}
+.wish-search-empty {
+  padding: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.wish-pick {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: rgba(74, 222, 128, 0.06);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.wish-pick.is-hide { display: none; }
+.wish-pick-type {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.wish-pick-type--movie { color: #60a5fa; }
+.wish-pick-main strong {
+  display: block;
+  font-family: var(--font-display, inherit);
+  font-size: 1.05rem;
+}
+.wish-pick-date {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.wish-pick-clear {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+.wish-pick-clear:hover { color: var(--text); border-color: var(--muted); }
+.wishbox-field.is-compact span em::after { content: " – oder Freitext wenn nichts passt"; }
+
 /* Installation (Handy, PC) */
 .install-pick {
   margin-top: 10px;

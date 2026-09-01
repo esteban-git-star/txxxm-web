@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=1" />
-  <link rel="stylesheet" href="support.css?v=5" />
+  <link rel="stylesheet" href="support.css?v=6" />
   <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
@@ -18,7 +18,7 @@
   <div class="wrap">
     <header class="hero">
       <h1 class="q">Wunschbox</h1>
-      <p class="hint">Was fehlt dir? Neuer Film, besserer Sender, Idee für die Seite – schreib’s kurz.</p>
+      <p class="hint">Film oder Serie suchen – du siehst direkt, wann die nächste Folge oder der Release kommt.</p>
     </header>
 
     <form class="wishbox-form" id="wishboxForm" novalidate>
@@ -32,29 +32,46 @@
         <input type="email" name="contact" maxlength="120" autocomplete="email" placeholder="nur wenn du Antwort willst" />
       </label>
 
-      <label class="wishbox-field">
-        <span>Dein Wunsch</span>
-        <textarea name="message" rows="6" required minlength="10" maxlength="2000" placeholder="Bitte Wunschfilm oder Serie hier eintragen"></textarea>
+      <label class="wishbox-field wishbox-field--search">
+        <span>Film oder Serie suchen</span>
+        <div class="wish-search" id="wishSearchWrap">
+          <input type="search" id="wishSearch" autocomplete="off" placeholder="Titel eingeben …" enterkeyhint="search" />
+          <ul class="wish-search-list is-hide" id="wishSearchList" role="listbox" aria-label="Suchergebnisse"></ul>
+        </div>
+      </label>
+
+      <div class="wish-pick is-hide" id="wishPick" aria-live="polite">
+        <div class="wish-pick-main">
+          <span class="wish-pick-type" id="wishPickType"></span>
+          <strong id="wishPickTitle"></strong>
+          <p class="wish-pick-date" id="wishPickDate"></p>
+        </div>
+        <button type="button" class="wish-pick-clear" id="wishPickClear">Andere wählen</button>
+      </div>
+
+      <label class="wishbox-field" id="wishFreeField">
+        <span>Zusatz <em>(optional)</em></span>
+        <textarea name="message" rows="4" maxlength="2000" placeholder="Freitext, wenn die Suche nichts findet – mindestens ein Satz"></textarea>
       </label>
 
       <input type="text" name="website" class="wishbox-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
       <p class="wishbox-status" id="wishboxStatus" role="status" aria-live="polite"></p>
 
-      <button type="submit" class="cta" id="wishboxSubmit">Abschicken</button>
+      <button type="submit" class="cta" id="wishboxSubmit">Wunsch abschicken</button>
     </form>
 
     <div class="note">
       <strong>Hinweis</strong>
       <p>Kein Support-Ticket – nur Wünsche und Ideen. Bei Problemen zuerst die <a href="kontakt.html">Support-Checkliste</a>.</p>
-      <p>Serien wie GZSZ mit tausenden Folgen bitte nicht anfragen – wird abgelehnt.</p>
+      <p>Bitte nur Filme und Serien wünschen – du kannst im Zusatzfeld noch Details ergänzen.</p>
     </div>
   </div>
   <script>
     if (typeof lucide !== "undefined") lucide.createIcons();
   </script>
   <script src="api-config.js?v=1"></script>
-  <script src="wunschbox.js?v=1"></script>
+  <script src="wunschbox.js?v=2"></script>
   <script src="site-nav.js?v=3"></script>
 </body>
 </html>

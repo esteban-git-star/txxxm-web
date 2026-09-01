@@ -351,8 +351,7 @@ body.admin-page {
   text-decoration: line-through;
   color: var(--muted);
 }
-.wish-note-input,
-.wish-date-input {
+.wish-note-input {
   width: 100%;
   min-width: 120px;
   box-sizing: border-box;
@@ -364,9 +363,48 @@ body.admin-page {
   font: inherit;
   font-size: 0.84rem;
 }
-.wish-date-input {
-  min-width: 140px;
+.wish-type-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--accent);
 }
+.wish-type-badge--movie {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+.wish-user-note {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.wish-trakt-date {
+  display: block;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  color: var(--text);
+  max-width: 220px;
+}
+.wish-trakt-date--empty,
+.wish-trakt-date--legacy {
+  color: var(--muted);
+}
+.wish-card-date span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  color: var(--muted-2);
+  font-weight: 600;
+}
+.wish-card-date p { margin: 0; }
 .wish-actions {
   display: flex;
   flex-direction: column;
