@@ -413,10 +413,9 @@ export default {
           var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
             limit: 10,
-            extended: "full",
           });
           if (!searchResp.ok) {
-            return json({ error: "trakt unavailable" }, 502, corsHeaders);
+            return traktErrorResponse(searchResp, corsHeaders);
           }
           var searchRaw = await searchResp.json();
           var results = [];
@@ -782,7 +781,7 @@ function traktHeaders(clientId) {
   };
 }
 
-function traktFetch(clientId, path, params) {
+async function traktFetch(clientId, path, params, allowRetry) {
   var target = TRAKT_API + path;
   if (params) {
     var parts = [];
@@ -793,7 +792,27 @@ function traktFetch(clientId, path, params) {
     });
     if (parts.length) target += "?" + parts.join("&");
   }
-  return fetch(target, { headers: traktHeaders(clientId) });
+  var resp = await fetch(target, { headers: traktHeaders(clientId) });
+  if (allowRetry !== false && resp.status === 429) {
+    var waitSec = parseInt(resp.headers.get("Retry-After") || "3", 10);
+    if (!waitSec || waitSec < 1) waitSec = 3;
+    if (waitSec > 12) waitSec = 12;
+    await new Promise(function (resolve) {
+      setTimeout(resolve, waitSec * 1000);
+    });
+    return traktFetch(clientId, path, params, false);
+  }
+  return resp;
+}
+
+function traktErrorResponse(resp, corsHeaders) {
+  if (resp && resp.status === 429) {
+    return json({ error: "rate limit", source: "trakt" }, 429, corsHeaders);
+  }
+  if (resp && (resp.status === 401 || resp.status === 403)) {
+    return json({ error: "trakt auth" }, 503, corsHeaders);
+  }
+  return json({ error: "trakt unavailable" }, 502, corsHeaders);
 }
 
 async function traktJson(resp) {
@@ -941,27 +960,48 @@ function pickTraktPoster(entity) {
 }
 
 async function resolveTraktPoster(env, clientId, type, traktId, ip, ctx) {
+  var kvKey = "trakt_poster:" + type + ":" + traktId;
+  if (env.UPDATES) {
+    var kvHit = await env.UPDATES.get(kvKey);
+    if (kvHit) return kvHit;
+  }
+
   var cache = caches.default;
-  var cacheKey = new Request("https://poster.cache/trakt/v1/" + type + "/" + traktId);
+  var cacheKey = new Request("https://poster.cache/trakt/v2/" + type + "/" + traktId);
   var cached = await cache.match(cacheKey);
   if (cached) {
     try {
       var hit = await cached.json();
-      if (hit && hit.poster) return hit.poster;
+      if (hit && hit.poster) {
+        if (env.UPDATES && hit.poster) {
+          ctx.waitUntil(env.UPDATES.put(kvKey, hit.poster, { expirationTtl: 604800 }));
+        }
+        return hit.poster;
+      }
     } catch (e) {
       /* ignore */
     }
   }
   if (!(await consumeTraktRate(env, ip, "meta"))) return "";
 
-  var path = type === "movie" ? "/movies/" + traktId : "/shows/" + traktId;
-  var resp = await traktFetch(clientId, path, { extended: "full" });
+  var apiPath = type === "movie" ? "/movies/" + traktId : "/shows/" + traktId;
+  var resp = await traktFetch(clientId, apiPath, { extended: "full" });
+  if (!resp.ok) return "";
   var data = await traktJson(resp);
   var poster = pickTraktPoster(data);
   var out = json({ poster: poster || "" }, 200, {});
   out.headers.set("Cache-Control", "public, max-age=604800");
-  if (ctx) ctx.waitUntil(cache.put(cacheKey, out.clone()));
-  else await cache.put(cacheKey, out.clone());
+  if (ctx) {
+    ctx.waitUntil(cache.put(cacheKey, out.clone()));
+    if (env.UPDATES && poster) {
+      ctx.waitUntil(env.UPDATES.put(kvKey, poster, { expirationTtl: 604800 }));
+    }
+  } else {
+    await cache.put(cacheKey, out.clone());
+    if (env.UPDATES && poster) {
+      await env.UPDATES.put(kvKey, poster, { expirationTtl: 604800 });
+    }
+  }
   return poster;
 }
 

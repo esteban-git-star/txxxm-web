@@ -259,16 +259,20 @@
       })
       .catch(function (err) {
         if (seq !== searchSeq) return;
+        if (searchLoading) searchLoading.classList.add("is-hide");
         if (err && err.message === "rate") {
           if (searchList) {
             searchList.innerHTML =
               '<li class="wish-search-empty">Gerade viele Suchen – 10 Sek. warten und weiter tippen.</li>';
             searchList.classList.remove("is-hide");
           }
-          if (searchLoading) searchLoading.classList.add("is-hide");
           return;
         }
-        hideSearchList();
+        if (searchList) {
+          searchList.innerHTML =
+            '<li class="wish-search-empty">Suche kurz nicht erreichbar – bitte in 10–20 Sek. erneut versuchen.</li>';
+          searchList.classList.remove("is-hide");
+        }
       });
   }
 
