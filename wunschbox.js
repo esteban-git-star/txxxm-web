@@ -4,22 +4,37 @@
   var form = document.getElementById("wishboxForm");
   var statusEl = document.getElementById("wishboxStatus");
   var submitBtn = document.getElementById("wishboxSubmit");
+  var submitHint = document.getElementById("wishSubmitHint");
   var searchInput = document.getElementById("wishSearch");
   var searchList = document.getElementById("wishSearchList");
+  var searchLoading = document.getElementById("wishSearchLoading");
+  var searchPanel = document.getElementById("wishSearchPanel");
+  var freePanel = document.getElementById("wishFreePanel");
+  var freeField = document.getElementById("wishFreeField");
+  var noteField = document.getElementById("wishNoteField");
+  var freitextToggle = document.getElementById("wishFreitextToggle");
+  var backToSearch = document.getElementById("wishBackToSearch");
   var pickEl = document.getElementById("wishPick");
   var pickType = document.getElementById("wishPickType");
   var pickTitle = document.getElementById("wishPickTitle");
   var pickDate = document.getElementById("wishPickDate");
   var pickPoster = document.getElementById("wishPickPoster");
+  var pickPosterEmpty = document.getElementById("wishPickPosterEmpty");
   var pickClear = document.getElementById("wishPickClear");
-  var freeField = document.getElementById("wishFreeField");
   var messageEl = form ? form.querySelector('[name="message"]') : null;
+  var noteEl = form ? form.querySelector('[name="note"]') : null;
+  var steps = [
+    document.getElementById("step1"),
+    document.getElementById("step2"),
+    document.getElementById("step3"),
+  ];
 
   if (!form || !statusEl) return;
 
   var API_BASE = window.TIVIM_API || "https://tivim-chatbot.eyepitv.workers.dev";
   var WISH_API = API_BASE + "/wishbox";
   var selected = null;
+  var freitextMode = false;
   var searchTimer = null;
   var searchSeq = 0;
 
@@ -40,38 +55,49 @@
     return type === "movie" ? "Film" : "Serie";
   }
 
+  function setSteps(activeIndex) {
+    steps.forEach(function (el, i) {
+      if (!el) return;
+      el.classList.toggle("is-active", i <= activeIndex);
+      el.classList.toggle("is-done", i < activeIndex);
+    });
+  }
+
+  function updateSubmitState() {
+    var canSubmit = false;
+    var hint = "Bitte zuerst einen Titel aus der Liste wählen.";
+
+    if (freitextMode) {
+      var text = messageEl ? messageEl.value.trim() : "";
+      canSubmit = text.length >= 10;
+      hint = canSubmit ? "" : "Freitext: mindestens ein kurzer Satz (10 Zeichen).";
+    } else if (selected) {
+      canSubmit = true;
+      hint = "";
+    }
+
+    if (submitBtn) submitBtn.disabled = !canSubmit;
+    if (submitHint) {
+      submitHint.textContent = hint;
+      submitHint.classList.toggle("is-hide", !hint);
+    }
+    setSteps(selected || freitextMode ? 2 : searchInput && searchInput.value.trim().length >= 2 ? 1 : 0);
+  }
+
   function hideSearchList() {
     if (searchList) {
       searchList.classList.add("is-hide");
       searchList.innerHTML = "";
     }
+    if (searchLoading) searchLoading.classList.add("is-hide");
   }
 
-  function updateFormMode() {
-    if (!messageEl || !freeField) return;
-    if (selected) {
-      messageEl.removeAttribute("required");
-      freeField.classList.add("is-compact");
-    } else {
-      messageEl.setAttribute("required", "required");
-      freeField.classList.remove("is-compact");
-    }
-  }
+  function setPoster(preview) {
+    var type = preview && preview.type;
+    var hasPoster = preview && preview.poster;
 
-  function showPick(preview) {
-    selected = preview;
-    if (!pickEl) return;
-    pickEl.classList.remove("is-hide");
-    if (pickType) {
-      pickType.textContent = typeLabel(preview.type);
-      pickType.className = "wish-pick-type wish-pick-type--" + preview.type;
-    }
-    if (pickTitle) {
-      pickTitle.textContent = preview.title + (preview.year ? " (" + preview.year + ")" : "");
-    }
-    if (pickDate) pickDate.textContent = preview.dateLabel || "";
     if (pickPoster) {
-      if (preview.poster) {
+      if (hasPoster) {
         pickPoster.src = preview.poster;
         pickPoster.alt = preview.title || "";
         pickPoster.classList.remove("is-hide");
@@ -80,15 +106,72 @@
         pickPoster.classList.add("is-hide");
       }
     }
+    if (pickPosterEmpty) {
+      if (hasPoster) {
+        pickPosterEmpty.classList.add("is-hide");
+      } else {
+        pickPosterEmpty.textContent = typeLabel(type || "show").slice(0, 1);
+        pickPosterEmpty.className =
+          "wish-pick-poster wish-pick-poster--empty wish-pick-poster--" + (type || "show");
+      }
+    }
+  }
+
+  function showPick(preview) {
+    selected = preview;
+    freitextMode = false;
+    if (freePanel) freePanel.classList.add("is-hide");
+    if (searchPanel) searchPanel.classList.remove("is-hide");
+    if (freitextToggle) freitextToggle.classList.remove("is-hide");
+    if (noteField) noteField.classList.remove("is-hide");
+
+    if (pickEl) {
+      pickEl.classList.remove("is-hide");
+      pickEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    if (pickType) {
+      pickType.textContent = typeLabel(preview.type);
+      pickType.className = "wish-pick-type wish-pick-type--" + preview.type;
+    }
+    if (pickTitle) {
+      pickTitle.textContent = preview.title + (preview.year ? " (" + preview.year + ")" : "");
+    }
+    if (pickDate) pickDate.textContent = preview.dateLabel || "Termin wird noch geladen …";
+    setPoster(preview);
     if (searchInput) searchInput.value = "";
     hideSearchList();
-    updateFormMode();
+    if (typeof lucide !== "undefined") lucide.createIcons();
+    updateSubmitState();
   }
 
   function clearPick() {
     selected = null;
     if (pickEl) pickEl.classList.add("is-hide");
-    updateFormMode();
+    updateSubmitState();
+  }
+
+  function enterFreitextMode() {
+    freitextMode = true;
+    clearPick();
+    hideSearchList();
+    if (searchPanel) searchPanel.classList.add("is-hide");
+    if (freePanel) freePanel.classList.remove("is-hide");
+    if (freitextToggle) freitextToggle.classList.add("is-hide");
+    if (noteField) noteField.classList.add("is-hide");
+    setStatus("");
+    if (messageEl) messageEl.focus();
+    updateSubmitState();
+  }
+
+  function exitFreitextMode() {
+    freitextMode = false;
+    if (messageEl) messageEl.value = "";
+    if (freePanel) freePanel.classList.add("is-hide");
+    if (searchPanel) searchPanel.classList.remove("is-hide");
+    if (freitextToggle) freitextToggle.classList.remove("is-hide");
+    setStatus("");
+    if (searchInput) searchInput.focus();
+    updateSubmitState();
   }
 
   function renderSearchItem(item) {
@@ -96,7 +179,11 @@
       ? '<img class="wish-search-poster" src="' +
         escapeHtml(item.poster) +
         '" alt="" loading="lazy" decoding="async" />'
-      : '<span class="wish-search-poster wish-search-poster--empty" aria-hidden="true"></span>';
+      : '<span class="wish-search-poster wish-search-poster--empty wish-search-poster--' +
+        escapeHtml(item.type) +
+        '" aria-hidden="true">' +
+        escapeHtml(typeLabel(item.type).slice(0, 1)) +
+        "</span>";
     return (
       '<li><button type="button" class="wish-search-item" data-type="' +
       escapeHtml(item.type) +
@@ -119,15 +206,17 @@
       '<span class="wish-search-item-title"><strong>' +
       escapeHtml(item.title) +
       "</strong>" +
-      (item.year ? " <em>(" + escapeHtml(String(item.year)) + ")</em>" : "") +
+      (item.year ? ' <em>(' + escapeHtml(String(item.year)) + ")</em>" : "") +
       "</span></span></button></li>"
     );
   }
 
   function renderSearchResults(items) {
     if (!searchList) return;
+    if (searchLoading) searchLoading.classList.add("is-hide");
     if (!items.length) {
-      searchList.innerHTML = '<li class="wish-search-empty">Kein Treffer</li>';
+      searchList.innerHTML =
+        '<li class="wish-search-empty">Kein Treffer – unten auf Freitext wechseln.</li>';
       searchList.classList.remove("is-hide");
       return;
     }
@@ -152,6 +241,7 @@
 
   function runSearch(q) {
     var seq = ++searchSeq;
+    if (searchLoading) searchLoading.classList.remove("is-hide");
     fetch(API_BASE + "/trakt/search?q=" + encodeURIComponent(q), { cache: "no-store" })
       .then(function (res) {
         if (seq !== searchSeq) return null;
@@ -184,6 +274,9 @@
         return res.json();
       })
       .then(function (preview) {
+        if (btn && btn.getAttribute("data-poster") && !preview.poster) {
+          preview.poster = btn.getAttribute("data-poster");
+        }
         showPick(preview);
         setStatus("");
       })
@@ -214,7 +307,9 @@
   if (searchInput) {
     searchInput.addEventListener("input", function () {
       clearTimeout(searchTimer);
+      clearPick();
       var q = searchInput.value.trim();
+      updateSubmitState();
       if (q.length < 2) {
         hideSearchList();
         return;
@@ -230,6 +325,10 @@
         searchList.classList.remove("is-hide");
       }
     });
+  }
+
+  if (messageEl) {
+    messageEl.addEventListener("input", updateSubmitState);
   }
 
   if (searchList) {
@@ -248,6 +347,9 @@
     });
   }
 
+  if (freitextToggle) freitextToggle.addEventListener("click", enterFreitextMode);
+  if (backToSearch) backToSearch.addEventListener("click", exitFreitextMode);
+
   document.addEventListener("click", function (e) {
     if (!e.target.closest("#wishSearchWrap")) hideSearchList();
   });
@@ -256,16 +358,28 @@
     e.preventDefault();
     setStatus("");
 
-    var fd = new FormData(form);
-    var message = String(fd.get("message") || "").trim();
-    var userNote = message;
-
-    if (!selected && message.length < 10) {
-      setStatus("Bitte einen Film/Serie auswählen oder mindestens einen Satz Freitext.", "error");
+    if (submitBtn && submitBtn.disabled) {
+      updateSubmitState();
       return;
     }
 
+    var fd = new FormData(form);
     var contact = String(fd.get("contact") || "").trim();
+    var userNote = String(fd.get("note") || "").trim();
+
+    if (freitextMode) {
+      var message = String(fd.get("message") || "").trim();
+      if (message.length < 10) {
+        setStatus("Bitte etwas ausführlicher schreiben.", "error");
+        updateSubmitState();
+        return;
+      }
+    } else if (!selected) {
+      setStatus("Bitte einen Titel aus der Liste wählen.", "error");
+      updateSubmitState();
+      return;
+    }
+
     if (contact && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
       setStatus("Die E-Mail sieht komisch aus – nochmal checken?", "error");
       return;
@@ -273,6 +387,7 @@
 
     submitBtn.disabled = true;
     setStatus("Wird geschickt …");
+    setSteps(2);
 
     var payload = {
       name: String(fd.get("name") || "").trim(),
@@ -285,7 +400,7 @@
       if (userNote) payload.note = userNote;
       payload.message = selected.title + (selected.year ? " (" + selected.year + ")" : "");
     } else {
-      payload.message = message;
+      payload.message = String(fd.get("message") || "").trim();
     }
 
     fetch(WISH_API, {
@@ -301,7 +416,10 @@
       .then(function () {
         form.reset();
         clearPick();
+        exitFreitextMode();
         setStatus("Danke – ist angekommen!", "ok");
+        setSteps(0);
+        updateSubmitState();
       })
       .catch(function (err) {
         if (err && err.message === "rate") {
@@ -311,9 +429,9 @@
         }
       })
       .finally(function () {
-        submitBtn.disabled = false;
+        updateSubmitState();
       });
   });
 
-  updateFormMode();
+  updateSubmitState();
 })();

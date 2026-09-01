@@ -116,12 +116,34 @@
     );
   }
 
-  function wishDisplayMessage(w) {
-    var main = escapeHtml(w.message || "");
-    if (w.userNote) {
-      return main + '<span class="wish-user-note">' + escapeHtml(w.userNote) + "</span>";
+  function wishPosterHtml(w) {
+    var poster = w.trakt && w.trakt.poster;
+    var type = (w.trakt && w.trakt.type) || "";
+    if (poster) {
+      return (
+        '<img class="wish-admin-poster" src="' +
+        escapeHtml(poster) +
+        '" alt="" loading="lazy" decoding="async" />'
+      );
     }
-    return main;
+    if (type) {
+      return (
+        '<span class="wish-admin-poster wish-admin-poster--empty wish-admin-poster--' +
+        escapeHtml(type) +
+        '">' +
+        escapeHtml(type === "movie" ? "F" : "S") +
+        "</span>"
+      );
+    }
+    return '<span class="wish-admin-poster wish-admin-poster--empty">?</span>';
+  }
+
+  function wishTitleHtml(w) {
+    var html = wishTypeBadge(w) + '<span class="wish-title-text">' + escapeHtml(w.message || "") + "</span>";
+    if (w.userNote) {
+      html += '<span class="wish-user-note">' + escapeHtml(w.userNote) + "</span>";
+    }
+    return html;
   }
 
   function wishDateCell(w) {
@@ -144,7 +166,7 @@
     updateWishBadges(openWishCount(items));
     if (!items.length) {
       wishesTableBody.innerHTML =
-        '<tr><td colspan="6"><p class="admin-empty">Noch keine Wünsche.</p></td></tr>';
+        '<tr><td colspan="7"><p class="admin-empty">Noch keine Wünsche.</p></td></tr>';
       wishesCards.innerHTML = '<p class="admin-empty">Noch keine Wünsche.</p>';
       return;
     }
@@ -157,22 +179,23 @@
           wishRowClass(w) +
           '" data-id="' +
           id +
-          '"><td class="wish-meta">' +
+          '"><td class="wish-cover">' +
+          wishPosterHtml(w) +
+          '</td><td class="wish-meta">' +
           escapeHtml(formatDate(w.created)) +
-          '</td><td class="wish-msg">' +
-          wishTypeBadge(w) +
-          wishDisplayMessage(w) +
+          '</td><td class="wish-title">' +
+          wishTitleHtml(w) +
+          '</td><td class="wish-term">' +
+          wishDateCell(w) +
           '</td><td class="wish-meta">' +
           escapeHtml(contact) +
-          '</td><td><input type="text" class="wish-note-input" data-field="note" value="' +
+          '</td><td class="wish-note"><input type="text" class="wish-note-input" data-field="note" value="' +
           escapeHtml(w.adminNote || "") +
-          '" placeholder="z.B. erledigt / abgelehnt" maxlength="500" /></td><td class="wish-meta">' +
-          wishDateCell(w) +
-          '</td><td><div class="wish-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          '" placeholder="Intern …" maxlength="500" /></td><td class="wish-actions-col"><div class="wish-actions wish-actions--row"><button type="button" class="admin-toggle admin-toggle--sm" data-action="save-wish" data-id="' +
           id +
-          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
+          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--sm admin-toggle--on" data-action="complete-wish" data-id="' +
           id +
-          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
+          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--sm admin-toggle--danger" data-action="delete-wish" data-id="' +
           id +
           '">Löschen</button></div></td></tr>'
         );
@@ -189,22 +212,23 @@
           (w.done ? "wish-row--done" : "") +
           '" data-id="' +
           id +
-          '"><strong>' +
+          '"><div class="wish-card-top">' +
+          wishPosterHtml(w) +
+          '<div class="wish-card-head"><strong>' +
           escapeHtml(formatDate(w.created)) +
-          '</strong><p class="wish-msg">' +
-          wishTypeBadge(w) +
-          wishDisplayMessage(w) +
-          '</p><span class="wish-meta">' +
+          '</strong><div class="wish-title">' +
+          wishTitleHtml(w) +
+          '</div><span class="wish-meta">' +
           (meta.join(" · ") || "Anonym") +
-          '</span><div class="wish-card-fields"><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +
-          escapeHtml(w.adminNote || "") +
-          '" placeholder="Interne Notiz" maxlength="500" /></label><div class="wish-card-date"><span>Termin</span><p>' +
+          '</span></div></div><div class="wish-card-fields"><div class="wish-card-date"><span>Termin (Trakt)</span><p>' +
           wishDateCell(w) +
-          '</p></div></div><div class="wish-card-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          '</p></div><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +
+          escapeHtml(w.adminNote || "") +
+          '" placeholder="Interne Notiz" maxlength="500" /></label></div><div class="wish-card-actions wish-actions--row"><button type="button" class="admin-toggle admin-toggle--sm" data-action="save-wish" data-id="' +
           id +
-          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
+          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--sm admin-toggle--on" data-action="complete-wish" data-id="' +
           id +
-          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
+          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--sm admin-toggle--danger" data-action="delete-wish" data-id="' +
           id +
           '">Löschen</button></div></article>'
         );
@@ -322,7 +346,7 @@
       })
       .catch(function () {
         wishesTableBody.innerHTML =
-          '<tr><td colspan="6"><p class="admin-empty">Wünsche konnten nicht geladen werden.</p></td></tr>';
+          '<tr><td colspan="7"><p class="admin-empty">Wünsche konnten nicht geladen werden.</p></td></tr>';
         wishesCards.innerHTML = '<p class="admin-empty">Wünsche konnten nicht geladen werden.</p>';
       });
   }

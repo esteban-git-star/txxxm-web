@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=1" />
-  <link rel="stylesheet" href="admin.css?v=4" />
+  <link rel="stylesheet" href="admin.css?v=5" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="admin-page" data-site-nav="off">
@@ -72,12 +72,13 @@
               <table class="wish-table">
                 <thead>
                   <tr>
+                    <th class="wish-cover-th" aria-label="Cover"></th>
                     <th>Eingang</th>
-                    <th>Wunsch</th>
+                    <th>Titel</th>
+                    <th>Termin</th>
                     <th>Kontakt</th>
                     <th>Notiz</th>
-                    <th>Termin (Trakt)</th>
-                    <th></th>
+                    <th class="wish-actions-th">Aktion</th>
                   </tr>
                 </thead>
                 <tbody id="wishesTableBody"></tbody>
