@@ -352,17 +352,17 @@ export default {
         }
         var traktClientId = String(env.TRAKT_CLIENT_ID).trim();
         var q = String(url.searchParams.get("q") || "").trim().slice(0, 80);
-        if (q.length < 2) {
+        if (q.length < 3) {
           return json({ results: [] }, 200, corsHeaders);
         }
         var searchIp = request.headers.get("CF-Connecting-IP") || "unknown";
-        if (!(await checkTraktRate(env, searchIp))) {
-          return json({ error: "rate limit" }, 429, corsHeaders);
-        }
         var cache = caches.default;
         var cacheKey = new Request(url.origin + "/trakt/search?v=2&q=" + encodeURIComponent(q.toLowerCase()));
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
+        if (!(await consumeTraktRate(env, searchIp, "search"))) {
+          return json({ error: "rate limit" }, 429, corsHeaders);
+        }
         try {
           var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
@@ -408,15 +408,16 @@ export default {
           return json({ error: "bad request" }, 400, corsHeaders);
         }
         var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
-        if (!(await checkTraktRate(env, previewIp))) {
-          return json({ error: "rate limit" }, 429, corsHeaders);
-        }
         try {
           var previewCacheKey = new Request(
             url.origin + "/trakt/preview?v=2&type=" + previewType + "&id=" + previewId
           );
           var cachedPreview = await caches.default.match(previewCacheKey);
           if (cachedPreview) return cachedPreview;
+
+          if (!(await consumeTraktRate(env, previewIp, "preview"))) {
+            return json({ error: "rate limit" }, 429, corsHeaders);
+          }
 
           var preview = await buildTraktPreview(env, previewType, previewId);
           if (!preview) return json({ error: "not found" }, 404, corsHeaders);
@@ -867,18 +868,21 @@ function pickTraktPoster(entity) {
   return url.slice(0, 500);
 }
 
-async function checkTraktRate(env, ip) {
+async function consumeTraktRate(env, ip, kind) {
   if (!env.UPDATES) return true;
-  var key = "trakt_rl:" + ip;
+  var limits = {
+    search: { max: 80, windowMs: 3600000 },
+    preview: { max: 40, windowMs: 3600000 },
+  };
+  var cfg = limits[kind] || limits.search;
+  var key = "trakt_rl:" + kind + ":" + ip;
   var raw = await env.UPDATES.get(key);
   var now = Date.now();
-  var windowMs = 3600000;
-  var max = 60;
   var entries = raw ? JSON.parse(raw) : [];
   entries = entries.filter(function (t) {
-    return now - t < windowMs;
+    return now - t < cfg.windowMs;
   });
-  if (entries.length >= max) return false;
+  if (entries.length >= cfg.max) return false;
   entries.push(now);
   await env.UPDATES.put(key, JSON.stringify(entries), { expirationTtl: 3600 });
   return true;

@@ -37,6 +37,7 @@
   var freitextMode = false;
   var searchTimer = null;
   var searchSeq = 0;
+  var lastSearchQuery = "";
 
   function setStatus(text, kind) {
     statusEl.textContent = text || "";
@@ -81,7 +82,7 @@
       submitHint.textContent = hint;
       submitHint.classList.toggle("is-hide", !hint);
     }
-    setSteps(selected || freitextMode ? 2 : searchInput && searchInput.value.trim().length >= 2 ? 1 : 0);
+    setSteps(selected || freitextMode ? 2 : searchInput && searchInput.value.trim().length >= 3 ? 1 : 0);
   }
 
   function hideSearchList() {
@@ -240,6 +241,8 @@
   }
 
   function runSearch(q) {
+    if (q === lastSearchQuery && searchList && !searchList.classList.contains("is-hide")) return;
+    lastSearchQuery = q;
     var seq = ++searchSeq;
     if (searchLoading) searchLoading.classList.remove("is-hide");
     fetch(API_BASE + "/trakt/search?q=" + encodeURIComponent(q), { cache: "no-store" })
@@ -251,14 +254,21 @@
       })
       .then(function (data) {
         if (!data || seq !== searchSeq) return;
+        setStatus("");
         renderSearchResults((data && data.results) || []);
       })
       .catch(function (err) {
         if (seq !== searchSeq) return;
-        hideSearchList();
         if (err && err.message === "rate") {
-          setStatus("Zu viele Suchen – kurz warten.", "error");
+          if (searchList) {
+            searchList.innerHTML =
+              '<li class="wish-search-empty">Gerade viele Suchen – 10 Sek. warten und weiter tippen.</li>';
+            searchList.classList.remove("is-hide");
+          }
+          if (searchLoading) searchLoading.classList.add("is-hide");
+          return;
         }
+        hideSearchList();
       });
   }
 
@@ -310,18 +320,19 @@
       clearPick();
       var q = searchInput.value.trim();
       updateSubmitState();
-      if (q.length < 2) {
+      if (q.length < 3) {
+        lastSearchQuery = "";
         hideSearchList();
         return;
       }
       searchTimer = setTimeout(function () {
         runSearch(q);
-      }, 350);
+      }, 500);
     });
 
     searchInput.addEventListener("focus", function () {
       var q = searchInput.value.trim();
-      if (q.length >= 2 && searchList && searchList.children.length) {
+      if (q.length >= 3 && searchList && searchList.children.length) {
         searchList.classList.remove("is-hide");
       }
     });
