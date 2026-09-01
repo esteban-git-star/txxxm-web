@@ -92,6 +92,108 @@
     });
   }
 
+  function openWishCount(items) {
+    var n = 0;
+    items.forEach(function (w) {
+      if (!w.done) n++;
+    });
+    return n;
+  }
+
+  function wishRowClass(w) {
+    return w.done ? "wish-row wish-row--done" : "wish-row";
+  }
+
+  function renderWishes(items) {
+    updateWishBadges(openWishCount(items));
+    if (!items.length) {
+      wishesTableBody.innerHTML =
+        '<tr><td colspan="6"><p class="admin-empty">Noch keine Wünsche.</p></td></tr>';
+      wishesCards.innerHTML = '<p class="admin-empty">Noch keine Wünsche.</p>';
+      return;
+    }
+    wishesTableBody.innerHTML = items
+      .map(function (w) {
+        var contact = [w.name, w.contact].filter(Boolean).join(" · ") || "Anonym";
+        var id = escapeHtml(w.id || "");
+        return (
+          '<tr class="' +
+          wishRowClass(w) +
+          '" data-id="' +
+          id +
+          '"><td class="wish-meta">' +
+          escapeHtml(formatDate(w.created)) +
+          '</td><td class="wish-msg">' +
+          escapeHtml(w.message || "") +
+          '</td><td class="wish-meta">' +
+          escapeHtml(contact) +
+          '</td><td><input type="text" class="wish-note-input" data-field="note" value="' +
+          escapeHtml(w.adminNote || "") +
+          '" placeholder="z.B. erledigt / abgelehnt" maxlength="500" /></td><td><input type="date" class="wish-date-input" data-field="date" value="' +
+          escapeHtml(w.adminDate || "") +
+          '" /></td><td><div class="wish-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          id +
+          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
+          id +
+          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
+          id +
+          '">Löschen</button></div></td></tr>'
+        );
+      })
+      .join("");
+    wishesCards.innerHTML = items
+      .map(function (w) {
+        var meta = [];
+        if (w.name) meta.push(escapeHtml(w.name));
+        if (w.contact) meta.push(escapeHtml(w.contact));
+        var id = escapeHtml(w.id || "");
+        return (
+          '<article class="admin-item ' +
+          (w.done ? "wish-row--done" : "") +
+          '" data-id="' +
+          id +
+          '"><strong>' +
+          escapeHtml(formatDate(w.created)) +
+          '</strong><p>' +
+          escapeHtml(w.message || "") +
+          '</p><span class="wish-meta">' +
+          (meta.join(" · ") || "Anonym") +
+          '</span><div class="wish-card-fields"><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +
+          escapeHtml(w.adminNote || "") +
+          '" placeholder="Interne Notiz" maxlength="500" /></label><label><span>Termin</span><input type="date" class="wish-date-input" data-field="date" value="' +
+          escapeHtml(w.adminDate || "") +
+          '" /></label></div><div class="wish-card-actions"><button type="button" class="admin-toggle" data-action="save-wish" data-id="' +
+          id +
+          '">Speichern</button><button type="button" class="admin-toggle admin-toggle--on" data-action="complete-wish" data-id="' +
+          id +
+          '">Erledigt</button><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
+          id +
+          '">Löschen</button></div></article>'
+        );
+      })
+      .join("");
+  }
+
+  function readWishFields(root) {
+    var noteEl = root.querySelector('[data-field="note"]');
+    var dateEl = root.querySelector('[data-field="date"]');
+    return {
+      note: noteEl ? noteEl.value.trim() : "",
+      date: dateEl ? dateEl.value : ""
+    };
+  }
+
+  function saveWish(id, root, done) {
+    var fields = readWishFields(root);
+    return postUpdate({
+      action: "update-wish",
+      id: id,
+      note: fields.note,
+      date: fields.date,
+      done: done === true ? true : undefined
+    }).then(loadWishes);
+  }
+
   function renderList(items) {
     if (!items.length) {
       itemsList.innerHTML = '<p class="admin-empty">Noch keine Meldungen.</p>';
@@ -147,50 +249,6 @@
       .join("");
   }
 
-  function renderWishes(items) {
-    updateWishBadges(items.length);
-    if (!items.length) {
-      wishesTableBody.innerHTML =
-        '<tr><td colspan="4"><p class="admin-empty">Noch keine Wünsche.</p></td></tr>';
-      wishesCards.innerHTML = '<p class="admin-empty">Noch keine Wünsche.</p>';
-      return;
-    }
-    wishesTableBody.innerHTML = items
-      .map(function (w) {
-        var contact = [w.name, w.contact].filter(Boolean).join(" · ") || "Anonym";
-        return (
-          "<tr><td class=\"wish-meta\">" +
-          escapeHtml(formatDate(w.created)) +
-          '</td><td class="wish-msg">' +
-          escapeHtml(w.message || "") +
-          '</td><td class="wish-meta">' +
-          escapeHtml(contact) +
-          '</td><td><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
-          escapeHtml(w.id || "") +
-          '">Erledigt</button></td></tr>'
-        );
-      })
-      .join("");
-    wishesCards.innerHTML = items
-      .map(function (w) {
-        var meta = [];
-        if (w.name) meta.push(escapeHtml(w.name));
-        if (w.contact) meta.push(escapeHtml(w.contact));
-        return (
-          '<article class="admin-item"><strong>' +
-          escapeHtml(formatDate(w.created)) +
-          '</strong><p>' +
-          escapeHtml(w.message || "") +
-          "</p><div class=\"admin-item-meta\"><span>" +
-          (meta.join(" · ") || "Anonym") +
-          '</span><button type="button" class="admin-toggle admin-toggle--danger" data-action="delete-wish" data-id="' +
-          escapeHtml(w.id || "") +
-          '">Erledigt</button></div></article>'
-        );
-      })
-      .join("");
-  }
-
   function loadItems() {
     var url = API ? API + "/updates" : "updates.json";
     return fetch(url, { cache: "no-store" })
@@ -229,7 +287,7 @@
       })
       .catch(function () {
         wishesTableBody.innerHTML =
-          '<tr><td colspan="4"><p class="admin-empty">Wünsche konnten nicht geladen werden.</p></td></tr>';
+          '<tr><td colspan="6"><p class="admin-empty">Wünsche konnten nicht geladen werden.</p></td></tr>';
         wishesCards.innerHTML = '<p class="admin-empty">Wünsche konnten nicht geladen werden.</p>';
       });
   }
@@ -454,14 +512,29 @@
     }
   });
 
-  function onWishDelete(e) {
-    var btn = e.target.closest("[data-action='delete-wish']");
+  function onWishAction(e) {
+    var btn = e.target.closest("[data-action]");
     if (!btn) return;
-    if (!confirm("Wunsch als erledigt entfernen?")) return;
-    postUpdate({ action: "delete-wish", id: btn.getAttribute("data-id") }).then(loadWishes);
+    var action = btn.getAttribute("data-action");
+    if (action !== "save-wish" && action !== "complete-wish" && action !== "delete-wish") return;
+    var id = btn.getAttribute("data-id");
+    var root = btn.closest("[data-id]");
+    if (action === "save-wish") {
+      saveWish(id, root, undefined);
+      return;
+    }
+    if (action === "complete-wish") {
+      if (!confirm("Wunsch als erledigt markieren?")) return;
+      saveWish(id, root, true);
+      return;
+    }
+    if (action === "delete-wish") {
+      if (!confirm("Wunsch endgültig löschen?")) return;
+      postUpdate({ action: "delete-wish", id: id }).then(loadWishes);
+    }
   }
-  wishesTableBody.addEventListener("click", onWishDelete);
-  wishesCards.addEventListener("click", onWishDelete);
+  wishesTableBody.addEventListener("click", onWishAction);
+  wishesCards.addEventListener("click", onWishAction);
 
   if (token()) {
     showCockpit(true);

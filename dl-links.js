@@ -5,7 +5,7 @@
   /* Fallback bis Worker deployed / pc-app in Admin gesetzt */
   var fallback = {
     "pc-app":
-      "https://drive.google.com/uc?export=download&id=1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG",
+      "https://drive.google.com/file/d/1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG/view?usp=sharing",
   };
 
   document.querySelectorAll("[data-dl]").forEach(function (el) {

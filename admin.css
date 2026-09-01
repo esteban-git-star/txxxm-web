@@ -344,6 +344,53 @@ body.admin-page {
   font-size: 0.84rem;
   white-space: nowrap;
 }
+.wish-row--done {
+  opacity: 0.55;
+}
+.wish-row--done .wish-msg {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.wish-note-input,
+.wish-date-input {
+  width: 100%;
+  min-width: 120px;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.84rem;
+}
+.wish-date-input {
+  min-width: 140px;
+}
+.wish-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 108px;
+}
+.wish-card-fields {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+.wish-card-fields label span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  color: var(--muted-2);
+  font-weight: 600;
+}
+.wish-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
 .wish-cards { display: none; }
 
 /* Forms */

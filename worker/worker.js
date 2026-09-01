@@ -128,6 +128,32 @@ export default {
           return json({ ok: true }, 200, corsHeaders);
         }
 
+        if (body.action === "update-wish" && body.id) {
+          var wishStore = await readWishes(env);
+          var wishFound = false;
+          wishStore.items = (wishStore.items || []).map(function (w) {
+            if (w.id !== body.id) return w;
+            wishFound = true;
+            var next = Object.assign({}, w, {
+              updated: new Date().toISOString(),
+            });
+            if (body.note != null) {
+              next.adminNote = String(body.note || "").trim().slice(0, 500);
+            }
+            if (body.date != null) {
+              next.adminDate = sanitizeAdminDate(body.date);
+            }
+            if (body.done === true) next.done = true;
+            if (body.done === false) next.done = false;
+            return next;
+          });
+          if (!wishFound) {
+            return json({ error: "not found" }, 404, corsHeaders);
+          }
+          await writeWishes(env, wishStore);
+          return json({ ok: true }, 200, corsHeaders);
+        }
+
         if (body.action === "create") {
           const imagePath = sanitizeImagePath(body.image, url.origin);
           const item = {
@@ -503,13 +529,19 @@ async function appendWish(env, payload) {
 
 var DEFAULT_INSTALL_CODES = { pro: "5276912", xc: "2853690" };
 var DEFAULT_PC_APP =
-  "https://drive.google.com/uc?export=download&id=1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG";
+  "https://drive.google.com/file/d/1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG/view?usp=sharing";
 
 function sanitizeInstallCode(raw) {
   return String(raw || "")
     .trim()
     .replace(/\D/g, "")
     .slice(0, 12);
+}
+
+function sanitizeAdminDate(raw) {
+  var s = String(raw || "").trim().slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  return "";
 }
 
 async function readInstallCodes(env) {
