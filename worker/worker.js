@@ -116,6 +116,65 @@ export default {
           return json({ ok: true, downloads: dl }, 200, corsHeaders);
         }
 
+        if (body.action === "get-poll") {
+          var pollData = await readPoll(env);
+          var pollRef = pollData || defaultPoll();
+          var voteRef = pollRef.id ? await readPollVotes(env, pollRef.id) : { counts: {} };
+          return json(
+            { ok: true, poll: pollRef, votes: voteRef.counts || {} },
+            200,
+            corsHeaders
+          );
+        }
+
+        if (body.action === "save-poll") {
+          var prevPoll = await readPoll(env);
+          var pollOptions = normalizePollOptions(body.options);
+          if (body.active === true && pollOptions.length < 2) {
+            return json({ error: "Mindestens 2 Antworten nötig" }, 400, corsHeaders);
+          }
+          var nextKey = pollOptions
+            .map(function (o) {
+              return o.label;
+            })
+            .join("\0");
+          var prevKey = ((prevPoll && prevPoll.options) || [])
+            .map(function (o) {
+              return o.label;
+            })
+            .join("\0");
+          var resetVotes = body.resetVotes === true || nextKey !== prevKey;
+          var pollId =
+            prevPoll && prevPoll.id && !resetVotes ? prevPoll.id : "p_" + Date.now().toString(36);
+          var nextPoll = {
+            id: pollId,
+            active: body.active === true,
+            title: String(body.title || "").slice(0, 120),
+            text: String(body.text || "").slice(0, 500),
+            options: pollOptions,
+            updated: new Date().toISOString(),
+          };
+          await writePoll(env, nextPoll);
+          if (resetVotes) {
+            await writePollVotes(env, pollId, { counts: {}, ips: {} });
+          }
+          var savedVotes = await readPollVotes(env, pollId);
+          return json(
+            { ok: true, poll: nextPoll, votes: savedVotes.counts || {} },
+            200,
+            corsHeaders
+          );
+        }
+
+        if (body.action === "reset-poll-votes") {
+          var currentPoll = await readPoll(env);
+          if (!currentPoll || !currentPoll.id) {
+            return json({ error: "no poll" }, 404, corsHeaders);
+          }
+          await writePollVotes(env, currentPoll.id, { counts: {}, ips: {} });
+          return json({ ok: true, votes: {} }, 200, corsHeaders);
+        }
+
         if (body.action === "get-wishes") {
           var wishItems = (await readWishes(env)).items || [];
           wishItems = wishItems.map(function (w) {
@@ -334,6 +393,76 @@ export default {
       if (path === "/updates") {
         const store = env.UPDATES ? await readStore(env) : { items: [] };
         return json(store, 200, corsHeaders);
+      }
+
+      if (path === "/poll" && request.method === "GET") {
+        var publicPoll = await readPoll(env);
+        if (!publicPoll || !publicPoll.active || !publicPoll.options || !publicPoll.options.length) {
+          return json({ active: false }, 200, corsHeaders);
+        }
+        return json(
+          {
+            active: true,
+            id: publicPoll.id,
+            title: publicPoll.title,
+            text: publicPoll.text,
+            options: publicPoll.options.map(function (o) {
+              return { id: o.id, label: o.label };
+            }),
+          },
+          200,
+          corsHeaders
+        );
+      }
+
+      if (path === "/poll/vote" && request.method === "POST") {
+        if (!env.UPDATES) {
+          return json({ error: "unavailable" }, 503, corsHeaders);
+        }
+        try {
+          var voteBody = await request.json();
+          var livePoll = await readPoll(env);
+          if (!livePoll || !livePoll.active) {
+            return json({ error: "inactive" }, 400, corsHeaders);
+          }
+          var voteOptionId = String(voteBody.optionId || "").trim();
+          var validOption = (livePoll.options || []).some(function (o) {
+            return o.id === voteOptionId;
+          });
+          if (!validOption) {
+            return json({ error: "invalid option" }, 400, corsHeaders);
+          }
+          var voterIp = request.headers.get("CF-Connecting-IP") || "unknown";
+          var voteStore = await readPollVotes(env, livePoll.id);
+          if (voteStore.ips && voteStore.ips[voterIp]) {
+            return json({ error: "already voted", results: buildPollResults(livePoll, voteStore.counts) }, 409, corsHeaders);
+          }
+          voteStore.counts = voteStore.counts || {};
+          voteStore.ips = voteStore.ips || {};
+          voteStore.counts[voteOptionId] = (voteStore.counts[voteOptionId] || 0) + 1;
+          voteStore.ips[voterIp] = voteOptionId;
+          await writePollVotes(env, livePoll.id, voteStore);
+          return json({ ok: true, results: buildPollResults(livePoll, voteStore.counts) }, 200, corsHeaders);
+        } catch (voteErr) {
+          return json({ error: "vote failed" }, 500, corsHeaders);
+        }
+      }
+
+      if (path === "/poll/results" && request.method === "GET") {
+        var resultsPoll = await readPoll(env);
+        if (!resultsPoll || !resultsPoll.active) {
+          return json({ active: false }, 200, corsHeaders);
+        }
+        var resultsVotes = await readPollVotes(env, resultsPoll.id);
+        return json(
+          {
+            active: true,
+            id: resultsPoll.id,
+            results: buildPollResults(resultsPoll, resultsVotes.counts || {}),
+          },
+          200,
+          corsHeaders
+        );
       }
 
       // Downloader-Codes für TV-Anleitung (tivim.html)
@@ -661,6 +790,70 @@ async function readWishes(env) {
 
 async function writeWishes(env, data) {
   await env.UPDATES.put("wishbox", JSON.stringify(data));
+}
+
+function defaultPoll() {
+  return {
+    id: "",
+    active: false,
+    title: "Bald geht's los!",
+    text: "Wir bereiten gerade die ersten Umfragen vor. Schau in Kürze wieder vorbei!",
+    options: [],
+    updated: null,
+  };
+}
+
+function normalizePollOptions(raw) {
+  var arr = Array.isArray(raw) ? raw : [];
+  var out = [];
+  arr.forEach(function (item, i) {
+    var label = "";
+    var id = "";
+    if (typeof item === "string") label = item.trim();
+    else if (item && item.label) {
+      label = String(item.label).trim();
+      id = String(item.id || "").trim();
+    }
+    if (!label) return;
+    if (!id) id = "o_" + (i + 1);
+    out.push({ id: id.slice(0, 24), label: label.slice(0, 120) });
+  });
+  return out.slice(0, 8);
+}
+
+function buildPollResults(poll, counts) {
+  var total = 0;
+  (poll.options || []).forEach(function (o) {
+    total += counts && counts[o.id] ? counts[o.id] : 0;
+  });
+  return (poll.options || []).map(function (o) {
+    var count = counts && counts[o.id] ? counts[o.id] : 0;
+    return {
+      id: o.id,
+      label: o.label,
+      count: count,
+      pct: total ? Math.round((count / total) * 100) : 0,
+    };
+  });
+}
+
+async function readPoll(env) {
+  if (!env.UPDATES) return null;
+  return await env.UPDATES.get("poll", "json");
+}
+
+async function writePoll(env, data) {
+  await env.UPDATES.put("poll", JSON.stringify(data));
+}
+
+async function readPollVotes(env, pollId) {
+  if (!env.UPDATES || !pollId) return { counts: {}, ips: {} };
+  return (await env.UPDATES.get("poll_votes:" + pollId, "json")) || { counts: {}, ips: {} };
+}
+
+async function writePollVotes(env, pollId, data) {
+  if (!env.UPDATES || !pollId) return;
+  await env.UPDATES.put("poll_votes:" + pollId, JSON.stringify(data), { expirationTtl: 7776000 });
 }
 
 async function appendWish(env, payload) {

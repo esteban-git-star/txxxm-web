@@ -16,12 +16,12 @@ body.admin-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 18px;
+  padding: max(24px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
 }
 .dash-login-card {
   width: 100%;
   max-width: 400px;
-  padding: 28px 22px;
+  padding: 24px 18px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
@@ -155,43 +155,51 @@ body.admin-page {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 18px;
-  padding-top: max(14px, env(safe-area-inset-top));
+  padding: 12px max(14px, env(safe-area-inset-left)) 12px max(14px, env(safe-area-inset-right));
+  padding-top: max(12px, env(safe-area-inset-top));
   border-bottom: 1px solid var(--line-strong);
   background: var(--surface);
+  flex-shrink: 0;
 }
 .cockpit-header h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 4vw, 1.15rem);
   font-weight: 700;
+  line-height: 1.2;
+  min-width: 0;
 }
 .cockpit-header-logout {
+  flex-shrink: 0;
   border: 1px solid var(--line);
   background: transparent;
   color: var(--muted);
   border-radius: var(--radius-pill);
-  padding: 7px 13px;
+  padding: 8px 14px;
+  min-height: 36px;
   font: inherit;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
+  touch-action: manipulation;
 }
 .cockpit-main {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 18px 24px;
+  overflow-x: hidden;
+  padding: 16px max(14px, env(safe-area-inset-left)) 20px max(14px, env(safe-area-inset-right));
   -webkit-overflow-scrolling: touch;
 }
 
 /* Mobile dock */
 .cockpit-dock {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0;
   border-top: 1px solid var(--line-strong);
   background: var(--surface);
-  padding-bottom: env(safe-area-inset-bottom);
+  padding: 6px max(4px, env(safe-area-inset-left)) max(6px, env(safe-area-inset-bottom)) max(4px, env(safe-area-inset-right));
+  box-shadow: 0 -1px 0 var(--line);
 }
 .cockpit-dock-btn {
   display: flex;
@@ -199,16 +207,19 @@ body.admin-page {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: 58px;
+  min-height: 52px;
+  padding: 6px 2px;
   border: 0;
   background: transparent;
   color: var(--muted-2);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: clamp(0.62rem, 2.8vw, 0.72rem);
   font-weight: 600;
+  line-height: 1.15;
   cursor: pointer;
   position: relative;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .cockpit-dock-btn svg {
   width: 22px;
@@ -253,31 +264,39 @@ body.admin-page {
   to { opacity: 1; transform: none; }
 }
 .cockpit-view-head {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 .cockpit-view-head h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: clamp(1.15rem, 4.5vw, 1.4rem);
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 .cockpit-view-head p {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.45;
 }
 
+.cockpit-install-grid,
+.cockpit-updates-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .cockpit-card {
-  padding: 18px;
+  padding: 16px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
   box-shadow: none;
 }
 .cockpit-card + .cockpit-card {
-  margin-top: 14px;
+  margin-top: 0;
 }
 .cockpit-card-title {
   margin: 0 0 14px;
@@ -503,7 +522,15 @@ body.admin-page {
   gap: 6px;
   margin-top: 12px;
 }
-.wish-cards { display: none; }
+.wish-cards {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+.wish-cards .admin-item {
+  margin-bottom: 0;
+  padding: 14px;
+}
 
 /* Forms */
 .admin-field {
@@ -636,11 +663,13 @@ body.admin-page {
   background: transparent;
   color: var(--text);
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 8px 14px;
+  min-height: 36px;
   font: inherit;
   font-size: 0.78rem;
   cursor: pointer;
   white-space: nowrap;
+  touch-action: manipulation;
 }
 .admin-toggle--on {
   border-color: rgba(61, 143, 212, 0.45);
@@ -671,9 +700,10 @@ body.admin-page {
 .cta {
   display: block;
   width: 100%;
-  padding: 16px;
+  padding: 15px 16px;
+  min-height: 48px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(180deg, var(--accent-hover), var(--accent));
@@ -682,12 +712,24 @@ body.admin-page {
   cursor: pointer;
   font-family: inherit;
   box-shadow: var(--shadow-accent);
+  touch-action: manipulation;
 }
 
-/* Mobile – Wünsche & Updates-Tabs */
+/* Mobile – Wünsche, Layout, Touch */
 @media (max-width: 899px) {
+  .cockpit-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .cockpit-stage {
+    min-height: 0;
+    overflow: hidden;
+  }
   .wish-table-wrap { display: none; }
-  .wish-cards { display: block; }
+  .wish-cards {
+    display: flex;
+  }
   .cockpit-updates-grid .cockpit-subview-list {
     display: none;
   }
@@ -696,6 +738,72 @@ body.admin-page {
   }
   .cockpit-updates-grid.is-list .cockpit-subview-list {
     display: block;
+  }
+  .cockpit-subnav-btn {
+    min-height: 44px;
+    padding: 12px 10px;
+  }
+  .admin-format {
+    gap: 8px;
+  }
+  .admin-format-btn {
+    min-height: 36px;
+    padding: 8px 14px;
+  }
+  .admin-field input,
+  .admin-field textarea {
+    font-size: 16px; /* verhindert iOS-Zoom beim Fokus */
+  }
+  .wish-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .wish-card-actions .admin-toggle--danger {
+    grid-column: 1 / -1;
+  }
+  .admin-item-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-item-actions .admin-toggle {
+    width: 100%;
+    text-align: center;
+  }
+  .poll-option-row {
+    flex-wrap: wrap;
+  }
+  .poll-option-input {
+    min-height: 44px;
+  }
+  .poll-option-remove {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  #pollResetVotes {
+    width: 100%;
+    text-align: center;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cockpit-dock-btn {
+    font-size: 0.58rem;
+    gap: 3px;
+  }
+  .cockpit-dock-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .cockpit-main {
+    padding-top: 12px;
+  }
+  .cockpit-card {
+    padding: 14px;
+  }
+  .wish-card-actions {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -724,6 +832,8 @@ body.admin-page {
   .cockpit-subnav {
     display: none;
   }
+  .wish-table-wrap { display: block; }
+  .wish-cards { display: none; }
   .cockpit-updates-grid {
     display: grid;
     grid-template-columns: minmax(300px, 400px) 1fr;
@@ -733,12 +843,80 @@ body.admin-page {
   .cockpit-install-grid {
     max-width: 520px;
   }
-  .wish-table-wrap { display: block; }
-  .wish-cards { display: none; }
+  #panel-poll .cockpit-install-grid {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(260px, 360px);
+    gap: 24px;
+    align-items: start;
+  }
 }
 
 @media (min-width: 1200px) {
   .cockpit.is-on {
     grid-template-columns: 280px 1fr;
   }
+}
+
+/* Umfrage Admin */
+.poll-options-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.poll-option-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.poll-option-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+}
+.poll-option-remove {
+  flex-shrink: 0;
+  min-width: 36px;
+  padding: 8px 10px;
+}
+.poll-results-admin {
+  margin-bottom: 14px;
+}
+.poll-result-row + .poll-result-row {
+  margin-top: 12px;
+}
+.poll-result-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+}
+.poll-result-head strong {
+  font-weight: 600;
+  color: var(--text);
+}
+.poll-result-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.poll-result-bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+}
+.poll-result-count {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--muted-2);
 }

@@ -11,10 +11,10 @@
   <title>Neue Inhalte – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=3" />
   <link rel="stylesheet" href="support.css?v=9" />
-  <link rel="stylesheet" href="neuigkeiten.css?v=2" />
+  <link rel="stylesheet" href="neuigkeiten.css?v=3" />
   <link rel="stylesheet" href="site-nav.css?v=5" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
@@ -34,7 +34,7 @@
           <button type="button" class="lang-btn" data-lang="tr" id="lang-tr" aria-pressed="false">🇹🇷 TR</button>
         </div>
       </div>
-      <button type="button" id="open-poll-btn" class="neu-btn">📊 Aktuelle Umfrage</button>
+      <button type="button" id="open-poll-btn" class="neu-btn is-hide">Aktuelle Umfrage</button>
 
       <section class="neu-section" aria-labelledby="filme-heading">
         <h2 id="filme-heading" class="neu-section-title">Neueste Filme</h2>
@@ -55,9 +55,9 @@
   <div id="poll-modal" class="modal-overlay hidden" aria-hidden="true" role="dialog" aria-labelledby="poll-modal-title">
     <div class="modal-content">
       <button type="button" class="modal-close" id="poll-modal-close" aria-label="Schließen">✕</button>
-      <h2 id="poll-modal-title" class="modal-title">Bald geht's los! 🚀</h2>
-      <p class="modal-text">Wir bereiten gerade die ersten Umfragen vor, um Tivim für dich noch besser zu machen. Schau in Kürze wieder vorbei!</p>
-      <button type="button" id="close-poll-info" class="poll-btn">Alles klar!</button>
+      <h2 id="poll-modal-title" class="modal-title">Umfrage</h2>
+      <p id="poll-modal-text" class="modal-text"></p>
+      <div id="poll-modal-body"></div>
     </div>
   </div>
 
@@ -175,36 +175,9 @@
       if (langTr) langTr.addEventListener("click", function () { loadPosters("tr"); });
 
       loadPosters("de");
-
-      var pollModal = document.getElementById("poll-modal");
-      var openPollBtn = document.getElementById("open-poll-btn");
-      var pollModalClose = document.getElementById("poll-modal-close");
-      var closePollInfo = document.getElementById("close-poll-info");
-
-      function openPollModal() {
-        if (!pollModal) return;
-        pollModal.classList.remove("hidden");
-        pollModal.setAttribute("aria-hidden", "false");
-      }
-
-      function closePollModal() {
-        if (!pollModal) return;
-        pollModal.classList.add("hidden");
-        pollModal.setAttribute("aria-hidden", "true");
-      }
-
-      if (openPollBtn) openPollBtn.addEventListener("click", openPollModal);
-      if (pollModalClose) pollModalClose.addEventListener("click", closePollModal);
-      if (closePollInfo) closePollInfo.addEventListener("click", closePollModal);
-      if (pollModal) {
-        pollModal.addEventListener("click", function (e) {
-          if (e.target === pollModal) closePollModal();
-        });
-      }
-
-      if (typeof lucide !== "undefined") lucide.createIcons();
     })();
   </script>
+  <script src="neuigkeiten-poll.js?v=1"></script>
   <script src="site-nav.js?v=5"></script>
 </body>
 </html>

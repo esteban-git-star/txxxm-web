@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=3" />
-  <link rel="stylesheet" href="admin.css?v=6" />
+  <link rel="stylesheet" href="admin.css?v=8" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="admin-page" data-site-nav="off">
@@ -45,6 +45,10 @@
         <button type="button" class="cockpit-nav-btn" data-panel="updates">
           <i data-lucide="radio" aria-hidden="true"></i>
           <span class="cockpit-nav-label">Live-Updates</span>
+        </button>
+        <button type="button" class="cockpit-nav-btn" data-panel="poll">
+          <i data-lucide="bar-chart-2" aria-hidden="true"></i>
+          <span class="cockpit-nav-label">Umfrage</span>
         </button>
         <button type="button" class="cockpit-nav-btn" data-panel="install">
           <i data-lucide="download" aria-hidden="true"></i>
@@ -145,6 +149,47 @@
           </div>
         </section>
 
+        <!-- Umfrage -->
+        <section id="panel-poll" class="cockpit-view" aria-label="Umfrage">
+          <div class="cockpit-view-head">
+            <h2>Umfrage</h2>
+            <p>Frage auf „Neue Inhalte“ veröffentlichen – Stimmen siehst du hier live.</p>
+          </div>
+          <div class="cockpit-install-grid">
+            <div class="cockpit-card">
+              <p class="cockpit-card-title">Umfrage bearbeiten</p>
+              <form id="pollForm">
+                <label class="admin-check">
+                  <input type="checkbox" id="pollActive" />
+                  <span>Umfrage aktiv (Button sichtbar)</span>
+                </label>
+                <label class="admin-field">
+                  <span>Frage / Titel</span>
+                  <input type="text" id="pollTitle" maxlength="120" placeholder="z. B. Welche Serie als Nächstes?" />
+                </label>
+                <label class="admin-field">
+                  <span>Kurzer Text</span>
+                  <textarea id="pollText" rows="3" maxlength="500" placeholder="Ein Satz zur Erklärung …"></textarea>
+                </label>
+                <div class="admin-field">
+                  <span>Antworten (min. 2)</span>
+                  <div id="pollOptionsList" class="poll-options-admin"></div>
+                  <button type="button" class="admin-toggle admin-toggle--sm" id="pollAddOption">+ Antwort</button>
+                </div>
+                <p class="admin-hint" id="pollHint"></p>
+                <button type="submit" class="cta">Umfrage speichern &amp; live schalten</button>
+              </form>
+            </div>
+            <div class="cockpit-card">
+              <p class="cockpit-card-title">Ergebnisse</p>
+              <div id="pollResults" class="poll-results-admin">
+                <p class="admin-empty">Noch keine Stimmen oder Umfrage nicht aktiv.</p>
+              </div>
+              <button type="button" class="admin-toggle admin-toggle--danger" id="pollResetVotes">Stimmen zurücksetzen</button>
+            </div>
+          </div>
+        </section>
+
         <!-- Codes -->
         <section id="panel-install" class="cockpit-view" aria-label="Installation">
           <div class="cockpit-view-head">
@@ -189,6 +234,10 @@
         <i data-lucide="radio" aria-hidden="true"></i>
         Updates
       </button>
+      <button type="button" class="cockpit-dock-btn" data-panel="poll">
+        <i data-lucide="bar-chart-2" aria-hidden="true"></i>
+        Umfrage
+      </button>
       <button type="button" class="cockpit-dock-btn" data-panel="install">
         <i data-lucide="download" aria-hidden="true"></i>
         Codes
@@ -198,6 +247,6 @@
 
   <script src="api-config.js"></script>
   <script src="update-format.js?v=1"></script>
-  <script src="admin.js?v=6"></script>
+  <script src="admin.js?v=7"></script>
 </body>
 </html>

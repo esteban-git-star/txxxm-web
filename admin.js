@@ -6,6 +6,7 @@
   var PANEL_TITLES = {
     wishes: "Wunschbox",
     updates: "Live-Updates",
+    poll: "Umfrage",
     install: "Codes & Downloads"
   };
 
@@ -19,6 +20,10 @@
   var adminStatus = document.getElementById("adminStatus");
   var cockpitTitle = document.getElementById("cockpitTitle");
   var updatesGrid = document.getElementById("updatesGrid");
+  var pollForm = document.getElementById("pollForm");
+  var pollOptionsList = document.getElementById("pollOptionsList");
+  var pollResults = document.getElementById("pollResults");
+  var pollHint = document.getElementById("pollHint");
 
   function token() {
     return sessionStorage.getItem(SESSION_KEY) || "";
@@ -320,6 +325,116 @@
       });
   }
 
+  function loadPoll() {
+    if (!API || !token()) return Promise.resolve();
+    return postUpdate({ action: "get-poll" })
+      .then(function (data) {
+        fillPollForm((data && data.poll) || {});
+        renderPollResults((data && data.poll) || {}, (data && data.votes) || {});
+        if (pollHint) pollHint.textContent = "";
+      })
+      .catch(function () {
+        if (pollHint) pollHint.textContent = "Umfrage konnte nicht geladen werden.";
+      });
+  }
+
+  function fillPollForm(poll) {
+    document.getElementById("pollActive").checked = poll.active === true;
+    document.getElementById("pollTitle").value = poll.title || "";
+    document.getElementById("pollText").value = poll.text || "";
+    if (!pollOptionsList) return;
+    pollOptionsList.innerHTML = "";
+    var opts = poll.options && poll.options.length ? poll.options : [{ label: "" }, { label: "" }];
+    opts.forEach(function (o) {
+      addPollOptionRow(o.label || "", o.id || "");
+    });
+  }
+
+  function addPollOptionRow(label, id) {
+    if (!pollOptionsList) return;
+    var row = document.createElement("div");
+    row.className = "poll-option-row";
+    if (id) row.setAttribute("data-id", id);
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "poll-option-input";
+    input.maxLength = 120;
+    input.placeholder = "Antwort …";
+    input.value = label || "";
+    var remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "admin-toggle admin-toggle--sm poll-option-remove";
+    remove.setAttribute("aria-label", "Entfernen");
+    remove.textContent = "×";
+    row.appendChild(input);
+    row.appendChild(remove);
+    pollOptionsList.appendChild(row);
+    remove.addEventListener("click", function () {
+      if (pollOptionsList.children.length <= 2) {
+        if (pollHint) pollHint.textContent = "Mindestens 2 Antworten behalten.";
+        return;
+      }
+      row.remove();
+      if (pollHint) pollHint.textContent = "";
+    });
+  }
+
+  function readPollOptionsFromForm() {
+    if (!pollOptionsList) return [];
+    return Array.prototype.slice
+      .call(pollOptionsList.querySelectorAll(".poll-option-row"))
+      .map(function (row) {
+        var input = row.querySelector(".poll-option-input");
+        var label = input ? input.value.trim() : "";
+        var id = row.getAttribute("data-id") || "";
+        if (!label) return null;
+        return id ? { id: id, label: label } : { label: label };
+      })
+      .filter(Boolean);
+  }
+
+  function renderPollResults(poll, votes) {
+    if (!pollResults) return;
+    var options = poll.options || [];
+    if (!options.length) {
+      pollResults.innerHTML = '<p class="admin-empty">Noch keine Umfrage angelegt.</p>';
+      return;
+    }
+    var total = 0;
+    options.forEach(function (o) {
+      total += votes[o.id] || 0;
+    });
+    if (!total) {
+      pollResults.innerHTML =
+        '<p class="admin-empty">Umfrage ist ' +
+        (poll.active ? "live" : "inaktiv") +
+        " – noch keine Stimmen.</p>";
+      return;
+    }
+    pollResults.innerHTML = options
+      .map(function (o) {
+        var count = votes[o.id] || 0;
+        var pct = total ? Math.round((count / total) * 100) : 0;
+        return (
+          '<div class="poll-result-row">' +
+          '<div class="poll-result-head"><span>' +
+          escapeHtml(o.label) +
+          "</span><strong>" +
+          pct +
+          "%</strong></div>" +
+          '<div class="poll-result-bar"><span style="width:' +
+          pct +
+          '%"></span></div>' +
+          '<p class="poll-result-count">' +
+          count +
+          " Stimme" +
+          (count === 1 ? "" : "n") +
+          "</p></div>"
+        );
+      })
+      .join("");
+  }
+
   function loadDownloads() {
     var dlHint = document.getElementById("dlHint");
     if (!API || !token()) return Promise.resolve();
@@ -386,6 +501,7 @@
         loadItems();
         loadDownloads();
         loadWishes();
+        loadPoll();
         switchPanel("wishes");
       })
       .catch(function (err) {
@@ -397,6 +513,64 @@
         alert("Worker antwortet nicht – Code deployt?");
       });
   });
+
+  var pollAddOption = document.getElementById("pollAddOption");
+  if (pollAddOption) {
+    pollAddOption.addEventListener("click", function () {
+      if (pollOptionsList && pollOptionsList.children.length >= 8) {
+        if (pollHint) pollHint.textContent = "Maximal 8 Antworten.";
+        return;
+      }
+      addPollOptionRow("");
+      if (pollHint) pollHint.textContent = "";
+    });
+  }
+
+  if (pollForm) {
+    pollForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var options = readPollOptionsFromForm();
+      if (document.getElementById("pollActive").checked && options.length < 2) {
+        if (pollHint) pollHint.textContent = "Mindestens 2 Antworten nötig.";
+        return;
+      }
+      postUpdate({
+        action: "save-poll",
+        active: document.getElementById("pollActive").checked,
+        title: document.getElementById("pollTitle").value.trim(),
+        text: document.getElementById("pollText").value.trim(),
+        options: options,
+      })
+        .then(function (data) {
+          if (pollHint) pollHint.textContent = "Gespeichert – ist live auf Neue Inhalte.";
+          fillPollForm((data && data.poll) || {});
+          renderPollResults((data && data.poll) || {}, (data && data.votes) || {});
+        })
+        .catch(function (err) {
+          if (pollHint) {
+            pollHint.textContent =
+              err && err.message === "auth" ? "Passwort falsch." : "Speichern fehlgeschlagen.";
+          }
+        });
+    });
+  }
+
+  var pollResetBtn = document.getElementById("pollResetVotes");
+  if (pollResetBtn) {
+    pollResetBtn.addEventListener("click", function () {
+      if (!confirm("Alle Stimmen löschen?")) return;
+      postUpdate({ action: "reset-poll-votes" })
+        .then(function () {
+          return loadPoll();
+        })
+        .then(function () {
+          if (pollHint) pollHint.textContent = "Stimmen zurückgesetzt.";
+        })
+        .catch(function () {
+          if (pollHint) pollHint.textContent = "Zurücksetzen fehlgeschlagen.";
+        });
+    });
+  }
 
   document.getElementById("downloadsForm").addEventListener("submit", function (e) {
     e.preventDefault();
