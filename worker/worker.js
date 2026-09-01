@@ -346,7 +346,11 @@ export default {
       }
 
       // Trakt-Suche für Wunschbox (Client ID nur im Worker)
-      if (path === "/trakt/search" && env.TRAKT_CLIENT_ID) {
+      if (path === "/trakt/search") {
+        if (!String(env.TRAKT_CLIENT_ID || "").trim()) {
+          return json({ error: "trakt not configured" }, 503, corsHeaders);
+        }
+        var traktClientId = String(env.TRAKT_CLIENT_ID).trim();
         var q = String(url.searchParams.get("q") || "").trim().slice(0, 80);
         if (q.length < 2) {
           return json({ results: [] }, 200, corsHeaders);
@@ -360,7 +364,7 @@ export default {
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
         try {
-          var searchResp = await traktFetch(env.TRAKT_CLIENT_ID, "/search/movie,show", {
+          var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
             limit: 8,
           });
@@ -392,7 +396,10 @@ export default {
         }
       }
 
-      if (path === "/trakt/preview" && env.TRAKT_CLIENT_ID) {
+      if (path === "/trakt/preview") {
+        if (!String(env.TRAKT_CLIENT_ID || "").trim()) {
+          return json({ error: "trakt not configured" }, 503, corsHeaders);
+        }
         var previewType = url.searchParams.get("type");
         var previewId = parseInt(url.searchParams.get("id") || "", 10);
         if ((previewType !== "show" && previewType !== "movie") || !previewId) {
@@ -709,8 +716,10 @@ var TRAKT_API = "https://api.trakt.tv";
 function traktHeaders(clientId) {
   return {
     "Content-Type": "application/json",
+    Accept: "application/json",
+    "User-Agent": "Tivim-Wunschbox/1.0 (tivim-web.com)",
     "trakt-api-version": "2",
-    "trakt-api-key": clientId,
+    "trakt-api-key": String(clientId || "").trim(),
   };
 }
 
@@ -741,11 +750,12 @@ function epCode(season, episode) {
 }
 
 async function buildTraktPreview(env, type, id) {
-  if (!env.TRAKT_CLIENT_ID) return null;
+  var clientId = String(env.TRAKT_CLIENT_ID || "").trim();
+  if (!clientId) return null;
   var numId = parseInt(id, 10);
   if (!numId || numId < 1) return null;
-  if (type === "movie") return buildMoviePreview(env.TRAKT_CLIENT_ID, numId);
-  if (type === "show") return buildShowPreview(env.TRAKT_CLIENT_ID, numId);
+  if (type === "movie") return buildMoviePreview(clientId, numId);
+  if (type === "show") return buildShowPreview(clientId, numId);
   return null;
 }
 
