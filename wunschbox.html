@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=1" />
-  <link rel="stylesheet" href="support.css?v=6" />
+  <link rel="stylesheet" href="support.css?v=7" />
   <link rel="stylesheet" href="site-nav.css?v=3" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
@@ -41,6 +41,7 @@
       </label>
 
       <div class="wish-pick is-hide" id="wishPick" aria-live="polite">
+        <img class="wish-pick-poster is-hide" id="wishPickPoster" alt="" />
         <div class="wish-pick-main">
           <span class="wish-pick-type" id="wishPickType"></span>
           <strong id="wishPickTitle"></strong>
@@ -71,7 +72,7 @@
     if (typeof lucide !== "undefined") lucide.createIcons();
   </script>
   <script src="api-config.js?v=1"></script>
-  <script src="wunschbox.js?v=2"></script>
+  <script src="wunschbox.js?v=3"></script>
   <script src="site-nav.js?v=3"></script>
 </body>
 </html>

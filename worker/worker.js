@@ -360,13 +360,14 @@ export default {
           return json({ error: "rate limit" }, 429, corsHeaders);
         }
         var cache = caches.default;
-        var cacheKey = new Request(url.origin + "/trakt/search?q=" + encodeURIComponent(q.toLowerCase()));
+        var cacheKey = new Request(url.origin + "/trakt/search?v=2&q=" + encodeURIComponent(q.toLowerCase()));
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
         try {
           var searchResp = await traktFetch(traktClientId, "/search/movie,show", {
             query: q,
-            limit: 8,
+            limit: 10,
+            extended: "full,images",
           });
           if (!searchResp.ok) {
             return json({ error: "trakt unavailable" }, 502, corsHeaders);
@@ -384,6 +385,7 @@ export default {
                 id: item.ids.trakt,
                 title: String(item.title || "").slice(0, 200),
                 year: item.year || null,
+                poster: pickTraktPoster(item) || pickTraktPoster(row),
               });
             });
           }
@@ -760,7 +762,7 @@ async function buildTraktPreview(env, type, id) {
 }
 
 async function buildMoviePreview(clientId, id) {
-  var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full" });
+  var resp = await traktFetch(clientId, "/movies/" + id, { extended: "full,images" });
   if (!resp.ok) return null;
   var movie = await resp.json();
   if (!movie || !movie.ids || !movie.ids.trakt) return null;
@@ -774,11 +776,12 @@ async function buildMoviePreview(clientId, id) {
     dateLabel: released ? "Release · " + formatTraktDate(released) : "Release unbekannt",
     dateIso: sanitizeAdminDate(released),
     episodeCode: "",
+    poster: pickTraktPoster(movie),
   };
 }
 
 async function buildShowPreview(clientId, id) {
-  var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full" });
+  var showResp = await traktFetch(clientId, "/shows/" + id, { extended: "full,images" });
   if (!showResp.ok) return null;
   var show = await showResp.json();
   if (!show || !show.ids || !show.ids.trakt) return null;
@@ -818,7 +821,18 @@ async function buildShowPreview(clientId, id) {
     dateLabel: dateLabel,
     dateIso: dateIso,
     episodeCode: episodeCode,
+    poster: pickTraktPoster(show),
   };
+}
+
+function pickTraktPoster(entity) {
+  if (!entity || !entity.images) return "";
+  var posters = entity.images.poster;
+  var url = "";
+  if (Array.isArray(posters) && posters[0]) url = String(posters[0]);
+  else if (typeof posters === "string") url = posters;
+  if (!url || url.indexOf("http") !== 0) return "";
+  return url.slice(0, 500);
 }
 
 async function checkTraktRate(env, ip) {

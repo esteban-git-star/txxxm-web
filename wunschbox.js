@@ -10,6 +10,7 @@
   var pickType = document.getElementById("wishPickType");
   var pickTitle = document.getElementById("wishPickTitle");
   var pickDate = document.getElementById("wishPickDate");
+  var pickPoster = document.getElementById("wishPickPoster");
   var pickClear = document.getElementById("wishPickClear");
   var freeField = document.getElementById("wishFreeField");
   var messageEl = form ? form.querySelector('[name="message"]') : null;
@@ -69,6 +70,16 @@
       pickTitle.textContent = preview.title + (preview.year ? " (" + preview.year + ")" : "");
     }
     if (pickDate) pickDate.textContent = preview.dateLabel || "";
+    if (pickPoster) {
+      if (preview.poster) {
+        pickPoster.src = preview.poster;
+        pickPoster.alt = preview.title || "";
+        pickPoster.classList.remove("is-hide");
+      } else {
+        pickPoster.removeAttribute("src");
+        pickPoster.classList.add("is-hide");
+      }
+    }
     if (searchInput) searchInput.value = "";
     hideSearchList();
     updateFormMode();
@@ -80,6 +91,33 @@
     updateFormMode();
   }
 
+  function renderSearchItem(item) {
+    var poster = item.poster
+      ? '<img class="wish-search-poster" src="' +
+        escapeHtml(item.poster) +
+        '" alt="" loading="lazy" decoding="async" />'
+      : '<span class="wish-search-poster wish-search-poster--empty" aria-hidden="true"></span>';
+    return (
+      '<li><button type="button" class="wish-search-item" data-type="' +
+      escapeHtml(item.type) +
+      '" data-id="' +
+      escapeHtml(String(item.id)) +
+      '">' +
+      poster +
+      '<span class="wish-search-item-body">' +
+      '<span class="wish-search-item-type wish-search-item-type--' +
+      escapeHtml(item.type) +
+      '">' +
+      escapeHtml(typeLabel(item.type)) +
+      "</span>" +
+      '<span class="wish-search-item-title"><strong>' +
+      escapeHtml(item.title) +
+      "</strong>" +
+      (item.year ? " <em>(" + escapeHtml(String(item.year)) + ")</em>" : "") +
+      "</span></span></button></li>"
+    );
+  }
+
   function renderSearchResults(items) {
     if (!searchList) return;
     if (!items.length) {
@@ -87,23 +125,22 @@
       searchList.classList.remove("is-hide");
       return;
     }
-    searchList.innerHTML = items
-      .map(function (item) {
-        return (
-          '<li><button type="button" class="wish-search-item" data-type="' +
-          escapeHtml(item.type) +
-          '" data-id="' +
-          escapeHtml(String(item.id)) +
-          '"><span class="wish-search-item-type">' +
-          escapeHtml(typeLabel(item.type)) +
-          "</span><strong>" +
-          escapeHtml(item.title) +
-          "</strong>" +
-          (item.year ? '<em>(' + escapeHtml(String(item.year)) + ")</em>" : "") +
-          "</button></li>"
-        );
-      })
-      .join("");
+    var shows = items.filter(function (i) {
+      return i.type === "show";
+    });
+    var movies = items.filter(function (i) {
+      return i.type === "movie";
+    });
+    var html = "";
+    if (shows.length) {
+      html += '<li class="wish-search-group">Serien</li>';
+      html += shows.map(renderSearchItem).join("");
+    }
+    if (movies.length) {
+      html += '<li class="wish-search-group">Filme</li>';
+      html += movies.map(renderSearchItem).join("");
+    }
+    searchList.innerHTML = html;
     searchList.classList.remove("is-hide");
   }
 
