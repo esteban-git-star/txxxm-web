@@ -502,6 +502,8 @@ async function appendWish(env, payload) {
 }
 
 var DEFAULT_INSTALL_CODES = { pro: "5276912", xc: "2853690" };
+var DEFAULT_PC_APP =
+  "https://drive.google.com/uc?export=download&id=1TqqzKKtyVRux-cw_DmgWxzD1v9hvkKNG";
 
 function sanitizeInstallCode(raw) {
   return String(raw || "")
@@ -532,6 +534,7 @@ async function resolveDownload(env, slug) {
   var codes = await readInstallCodes(env);
   if (slug === "pro-apk" && codes.pro) return "https://go.aftvnews.com/" + codes.pro;
   if (slug === "xc-apk" && codes.xc) return "https://go.aftvnews.com/" + codes.xc;
+  if (slug === "pc-app") return DEFAULT_PC_APP;
   return null;
 }
 
