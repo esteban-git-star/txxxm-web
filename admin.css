@@ -25,7 +25,7 @@ body.admin-page {
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 .dash-login-card h1 {
   margin: 0;
@@ -107,12 +107,12 @@ body.admin-page {
   stroke: var(--muted);
 }
 .cockpit-nav-btn.is-active {
-  border-color: rgba(74, 143, 184, 0.35);
-  background: var(--accent-soft);
-  color: #a8cce3;
+  border-color: var(--line-strong);
+  background: var(--surface-hover);
+  color: var(--text);
 }
 .cockpit-nav-btn.is-active svg {
-  stroke: #a8cce3;
+  stroke: var(--text);
 }
 .cockpit-nav-label {
   flex: 1;
@@ -121,8 +121,8 @@ body.admin-page {
   min-width: 1.4em;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: rgba(74, 143, 184, 0.22);
-  color: #a8cce3;
+  background: rgba(61, 143, 212, 0.22);
+  color: var(--accent-text);
   font-size: 0.72rem;
   font-weight: 700;
   text-align: center;
@@ -216,10 +216,10 @@ body.admin-page {
   stroke-width: 1.65;
 }
 .cockpit-dock-btn.is-active {
-  color: #a8cce3;
+  color: var(--text);
 }
 .cockpit-dock-btn.is-active svg {
-  stroke: #a8cce3;
+  stroke: var(--text);
 }
 .cockpit-dock-badge {
   position: absolute;
@@ -229,7 +229,7 @@ body.admin-page {
   height: 16px;
   padding: 0 4px;
   border-radius: 8px;
-  background: #4a8fb8;
+  background: var(--accent);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 700;
@@ -274,7 +274,7 @@ body.admin-page {
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 .cockpit-card + .cockpit-card {
   margin-top: 14px;
@@ -307,9 +307,9 @@ body.admin-page {
   cursor: pointer;
 }
 .cockpit-subnav-btn.is-active {
-  border-color: rgba(74, 143, 184, 0.4);
+  border-color: rgba(61, 143, 212, 0.4);
   background: var(--accent-soft);
-  color: #a8cce3;
+  color: var(--accent-text);
 }
 
 /* Wishes */
@@ -583,7 +583,7 @@ body.admin-page {
   border-radius: var(--radius-sm);
 }
 .admin-item--pinned {
-  border-color: rgba(74, 143, 184, 0.32);
+  border-color: rgba(61, 143, 212, 0.32);
 }
 .admin-item strong {
   display: block;
@@ -643,8 +643,8 @@ body.admin-page {
   white-space: nowrap;
 }
 .admin-toggle--on {
-  border-color: rgba(74, 143, 184, 0.45);
-  color: #a8cce3;
+  border-color: rgba(61, 143, 212, 0.45);
+  color: var(--accent-text);
   background: var(--accent-soft);
 }
 .admin-toggle--danger {
@@ -661,7 +661,7 @@ body.admin-page {
   margin-bottom: 16px;
   padding: 12px 14px;
   background: var(--surface);
-  border: 1px solid rgba(74, 143, 184, 0.25);
+  border: 1px solid rgba(61, 143, 212, 0.25);
   border-radius: var(--radius-md);
   font-size: 0.88rem;
   color: var(--muted);

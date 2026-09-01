@@ -26,7 +26,7 @@
 .neu-tab:active { background: var(--surface-2); }
 .neu-tab.active {
   color: var(--text);
-  border-color: rgba(61, 126, 166, 0.35);
+  border-color: rgba(61, 143, 212, 0.25);
   background: var(--accent-soft);
 }
 .neu-tab-icon {
@@ -35,9 +35,9 @@
   margin-bottom: 6px;
 }
 .neu-tab-label {
-  font-family: "Outfit", sans-serif;
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .neu-panel { display: none; margin-top: 22px; }
@@ -69,7 +69,7 @@
 }
 .lang-btn.active {
   color: var(--text);
-  border-color: rgba(61, 126, 166, 0.35);
+  border-color: rgba(61, 143, 212, 0.25);
   background: var(--accent-soft);
 }
 

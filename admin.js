@@ -172,7 +172,7 @@
     }
     wishesTableBody.innerHTML = items
       .map(function (w) {
-        var contact = [w.name, w.contact].filter(Boolean).join(" · ") || "Anonym";
+        var username = w.name ? escapeHtml(w.name) : "—";
         var id = escapeHtml(w.id || "");
         return (
           '<tr class="' +
@@ -188,7 +188,7 @@
           '</td><td class="wish-term">' +
           wishDateCell(w) +
           '</td><td class="wish-meta">' +
-          escapeHtml(contact) +
+          escapeHtml(username) +
           '</td><td class="wish-note"><input type="text" class="wish-note-input" data-field="note" value="' +
           escapeHtml(w.adminNote || "") +
           '" placeholder="Intern …" maxlength="500" /></td><td class="wish-actions-col"><div class="wish-actions wish-actions--row"><button type="button" class="admin-toggle admin-toggle--sm" data-action="save-wish" data-id="' +
@@ -203,9 +203,7 @@
       .join("");
     wishesCards.innerHTML = items
       .map(function (w) {
-        var meta = [];
-        if (w.name) meta.push(escapeHtml(w.name));
-        if (w.contact) meta.push(escapeHtml(w.contact));
+        var meta = w.name ? escapeHtml(w.name) : "—";
         var id = escapeHtml(w.id || "");
         return (
           '<article class="admin-item ' +
@@ -219,7 +217,7 @@
           '</strong><div class="wish-title">' +
           wishTitleHtml(w) +
           '</div><span class="wish-meta">' +
-          (meta.join(" · ") || "Anonym") +
+          (meta || "—") +
           '</span></div></div><div class="wish-card-fields"><div class="wish-card-date"><span>Termin (Trakt)</span><p>' +
           wishDateCell(w) +
           '</p></div><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +

@@ -12,6 +12,7 @@
   var guideActions = document.getElementById("guideActions");
   var backBtn = document.getElementById("btnBack");
   var chips = document.getElementById("chips");
+  var homeDoors = document.getElementById("homeDoors");
   var navStack = [];
   var navSnapshot = null;
 
@@ -516,15 +517,9 @@
     return null;
   }
 
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      ask(input.value);
-    });
-  }
-
-  if (chips) {
-    chips.addEventListener("click", function (e) {
+  function bindIntentClicks(root) {
+    if (!root) return;
+    root.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-ask], [data-intent]");
       if (!btn) return;
       var intentId = btn.getAttribute("data-intent");
@@ -539,6 +534,16 @@
       }
     });
   }
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      ask(input.value);
+    });
+  }
+
+  bindIntentClicks(chips);
+  bindIntentClicks(homeDoors);
 
   if (backBtn) {
     backBtn.addEventListener("click", guideBack);

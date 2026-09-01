@@ -4,7 +4,6 @@
   var form = document.getElementById("wishboxForm");
   var statusEl = document.getElementById("wishboxStatus");
   var submitBtn = document.getElementById("wishboxSubmit");
-  var submitHint = document.getElementById("wishSubmitHint");
   var searchInput = document.getElementById("wishSearch");
   var searchList = document.getElementById("wishSearchList");
   var searchLoading = document.getElementById("wishSearchLoading");
@@ -23,11 +22,6 @@
   var pickClear = document.getElementById("wishPickClear");
   var messageEl = form ? form.querySelector('[name="message"]') : null;
   var noteEl = form ? form.querySelector('[name="note"]') : null;
-  var steps = [
-    document.getElementById("step1"),
-    document.getElementById("step2"),
-    document.getElementById("step3"),
-  ];
 
   if (!form || !statusEl) return;
 
@@ -58,33 +52,17 @@
     return type === "movie" ? "Film" : "Serie";
   }
 
-  function setSteps(activeIndex) {
-    steps.forEach(function (el, i) {
-      if (!el) return;
-      el.classList.toggle("is-active", i <= activeIndex);
-      el.classList.toggle("is-done", i < activeIndex);
-    });
-  }
-
   function updateSubmitState() {
     var canSubmit = false;
-    var hint = "Bitte zuerst einen Titel aus der Liste wählen.";
 
     if (freitextMode) {
       var text = messageEl ? messageEl.value.trim() : "";
       canSubmit = text.length >= 10;
-      hint = canSubmit ? "" : "Freitext: mindestens ein kurzer Satz (10 Zeichen).";
     } else if (selected) {
       canSubmit = true;
-      hint = "";
     }
 
     if (submitBtn) submitBtn.disabled = !canSubmit;
-    if (submitHint) {
-      submitHint.textContent = hint;
-      submitHint.classList.toggle("is-hide", !hint);
-    }
-    setSteps(selected || freitextMode ? 2 : searchInput && searchInput.value.trim().length >= 3 ? 1 : 0);
   }
 
   function hideSearchList() {
@@ -429,7 +407,6 @@
     }
 
     var fd = new FormData(form);
-    var contact = String(fd.get("contact") || "").trim();
     var userNote = String(fd.get("note") || "").trim();
 
     if (freitextMode) {
@@ -445,18 +422,11 @@
       return;
     }
 
-    if (contact && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
-      setStatus("Die E-Mail sieht komisch aus – nochmal checken?", "error");
-      return;
-    }
-
     submitBtn.disabled = true;
     setStatus("Wird geschickt …");
-    setSteps(2);
 
     var payload = {
-      name: String(fd.get("name") || "").trim(),
-      contact: contact,
+      name: String(fd.get("username") || "").trim(),
       website: String(fd.get("website") || ""),
     };
 
@@ -483,7 +453,6 @@
         clearPick();
         exitFreitextMode();
         setStatus("Danke – ist angekommen!", "ok");
-        setSteps(0);
         updateSubmitState();
       })
       .catch(function (err) {

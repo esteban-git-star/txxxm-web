@@ -4,35 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#0c0d10" />
+  <meta name="theme-color" content="#0a0b0d" />
   <title>Wunschbox – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=1" />
-  <link rel="stylesheet" href="support.css?v=8" />
-  <link rel="stylesheet" href="site-nav.css?v=3" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=3" />
+  <link rel="stylesheet" href="support.css?v=9" />
+  <link rel="stylesheet" href="site-nav.css?v=5" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="wrap">
     <header class="hero">
       <h1 class="q">Wunschbox</h1>
-      <p class="hint">Such deinen Film oder deine Serie – Cover und Termin siehst du sofort.</p>
+      <p class="hint">Such deinen Film oder Serie. Cover und Termin siehst du direkt.</p>
     </header>
-
-    <ol class="wishbox-steps" aria-label="So geht's">
-      <li class="wishbox-step is-active" id="step1"><span>1</span> Titel suchen</li>
-      <li class="wishbox-step" id="step2"><span>2</span> Aus Liste wählen</li>
-      <li class="wishbox-step" id="step3"><span>3</span> Absenden</li>
-    </ol>
 
     <form class="wishbox-form" id="wishboxForm" novalidate>
       <section class="wishbox-panel" id="wishSearchPanel">
         <label class="wishbox-field wishbox-field--search">
-          <span>Welcher Film oder welche Serie?</span>
+          <span>Welcher Titel?</span>
           <div class="wish-search" id="wishSearchWrap">
-            <input type="search" id="wishSearch" autocomplete="off" placeholder="z. B. One Piece, Punisher, Dune …" enterkeyhint="search" />
+            <input type="search" id="wishSearch" autocomplete="off" placeholder="z. B. One Piece, Dune …" enterkeyhint="search" />
             <p class="wish-search-hint is-hide" id="wishSearchLoading">Suche …</p>
             <ul class="wish-search-list is-hide" id="wishSearchList" role="listbox" aria-label="Suchergebnisse"></ul>
           </div>
@@ -44,38 +38,30 @@
             <span class="wish-pick-poster wish-pick-poster--empty is-hide" id="wishPickPosterEmpty" aria-hidden="true"></span>
           </div>
           <div class="wish-pick-main">
-            <p class="wish-pick-ok"><i data-lucide="check-circle" aria-hidden="true"></i> Ausgewählt</p>
             <span class="wish-pick-type" id="wishPickType"></span>
             <strong id="wishPickTitle"></strong>
             <p class="wish-pick-date" id="wishPickDate"></p>
           </div>
           <button type="button" class="wish-pick-clear" id="wishPickClear">Ändern</button>
         </div>
-      </section>
 
-      <p class="wishbox-or">
-        <button type="button" class="wishbox-link-btn" id="wishFreitextToggle">Stattdessen Freitext (wenn nichts passt)</button>
-      </p>
+        <p class="wishbox-or">
+          <button type="button" class="wishbox-link-btn" id="wishFreitextToggle">Freitext, wenn nichts passt</button>
+        </p>
+      </section>
 
       <section class="wishbox-panel is-hide" id="wishFreePanel">
         <label class="wishbox-field" id="wishFreeField">
-          <span>Dein Wunsch als Text</span>
-          <textarea name="message" rows="4" maxlength="2000" placeholder="Schreib den Titel – mindestens ein kurzer Satz"></textarea>
+          <span>Dein Wunsch</span>
+          <textarea name="message" rows="3" maxlength="2000" placeholder="Titel schreiben – mindestens ein kurzer Satz"></textarea>
         </label>
         <button type="button" class="wishbox-link-btn" id="wishBackToSearch">← Zurück zur Suche</button>
       </section>
 
-      <details class="wishbox-optional">
-        <summary>Name &amp; E-Mail (optional)</summary>
-        <label class="wishbox-field">
-          <span>Dein Name</span>
-          <input type="text" name="name" maxlength="80" autocomplete="name" placeholder="Wie dürfen wir dich nennen?" />
-        </label>
-        <label class="wishbox-field">
-          <span>E-Mail für Rückfragen</span>
-          <input type="email" name="contact" maxlength="120" autocomplete="email" placeholder="Nur wenn du Antwort willst" />
-        </label>
-      </details>
+      <label class="wishbox-field">
+        <span>Username</span>
+        <input type="text" name="username" maxlength="80" autocomplete="username" placeholder="Dein Tivim-Username" />
+      </label>
 
       <label class="wishbox-field is-hide" id="wishNoteField">
         <span>Zusatz <em>(optional)</em></span>
@@ -87,19 +73,18 @@
       <p class="wishbox-status" id="wishboxStatus" role="status" aria-live="polite"></p>
 
       <button type="submit" class="cta" id="wishboxSubmit" disabled>Wunsch abschicken</button>
-      <p class="wishbox-submit-hint" id="wishSubmitHint">Bitte zuerst einen Titel aus der Liste wählen.</p>
     </form>
 
     <div class="note">
       <strong>Hinweis</strong>
-      <p>Kein Support-Ticket – nur Wünsche. Bei Problemen zuerst die <a href="kontakt.html">Support-Checkliste</a>.</p>
+      <p>Kein Support – nur Wünsche. Bei Problemen die <a href="kontakt.html">Support-Checkliste</a>.</p>
     </div>
   </div>
   <script>
     if (typeof lucide !== "undefined") lucide.createIcons();
   </script>
   <script src="api-config.js?v=1"></script>
-  <script src="wunschbox.js?v=8"></script>
-  <script src="site-nav.js?v=3"></script>
+  <script src="wunschbox.js?v=9"></script>
+  <script src="site-nav.js?v=5"></script>
 </body>
 </html>

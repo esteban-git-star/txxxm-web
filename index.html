@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css?v=3" />
-  <link rel="stylesheet" href="support.css?v=4" />
-  <link rel="stylesheet" href="app.css?v=6" />
+  <link rel="stylesheet" href="support.css?v=9" />
+  <link rel="stylesheet" href="app.css?v=9" />
   <link rel="stylesheet" href="site-nav.css?v=5" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
@@ -52,23 +52,39 @@
         <button type="submit">Los</button>
       </form>
 
+      <div class="home-doors" id="homeDoors">
+        <a class="home-door" href="install.html">
+          <i data-lucide="download" aria-hidden="true"></i>
+          <strong>Neu einrichten</strong>
+          <em>TV, Handy oder PC</em>
+        </a>
+        <button type="button" class="home-door" data-intent="probleme">
+          <i data-lucide="circle-alert" aria-hidden="true"></i>
+          <strong>Läuft nicht / Fehler</strong>
+          <em>App hängt, Codes, schwarzer Bildschirm</em>
+        </button>
+        <button type="button" class="home-door" data-intent="vpn">
+          <i data-lucide="shield" aria-hidden="true"></i>
+          <strong>Ruckelt abends</strong>
+          <em>Meist Leitung – VPN hilft</em>
+        </button>
+      </div>
+
+      <p class="chips-label">Oft gesucht</p>
       <div class="chips" id="chips">
         <button type="button" class="chip" data-intent="status"><i data-lucide="activity" class="chip-ico" aria-hidden="true"></i> Läuft Tivim?</button>
-        <button type="button" class="chip" data-intent="install-tv"><i data-lucide="tv" class="chip-ico" aria-hidden="true"></i> TV einrichten</button>
         <button type="button" class="chip" data-intent="pro-401"><i data-lucide="key-round" class="chip-ico" aria-hidden="true"></i> Fehler 401</button>
         <button type="button" class="chip" data-intent="pro-403"><i data-lucide="ban" class="chip-ico" aria-hidden="true"></i> Fehler 403</button>
         <button type="button" class="chip" data-intent="pro-codec"><i data-lucide="film" class="chip-ico" aria-hidden="true"></i> CodecException</button>
         <button type="button" class="chip" data-intent="xc-empty"><i data-lucide="list-x" class="chip-ico" aria-hidden="true"></i> Listen leer</button>
-        <button type="button" class="chip" data-intent="vpn"><i data-lucide="shield" class="chip-ico" aria-hidden="true"></i> Ruckelt abends</button>
-        <button type="button" class="chip" data-intent="install-mobile"><i data-lucide="smartphone" class="chip-ico" aria-hidden="true"></i> Handy</button>
       </div>
 
       <nav class="more">
         <p>Noch was?</p>
         <div class="more-grid">
           <a href="install.html"><i data-lucide="download" aria-hidden="true"></i> Installation</a>
-          <a href="mehr.html"><i data-lucide="ellipsis" aria-hidden="true"></i> Mehr</a>
           <a href="wunschbox.html"><i data-lucide="message-square-plus" aria-hidden="true"></i> Wunschbox</a>
+          <a href="mehr.html"><i data-lucide="ellipsis" aria-hidden="true"></i> Mehr</a>
         </div>
       </nav>
 
@@ -87,7 +103,7 @@
 
   <script src="api-config.js?v=1"></script>
   <script src="kb.js?v=20260831-12"></script>
-  <script src="assistant.js?v=20260831-13"></script>
+  <script src="assistant.js?v=20260901-14"></script>
   <script src="script.js?v=20260831-11"></script>
   <script src="update-format.js?v=1"></script>
   <script src="updates.js?v=5"></script>

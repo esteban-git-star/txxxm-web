@@ -26,10 +26,10 @@ body {
 
 .q {
   margin: 0;
-  font-size: 1.52rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.035em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.028em;
 }
 
 .hint {
@@ -74,9 +74,9 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 92px;
-  padding: 18px 16px;
-  border-radius: var(--radius-lg);
+  min-height: 76px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--text);
@@ -84,55 +84,54 @@ body {
   text-decoration: none;
   font: inherit;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+  box-shadow: none;
+  transition: background 0.12s ease, border-color 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .door:active {
   background: var(--surface-hover);
-  transform: scale(0.99);
 }
 .door svg {
-  width: 34px;
-  height: 34px;
+  width: 22px;
+  height: 22px;
   stroke-width: 1.65;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   stroke: var(--muted);
 }
 .door strong {
   display: block;
-  font-size: 1.06rem;
-  font-weight: 700;
+  font-size: 0.94rem;
+  font-weight: 600;
   color: var(--text);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .door em {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   font-style: normal;
-  font-size: 0.86rem;
+  font-size: 0.78rem;
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.35;
   font-weight: 400;
 }
-.door--muted { min-height: 72px; opacity: 0.92; }
+.door--muted { min-height: 64px; opacity: 0.92; }
 .door--rec {
-  border-color: rgba(74, 143, 184, 0.28);
-  background: var(--accent-soft);
+  border-color: var(--line-strong);
+  background: var(--surface);
 }
-.door--rec svg { stroke: #a8cce3; }
+.door--rec svg { stroke: var(--muted); }
 .door--action {
-  border-color: rgba(74, 143, 184, 0.22);
-  background: var(--accent-soft);
+  border-color: var(--line-strong);
+  background: var(--surface);
 }
-.door--action svg { stroke: #a8cce3; }
+.door--action svg { stroke: var(--muted); }
 .door--issue { border-color: var(--line-strong); }
 .door--ok {
-  border-color: rgba(69, 168, 114, 0.28);
+  border-color: rgba(76, 175, 130, 0.25);
   background: var(--ok-soft);
 }
 .door--ok svg { stroke: var(--ok); }
-.door--tall { min-height: 128px; padding: 22px 16px; }
+.door--tall { min-height: 96px; padding: 18px 16px; }
 
 .badge {
   display: inline-block;
@@ -146,8 +145,8 @@ body {
 }
 .badge--hot {
   background: var(--accent-soft);
-  color: #a8cce3;
-  border: 1px solid rgba(74, 143, 184, 0.28);
+  color: var(--accent-text);
+  border: 1px solid rgba(61, 143, 212, 0.2);
 }
 .badge--free {
   background: rgba(255, 255, 255, 0.03);
@@ -164,16 +163,16 @@ body {
   color: #dde1e8;
   font-size: 0.94rem;
   line-height: 1.5;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 .list li { margin-bottom: 10px; }
 .list li:last-child { margin-bottom: 0; }
 .list strong { color: var(--text); }
 
 .code {
-  color: #a8cce3;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  color: var(--accent-text);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .note,
@@ -183,8 +182,8 @@ body {
   padding: 16px 18px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  box-shadow: none;
 }
 .note strong,
 .warn strong {
@@ -349,30 +348,29 @@ body {
   display: block;
   width: 100%;
   margin-top: 14px;
-  padding: 17px 16px;
+  padding: 14px 16px;
   text-align: center;
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
   color: #fff;
-  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  background: var(--accent);
   border: 0;
   border-radius: var(--radius-md);
   cursor: pointer;
   font-family: inherit;
-  box-shadow: var(--shadow-accent);
-  transition: opacity 0.15s ease, transform 0.1s ease;
+  box-shadow: none;
+  transition: background 0.12s ease, opacity 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .cta:active {
-  opacity: 0.92;
-  transform: scale(0.99);
+  opacity: 0.9;
 }
 .cta--ghost {
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--line-strong);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   margin-top: 10px;
 }
 
@@ -419,14 +417,14 @@ body {
 .wishbox-field input,
 .wishbox-field textarea {
   width: 100%;
-  padding: 14px 14px;
+  padding: 12px 14px;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   resize: vertical;
   min-height: 48px;
   -webkit-tap-highlight-color: transparent;
@@ -438,7 +436,7 @@ body {
 .wishbox-field input:focus,
 .wishbox-field textarea:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 .wishbox-hp {
   position: absolute;
@@ -478,12 +476,12 @@ body {
   list-style: none;
   margin: 6px 0 0;
   padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
   background: var(--surface);
   max-height: 360px;
   overflow-y: auto;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
 }
 .wish-search-list.is-hide { display: none; }
 .wish-search-group {
@@ -691,14 +689,15 @@ body {
   font-size: 0.9rem;
 }
 .wish-pick {
-  margin-bottom: 16px;
-  padding: 14px 16px;
-  border: 1px solid rgba(74, 222, 128, 0.45);
-  border-radius: var(--radius);
-  background: rgba(74, 222, 128, 0.06);
+  margin-top: 12px;
+  margin-bottom: 0;
+  padding: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
 }
 .wish-pick.is-hide { display: none; }
 .wish-pick-poster {
