@@ -321,7 +321,21 @@
 
     function paint() {
       state.idx = idx;
-      progress.textContent = "Schritt " + (idx + 1) + " von " + total;
+      var pct = Math.round(((idx + 1) / total) * 100);
+      progress.className = "step-progress-wrap";
+      progress.innerHTML =
+        '<div class="step-progress-bar" role="progressbar" aria-valuenow="' +
+        (idx + 1) +
+        '" aria-valuemin="1" aria-valuemax="' +
+        total +
+        '"><span style="width:' +
+        pct +
+        '%"></span></div>' +
+        '<p class="step-progress-text">Schritt ' +
+        (idx + 1) +
+        " von " +
+        total +
+        "</p>";
       card.innerHTML = buildStepHtml(intent.steps[idx], idx + 1);
 
       guideActions.innerHTML = "";
@@ -342,10 +356,15 @@
       }
 
       if (idx < total - 1) {
+        var hint = document.createElement("p");
+        hint.className = "step-action-hint";
+        hint.textContent = "Wenn du das erledigt hast:";
+        guideActions.appendChild(hint);
+
         var next = document.createElement("button");
         next.type = "button";
         next.className = "cta";
-        next.textContent = "Ok, weiter";
+        next.textContent = "Erledigt – weiter";
         next.addEventListener("click", function () {
           idx += 1;
           paint();
@@ -353,10 +372,15 @@
         });
         guideActions.appendChild(next);
       } else {
+        var doneHint = document.createElement("p");
+        doneHint.className = "step-action-hint";
+        doneHint.textContent = "Läuft es wieder?";
+        guideActions.appendChild(doneHint);
+
         var ok = document.createElement("button");
         ok.type = "button";
         ok.className = "cta";
-        ok.textContent = "Geht wieder";
+        ok.textContent = "Ja, geht wieder";
         ok.addEventListener("click", function () {
           if (input) input.value = "";
           showHome();
@@ -366,7 +390,7 @@
         var bad = document.createElement("a");
         bad.className = "cta cta--ghost";
         bad.href = "kontakt.html";
-        bad.textContent = "Geht immer noch nicht – Support";
+        bad.textContent = "Nein – Support";
         guideActions.appendChild(bad);
       }
     }
@@ -386,45 +410,91 @@
     showGuide();
   }
 
+  function extractCopyValue(taps) {
+    if (!taps || !taps.length) return "";
+    for (var i = 0; i < taps.length; i++) {
+      var m = String(taps[i]).match(/\b(TivimPlayer|FA69EV)\b/i);
+      if (m) return m[1];
+    }
+    return "";
+  }
+
+  function inferGoal(step) {
+    if (step.goal) return step.goal;
+    if (step.text) return step.text;
+    if (step.lead) return String(step.lead).replace(/:+\s*$/, "");
+    if (step.taps && step.taps.length) {
+      for (var i = 0; i < step.taps.length; i++) {
+        if (/\b(TivimPlayer|FA69EV)\b/i.test(step.taps[i])) {
+          return "Trage als User-Agent TivimPlayer ein und speichere.";
+        }
+      }
+      return "Folge der Reihe nach im Menü.";
+    }
+    return "";
+  }
+
   function buildStepHtml(step, num) {
     if (step && typeof step === "object" && step.taps && step.taps.length) {
-      var lead = step.lead
-        ? '<p class="step-lead">' + formatInline(step.lead) + "</p>"
-        : "";
-      var taps = step.taps
-        .map(function (tap) {
+      var goal = inferGoal(step);
+      var copyVal = extractCopyValue(step.taps);
+      var menuItems = step.taps
+        .map(function (tap, i) {
+          var isKey = /\b(TivimPlayer|FA69EV)\b/i.test(tap);
           return (
-            '<li class="tap-item">' +
-            '<div class="tap-row">' +
-            '<span class="tap-dot" aria-hidden="true"></span>' +
-            '<span class="tap-label">' +
+            '<li class="step-menu-item' +
+            (isKey ? " is-key" : "") +
+            '"><span class="step-menu-n">' +
+            (i + 1) +
+            '</span><span class="step-menu-label">' +
             formatInline(tap) +
-            "</span></div></li>"
+            "</span></li>"
           );
         })
         .join("");
+      var copyHtml = copyVal
+        ? '<div class="step-copy">' +
+          '<p class="step-copy-label">Genau so eintragen:</p>' +
+          '<button type="button" class="step-copy-btn" data-copy="' +
+          escapeHtml(copyVal) +
+          '"><code>' +
+          escapeHtml(copyVal) +
+          '</code><span class="step-copy-action">Kopieren</span></button></div>'
+        : "";
       return (
-        '<div class="step-focus-top">' +
-        '<span class="step-num">' +
-        num +
-        "</span>" +
-        lead +
-        "</div>" +
-        '<ol class="step-taps">' +
-        taps +
-        "</ol>"
+        '<div class="step-card">' +
+        '<p class="step-now">Das machst du jetzt</p>' +
+        '<p class="step-goal">' +
+        formatInline(goal) +
+        "</p>" +
+        '<p class="step-menu-hint">In Tivim Pro der Reihe nach:</p>' +
+        '<ol class="step-menu">' +
+        menuItems +
+        "</ol>" +
+        copyHtml +
+        "</div>"
       );
     }
 
-    var text = typeof step === "string" ? step : step.text || "";
+    var headline =
+      typeof step === "string"
+        ? step
+        : step.goal || step.text || "";
+    var detail =
+      step &&
+      typeof step === "object" &&
+      step.goal &&
+      step.text &&
+      step.text !== step.goal
+        ? '<p class="step-detail">' + formatInline(step.text) + "</p>"
+        : "";
     return (
-      '<div class="step-focus-top">' +
-      '<span class="step-num">' +
-      num +
-      "</span>" +
-      '<p class="step-text">' +
-      formatInline(text) +
+      '<div class="step-card step-card--simple">' +
+      '<p class="step-now">Das machst du jetzt</p>' +
+      '<p class="step-goal">' +
+      formatInline(headline) +
       "</p>" +
+      detail +
       "</div>"
     );
   }
@@ -544,6 +614,29 @@
 
   bindIntentClicks(chips);
   bindIntentClicks(homeDoors);
+
+  if (guideBody) {
+    guideBody.addEventListener("click", function (e) {
+      var btn = e.target.closest(".step-copy-btn");
+      if (!btn) return;
+      var val = btn.getAttribute("data-copy") || "";
+      if (!val) return;
+      var action = btn.querySelector(".step-copy-action");
+      function done() {
+        if (action) action.textContent = "Kopiert!";
+        setTimeout(function () {
+          if (action) action.textContent = "Kopieren";
+        }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(done).catch(function () {
+          if (action) action.textContent = val;
+        });
+      } else if (action) {
+        action.textContent = val;
+      }
+    });
+  }
 
   if (backBtn) {
     backBtn.addEventListener("click", guideBack);

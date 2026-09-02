@@ -7,6 +7,9 @@ body.admin-page {
   min-height: 100dvh;
   overflow-x: hidden;
   background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -15%, rgba(232, 168, 56, 0.07), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(232, 168, 56, 0.03), transparent);
 }
 
 /* Login */
@@ -21,11 +24,11 @@ body.admin-page {
 .dash-login-card {
   width: 100%;
   max-width: 400px;
-  padding: 24px 18px;
+  padding: 28px 22px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  box-shadow: none;
+  box-shadow: var(--shadow-md);
 }
 .dash-login-card h1 {
   margin: 0;
@@ -33,6 +36,8 @@ body.admin-page {
   font-size: 1.45rem;
   font-weight: 700;
   text-align: center;
+  color: var(--text);
+  letter-spacing: -0.02em;
 }
 .dash-login-card .hint {
   margin-top: 10px;
@@ -64,6 +69,7 @@ body.admin-page {
   padding: 24px 16px;
   border-right: 1px solid var(--line-strong);
   background: var(--surface);
+  box-shadow: var(--shadow-sm);
 }
 .cockpit-brand {
   margin: 0 0 6px 10px;
@@ -71,6 +77,7 @@ body.admin-page {
   font-size: 1.2rem;
   font-weight: 800;
   letter-spacing: -0.03em;
+  color: var(--accent-text);
 }
 .cockpit-brand-sub {
   margin: 0 0 28px 10px;
@@ -91,13 +98,14 @@ body.admin-page {
   border: 1px solid transparent;
   background: transparent;
   color: var(--muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 13px 14px;
   font: inherit;
   font-size: 0.92rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 .cockpit-nav-btn svg {
   width: 20px;
@@ -105,14 +113,23 @@ body.admin-page {
   stroke-width: 1.65;
   flex-shrink: 0;
   stroke: var(--muted);
+  transition: stroke 0.12s ease;
 }
 .cockpit-nav-btn.is-active {
-  border-color: var(--line-strong);
-  background: var(--surface-hover);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
   color: var(--text);
+  box-shadow: var(--shadow-sm);
 }
 .cockpit-nav-btn.is-active svg {
-  stroke: var(--text);
+  stroke: var(--accent-text);
+}
+@media (hover: hover) {
+  .cockpit-nav-btn:hover:not(.is-active) {
+    background: var(--surface-hover);
+    border-color: var(--line);
+    color: var(--text);
+  }
 }
 .cockpit-nav-label {
   flex: 1;
@@ -121,7 +138,7 @@ body.admin-page {
   min-width: 1.4em;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: rgba(61, 143, 212, 0.22);
+  background: var(--accent-soft);
   color: var(--accent-text);
   font-size: 0.72rem;
   font-weight: 700;
@@ -131,15 +148,20 @@ body.admin-page {
 .cockpit-logout {
   margin-top: 16px;
   width: 100%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   background: transparent;
   color: var(--muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   padding: 12px 14px;
   font: inherit;
   font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.cockpit-logout:hover {
+  background: var(--surface-hover);
+  color: var(--text);
 }
 
 /* Stage */
@@ -158,7 +180,9 @@ body.admin-page {
   padding: 12px max(14px, env(safe-area-inset-left)) 12px max(14px, env(safe-area-inset-right));
   padding-top: max(12px, env(safe-area-inset-top));
   border-bottom: 1px solid var(--line-strong);
-  background: var(--surface);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   flex-shrink: 0;
 }
 .cockpit-header h1 {
@@ -195,11 +219,13 @@ body.admin-page {
 .cockpit-dock {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  gap: 4px;
   border-top: 1px solid var(--line-strong);
-  background: var(--surface);
-  padding: 6px max(4px, env(safe-area-inset-left)) max(6px, env(safe-area-inset-bottom)) max(4px, env(safe-area-inset-right));
-  box-shadow: 0 -1px 0 var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 6px max(6px, env(safe-area-inset-left)) max(6px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-right));
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
 }
 .cockpit-dock-btn {
   display: flex;
@@ -208,8 +234,9 @@ body.admin-page {
   justify-content: center;
   gap: 4px;
   min-height: 52px;
-  padding: 6px 2px;
+  padding: 6px 4px;
   border: 0;
+  border-radius: var(--radius-md);
   background: transparent;
   color: var(--muted-2);
   font: inherit;
@@ -220,6 +247,7 @@ body.admin-page {
   position: relative;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 .cockpit-dock-btn svg {
   width: 22px;
@@ -227,25 +255,27 @@ body.admin-page {
   stroke-width: 1.65;
 }
 .cockpit-dock-btn.is-active {
-  color: var(--text);
+  color: var(--accent-text);
+  background: var(--accent-soft);
 }
 .cockpit-dock-btn.is-active svg {
-  stroke: var(--text);
+  stroke: var(--accent-text);
 }
 .cockpit-dock-badge {
   position: absolute;
-  top: 8px;
+  top: 6px;
   right: calc(50% - 22px);
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-on);
   font-size: 0.62rem;
   font-weight: 700;
   line-height: 16px;
   text-align: center;
+  box-shadow: var(--shadow-accent);
 }
 .cockpit-dock-badge.is-hide { display: none; }
 
@@ -289,11 +319,11 @@ body.admin-page {
 }
 
 .cockpit-card {
-  padding: 16px;
+  padding: 18px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  box-shadow: none;
+  box-shadow: var(--shadow-sm);
 }
 .cockpit-card + .cockpit-card {
   margin-top: 0;
@@ -303,7 +333,7 @@ body.admin-page {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted-2);
+  color: var(--accent-text);
   font-weight: 700;
 }
 
@@ -318,15 +348,17 @@ body.admin-page {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   padding: 10px 12px;
   font: inherit;
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 .cockpit-subnav-btn.is-active {
-  border-color: rgba(61, 143, 212, 0.4);
+  border-color: var(--accent-border);
   background: var(--accent-soft);
   color: var(--accent-text);
 }
@@ -371,7 +403,7 @@ body.admin-page {
   width: 44px;
   height: 66px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: var(--bg);
 }
@@ -382,10 +414,10 @@ body.admin-page {
   font-size: 0.85rem;
   font-weight: 800;
   color: var(--muted);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.1), rgba(0, 0, 0, 0.12));
 }
-.wish-admin-poster--movie { color: #60a5fa; }
-.wish-admin-poster--show { color: #4ade80; }
+.wish-admin-poster--movie { color: var(--accent-text); }
+.wish-admin-poster--show { color: var(--ok); }
 .wish-table td.wish-title {
   min-width: 220px;
   max-width: 320px;
@@ -423,30 +455,35 @@ body.admin-page {
   width: 100%;
   min-width: 120px;
   box-sizing: border-box;
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
   color: var(--text);
   font: inherit;
   font-size: 0.84rem;
 }
+.wish-note-input:focus {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
 .wish-type-badge {
   display: inline-block;
   margin-right: 6px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   vertical-align: middle;
-  background: rgba(74, 222, 128, 0.15);
-  color: var(--accent);
+  background: var(--ok-soft);
+  color: var(--ok);
 }
 .wish-type-badge--movie {
-  background: rgba(96, 165, 250, 0.15);
-  color: #60a5fa;
+  background: var(--accent-soft);
+  color: var(--accent-text);
 }
 .wish-user-note {
   display: block;
@@ -530,6 +567,8 @@ body.admin-page {
 .wish-cards .admin-item {
   margin-bottom: 0;
   padding: 14px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Forms */
@@ -548,13 +587,20 @@ body.admin-page {
 .admin-field textarea {
   width: 100%;
   box-sizing: border-box;
-  padding: 14px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: var(--bg);
+  padding: 14px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
   color: var(--text);
   font: inherit;
   font-size: 0.95rem;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.admin-field input:focus,
+.admin-field textarea:focus {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .admin-format {
   display: flex;
@@ -563,15 +609,22 @@ body.admin-page {
   margin-bottom: 8px;
 }
 .admin-format-btn {
-  border: 1px solid var(--line);
-  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
   color: var(--muted);
-  border-radius: 999px;
-  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
   font: inherit;
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.admin-format-btn:active,
+.admin-format-btn:hover {
+  border-color: var(--accent-border);
+  color: var(--accent-text);
+  background: var(--accent-soft);
 }
 .admin-format-hint {
   margin: 8px 0 0;
@@ -598,19 +651,21 @@ body.admin-page {
   max-height: 140px;
   object-fit: cover;
   margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
 }
 .admin-preview.is-hide { display: none; }
 .admin-item {
   margin-bottom: 10px;
   padding: 14px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 .admin-item--pinned {
-  border-color: rgba(61, 143, 212, 0.32);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
 }
 .admin-item strong {
   display: block;
@@ -630,7 +685,7 @@ body.admin-page {
   font-size: 0.88rem;
   line-height: 1.45;
 }
-.admin-item-body a { color: #9ec5dd; }
+.admin-item-body a { color: var(--accent-text); }
 .admin-item-meta {
   display: flex;
   align-items: center;
@@ -650,13 +705,14 @@ body.admin-page {
   width: 100%;
   max-height: 120px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-bottom: 8px;
+  border: 1px solid var(--line);
 }
 .admin-tag {
   font-style: normal;
   font-size: 0.72rem;
-  color: #9ec5dd;
+  color: var(--accent-text);
 }
 .admin-toggle {
   border: 1px solid var(--line);
@@ -672,7 +728,7 @@ body.admin-page {
   touch-action: manipulation;
 }
 .admin-toggle--on {
-  border-color: rgba(61, 143, 212, 0.45);
+  border-color: var(--accent-border);
   color: var(--accent-text);
   background: var(--accent-soft);
 }
@@ -688,14 +744,15 @@ body.admin-page {
 }
 .admin-status {
   margin-bottom: 16px;
-  padding: 12px 14px;
-  background: var(--surface);
-  border: 1px solid rgba(61, 143, 212, 0.25);
-  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-lg);
   font-size: 0.88rem;
   color: var(--muted);
+  box-shadow: var(--shadow-sm);
 }
-.admin-status strong { color: var(--ok, #4ade80); }
+.admin-status strong { color: var(--ok); }
 
 .cta {
   display: block;
@@ -705,10 +762,10 @@ body.admin-page {
   text-align: center;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--accent-on);
   background: linear-gradient(180deg, var(--accent-hover), var(--accent));
   border: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-btn);
   cursor: pointer;
   font-family: inherit;
   box-shadow: var(--shadow-accent);
@@ -873,13 +930,18 @@ body.admin-page {
 .poll-option-input {
   flex: 1;
   min-width: 0;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
   color: var(--text);
   font: inherit;
   font-size: 0.9rem;
+}
+.poll-option-input:focus {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .poll-option-remove {
   flex-shrink: 0;

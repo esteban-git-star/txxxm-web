@@ -40,7 +40,7 @@ window.TIVIM_KB = [
   {
     id: "pro-401",
     title: "Fehlercode 401",
-    summary: "In Pro fehlt der User-Agent TivimPlayer.",
+    summary: "User-Agent fehlt – in 2 Schritten fix.",
     keywords: [
       "401", "fehlercode 401", "fehler 401", "useragent", "user-agent",
       "user agent", "tivimplayer", "pro 401"
@@ -48,10 +48,13 @@ window.TIVIM_KB = [
     type: "steps",
     steps: [
       {
-        lead: "In Tivim Pro:",
-        taps: ["Einstellungen", "Allgemein (General)", "User-Agent", "TivimPlayer eintragen", "Speichern"]
+        goal: "Als User-Agent TivimPlayer eintragen und speichern.",
+        taps: ["Einstellungen", "Allgemein", "User-Agent", "TivimPlayer", "Speichern"]
       },
-      "App wirklich zu, wieder öffnen."
+      {
+        goal: "Tivim Pro komplett schließen und neu öffnen.",
+        text: "App wirklich zu (nicht nur minimieren), dann wieder starten."
+      }
     ]
   },
   {
@@ -88,7 +91,7 @@ window.TIVIM_KB = [
       "Tivim Pro und Tivim XC nicht gleichzeitig offen lassen.",
       "Eine Minute warten – dann nur auf diesem Gerät wieder öffnen.",
       {
-        lead: "Ablaufdatum in Tivim Pro:",
+        goal: "Ablaufdatum in den Xtream-Parametern prüfen.",
         taps: ["Einstellungen", "Wiedergabelisten", "Tivim", "Xtream-Parameter"]
       },
       "Restlaufzeit / Ablaufdatum prüfen. Datum vorbei = Abo durch, deshalb 403.",

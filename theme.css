@@ -1,32 +1,38 @@
-/* Design-Tokens – einheitlich für alle Support-Seiten */
+/* Design-Tokens – Warm Kino (Tivim Support) */
 :root {
-  --bg: #0a0b0d;
-  --bg-elevated: #0e0f12;
-  --surface: #141518;
-  --surface-2: #141518;
-  --surface-hover: #1b1c20;
-  --line: rgba(255, 255, 255, 0.06);
-  --line-strong: rgba(255, 255, 255, 0.1);
-  --text: #f2f3f5;
-  --muted: #8b8e98;
-  --muted-2: #6b6e78;
-  --accent: #3d8fd4;
-  --accent-hover: #4a9ae0;
-  --accent-soft: rgba(61, 143, 212, 0.1);
-  --accent-glow: transparent;
-  --accent-text: #9ec4e4;
-  --ok: #4caf82;
-  --ok-soft: rgba(76, 175, 130, 0.12);
+  --bg: #0c0a09;
+  --bg-elevated: #12100e;
+  --surface: #1a1714;
+  --surface-2: #1e1b17;
+  --surface-hover: #242019;
+  --line: rgba(232, 168, 56, 0.07);
+  --line-strong: rgba(232, 168, 56, 0.14);
+  --text: #f5f0ea;
+  --muted: #9a928a;
+  --muted-2: #6f6860;
+  --accent: #e8a838;
+  --accent-hover: #f0b84a;
+  --accent-soft: rgba(232, 168, 56, 0.12);
+  --accent-glow: rgba(232, 168, 56, 0.22);
+  --accent-text: #f0c56e;
+  --accent-border: rgba(232, 168, 56, 0.28);
+  --accent-on: #1a1208;
+  --ok: #6dbf7a;
+  --ok-soft: rgba(109, 191, 122, 0.14);
   --bad: #d47373;
   --bad-soft: rgba(212, 115, 115, 0.12);
-  --radius-lg: 12px;
-  --radius-md: 10px;
-  --radius-sm: 8px;
+  --warn-soft: rgba(232, 168, 56, 0.08);
+  --focus-ring: rgba(232, 168, 56, 0.4);
+  --glass: rgba(12, 10, 9, 0.92);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
   --radius-pill: 999px;
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-accent: none;
-  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --radius-btn: var(--radius-pill);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-accent: 0 4px 18px rgba(232, 168, 56, 0.18);
+  --font-display: "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --radius: var(--radius-lg);
 }
@@ -46,6 +52,9 @@ body {
   font-family: var(--font-body);
   color: var(--text);
   background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -15%, rgba(232, 168, 56, 0.07), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(232, 168, 56, 0.03), transparent);
 }
 
 h1, .door, .cta, .back, .chip, .faq summary, .step-n, .q {

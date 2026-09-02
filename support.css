@@ -74,9 +74,9 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 76px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
+  min-height: 80px;
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--text);
@@ -84,19 +84,20 @@ body {
   text-decoration: none;
   font: inherit;
   cursor: pointer;
-  box-shadow: none;
-  transition: background 0.12s ease, border-color 0.12s ease;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .door:active {
   background: var(--surface-hover);
+  border-color: var(--accent-border);
 }
 .door svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   stroke-width: 1.65;
-  margin-bottom: 6px;
-  stroke: var(--muted);
+  margin-bottom: 8px;
+  stroke: var(--accent-text);
 }
 .door strong {
   display: block;
@@ -127,7 +128,7 @@ body {
 .door--action svg { stroke: var(--muted); }
 .door--issue { border-color: var(--line-strong); }
 .door--ok {
-  border-color: rgba(76, 175, 130, 0.25);
+  border-color: rgba(109, 191, 122, 0.35);
   background: var(--ok-soft);
 }
 .door--ok svg { stroke: var(--ok); }
@@ -146,10 +147,10 @@ body {
 .badge--hot {
   background: var(--accent-soft);
   color: var(--accent-text);
-  border: 1px solid rgba(61, 143, 212, 0.2);
+  border: 1px solid var(--accent-border);
 }
 .badge--free {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(245, 240, 234, 0.03);
   color: var(--muted);
   border: 1px solid var(--line);
 }
@@ -221,7 +222,7 @@ body {
   padding: 0;
   border: none;
   background: none;
-  color: #a8cce3;
+  color: var(--accent-text);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 700;
@@ -288,7 +289,7 @@ body {
   margin-bottom: 8px;
   background: var(--surface);
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
@@ -335,9 +336,9 @@ body {
   font-weight: 650;
   background: var(--surface);
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 .more a:active {
   background: var(--surface-hover);
@@ -348,29 +349,31 @@ body {
   display: block;
   width: 100%;
   margin-top: 14px;
-  padding: 14px 16px;
+  padding: 15px 20px;
+  min-height: 50px;
   text-align: center;
   text-decoration: none;
   font-size: 0.92rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--accent);
+  font-weight: 700;
+  color: var(--accent-on);
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
   border: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-btn);
   cursor: pointer;
   font-family: inherit;
-  box-shadow: none;
-  transition: background 0.12s ease, opacity 0.12s ease;
+  box-shadow: var(--shadow-accent);
+  transition: opacity 0.12s ease, transform 0.1s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .cta:active {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: scale(0.99);
 }
 .cta--ghost {
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--line-strong);
-  box-shadow: none;
+  box-shadow: var(--shadow-sm);
   margin-top: 10px;
 }
 
@@ -436,7 +439,7 @@ body {
 .wishbox-field input:focus,
 .wishbox-field textarea:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: var(--focus-ring);
 }
 .wishbox-hp {
   position: absolute;
@@ -511,14 +514,14 @@ body {
   text-align: left;
   cursor: pointer;
 }
-.wish-search-item:hover { background: rgba(255, 255, 255, 0.06); }
+.wish-search-item:hover { background: var(--surface-hover); }
 .wish-search-poster {
   width: 42px;
   height: 63px;
   flex-shrink: 0;
   object-fit: cover;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  background: var(--surface-hover);
   border: 1px solid var(--line);
 }
 .wish-search-poster--empty {
@@ -528,10 +531,10 @@ body {
   font-size: 0.9rem;
   font-weight: 800;
   color: var(--muted);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.08), rgba(0, 0, 0, 0.15));
 }
-.wish-search-poster--empty.wish-search-poster--show { color: #4ade80; }
-.wish-search-poster--empty.wish-search-poster--movie { color: #60a5fa; }
+.wish-search-poster--empty.wish-search-poster--show { color: var(--ok); }
+.wish-search-poster--empty.wish-search-poster--movie { color: var(--accent-text); }
 .wish-search-hint {
   margin: 8px 2px 0;
   font-size: 0.84rem;
@@ -568,15 +571,15 @@ body {
   line-height: 20px;
 }
 .wishbox-step.is-active {
-  border-color: rgba(74, 222, 128, 0.45);
+  border-color: rgba(109, 191, 122, 0.4);
   color: var(--text);
-  background: rgba(74, 222, 128, 0.08);
+  background: var(--ok-soft);
 }
 .wishbox-step.is-active span,
 .wishbox-step.is-done span {
   border-color: var(--accent);
   background: var(--accent);
-  color: #0c0d10;
+  color: var(--accent-on);
 }
 .wishbox-step.is-done {
   color: var(--muted);
@@ -755,11 +758,11 @@ body {
   -webkit-appearance: none;
 }
 .install-pick .door.is-on {
-  border-color: rgba(74, 143, 184, 0.4);
+  border-color: var(--accent-border);
   background: var(--accent-soft);
 }
 .install-pick .door.is-on svg {
-  stroke: #a8cce3;
+  stroke: var(--accent-text);
 }
 .install-panel {
   display: none;

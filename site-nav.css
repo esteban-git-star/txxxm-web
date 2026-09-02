@@ -12,10 +12,10 @@ body.has-site-nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10, 11, 13, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-strong);
   margin: 0 -18px 10px;
   padding: 0 18px;
 }
@@ -34,19 +34,20 @@ body.has-site-nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   text-decoration: none;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--surface);
-  color: var(--muted);
+  color: var(--accent-text);
   box-shadow: var(--shadow-sm);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .site-top-home:active {
   background: var(--surface-hover);
+  border-color: var(--accent-border);
   color: var(--text);
 }
 .site-top-home svg {
@@ -61,12 +62,12 @@ body.has-site-nav {
   right: 0;
   bottom: 0;
   z-index: 200;
-  background: rgba(10, 11, 13, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line-strong);
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: none;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .site-bottom-inner {
@@ -92,14 +93,17 @@ body.has-site-nav {
   font-size: 0.58rem;
   font-weight: 500;
   letter-spacing: 0;
-  border-radius: var(--radius-sm);
-  transition: color 0.12s ease;
+  border-radius: var(--radius-md);
+  transition: color 0.12s ease, background 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.site-nav-item:active { background: none; color: var(--text); }
+.site-nav-item:active {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
 .site-nav-item.is-active {
-  color: var(--text);
-  background: none;
+  color: var(--accent-text);
+  background: var(--accent-soft);
   box-shadow: none;
 }
 .site-nav-item.is-active .site-nav-icon { stroke: currentColor; }

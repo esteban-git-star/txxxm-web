@@ -15,18 +15,19 @@
   min-height: 88px;
   padding: 16px 12px;
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   background: var(--surface);
   color: var(--muted);
   font: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-shadow: var(--shadow-sm);
 }
-.neu-tab:active { background: var(--surface-2); }
+.neu-tab:active { background: var(--surface-hover); }
 .neu-tab.active {
   color: var(--text);
-  border-color: rgba(61, 143, 212, 0.25);
+  border-color: var(--accent-border);
   background: var(--accent-soft);
 }
 .neu-tab-icon {
@@ -49,9 +50,9 @@
 .poll-option {
   display: block;
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   background: var(--surface);
   color: var(--text);
   font: inherit;
@@ -59,6 +60,7 @@
   font-weight: 500;
   text-align: left;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
 }
 .poll-option:active,
 .poll-option:hover {
@@ -111,13 +113,14 @@
   width: 100%;
   padding: 14px 16px;
   border: 0;
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: #fff;
+  border-radius: var(--radius-btn);
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  color: var(--accent-on);
   font: inherit;
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: var(--shadow-accent);
 }
 .poll-btn--ghost {
   margin-top: 4px;
@@ -155,23 +158,25 @@
 }
 .lang-btn.active {
   color: var(--text);
-  border-color: rgba(61, 143, 212, 0.25);
+  border-color: var(--accent-border);
   background: var(--accent-soft);
 }
 
 .neu-btn {
   display: inline-block;
   margin-bottom: 20px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
+  padding: 12px 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--text);
   font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+  box-shadow: var(--shadow-sm);
   -webkit-tap-highlight-color: transparent;
+}
 }
 .neu-btn:active { background: var(--surface-2); }
 
