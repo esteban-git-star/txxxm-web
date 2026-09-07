@@ -5,39 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0c0a09" />
+  <meta name="theme-color" content="#080706" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Tivim Support" />
   <title>Ruckelt abends? – VPN – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=4" />
-  <link rel="stylesheet" href="support.css?v=10" />
-  <link rel="stylesheet" href="site-nav.css?v=6" />
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="support.css?v=17" />
+  <link rel="stylesheet" href="site-nav.css?v=10" />
 </head>
-<body>
+<body class="page-slim">
   <div class="wrap">
-    <a class="back" id="vpnBack" href="index.html">Zurück</a>
-
-    <header class="hero">
+    <header class="hero hero--slim">
       <h1 class="q">Ruckelt abends?</h1>
-      <p class="hint">Abends oft Stau bei Telekom & Co. VPN = Umleitung – Bild läuft wieder.</p>
+      <p class="hint">Oft Leitung – VPN leitet um.</p>
     </header>
 
     <div class="doors">
-      <a class="door door--rec door--tall" href="privado.html">
+      <a class="door" href="privado.html">
         <span class="badge badge--hot">Empfohlen</span>
-        <i data-lucide="shield" aria-hidden="true"></i>
         <strong>Privado</strong>
-        <em>Schnell – große Serverauswahl – 24 Monate für 30&nbsp;€ (1,25&nbsp;€/Monat)</em>
+        <em>Schnell, große Serverauswahl · ca. 1,25&nbsp;€/Monat</em>
       </a>
-      <a class="door door--tall" href="proton-free.html">
+      <a class="door" href="proton-free.html">
         <span class="badge badge--free">Kostenlos</span>
-        <i data-lucide="leaf" aria-hidden="true"></i>
         <strong>Proton Free</strong>
-        <em>Kostet nichts. Teils hohe Auslastung – max. 3 Server zur Wahl</em>
+        <em>Reicht oft – abends teils volle Server</em>
       </a>
     </div>
 
@@ -57,18 +52,6 @@
       </details>
     </section>
   </div>
-  <script>
-    (function () {
-      var back = document.getElementById("vpnBack");
-      if (back && document.referrer) {
-        back.addEventListener("click", function (e) {
-          e.preventDefault();
-          history.back();
-        });
-      }
-      if (typeof lucide !== "undefined") lucide.createIcons();
-    })();
-  </script>
-  <script src="site-nav.js?v=5"></script>
+  <script src="site-nav.js?v=6"></script>
 </body>
 </html>

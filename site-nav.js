@@ -19,9 +19,8 @@
   var NAV = [
     { id: "start", href: "index.html", label: "Start", icon: "home", match: /(^|\/)index\.html?$|\/$/ },
     { id: "hilfe", href: "stoerungen.html", label: "Hilfe", icon: "help", match: /stoerungen\.html/ },
-    { id: "vpn", href: "vpn.html", label: "VPN", icon: "vpn", match: /vpn\.html|privado\.html|proton-free\.html/ },
-    { id: "install", href: "install.html", label: "Install", icon: "install", match: /install\.html|tivim\.html|mobile-install\.html|pc\.html/ },
-    { id: "mehr", href: "mehr.html", label: "Mehr", icon: "more", match: /mehr\.html|neuigkeiten\.html|kontakt\.html|news\.html|wunschbox\.html/ }
+    { id: "install", href: "install.html", label: "Einrichten", icon: "install", match: /install\.html|tivim\.html|mobile-install\.html|pc\.html/ },
+    { id: "mehr", href: "mehr.html", label: "Mehr", icon: "more", match: /mehr\.html|neuigkeiten\.html|kontakt\.html|news\.html|wunschbox\.html|vpn\.html|privado\.html|proton-free\.html/ }
   ];
 
   var path = window.location.pathname.split("/").pop() || "index.html";

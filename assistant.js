@@ -183,13 +183,7 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "door";
-      btn.innerHTML =
-        "<strong>" +
-        escapeHtml(intent.title) +
-        "</strong>" +
-        (intent.summary
-          ? "<em>" + escapeHtml(intent.summary) + "</em>"
-          : "");
+      btn.innerHTML = "<strong>" + escapeHtml(intent.title) + "</strong>";
       btn.addEventListener("click", function () {
         openIntent(intent);
       });
@@ -467,7 +461,7 @@
         '<p class="step-goal">' +
         formatInline(goal) +
         "</p>" +
-        '<p class="step-menu-hint">In Tivim Pro der Reihe nach:</p>' +
+        '<p class="step-menu-hint">Der Reihe nach:</p>' +
         '<ol class="step-menu">' +
         menuItems +
         "</ol>" +
@@ -488,6 +482,18 @@
       step.text !== step.goal
         ? '<p class="step-detail">' + formatInline(step.text) + "</p>"
         : "";
+    var copyMatch = String(headline + " " + (step && step.text ? step.text : "")).match(
+      /\b(TivimPlayer|FA69EV)\b/
+    );
+    var copyHtml = copyMatch
+      ? '<div class="step-copy">' +
+        '<p class="step-copy-label">Genau so eintragen:</p>' +
+        '<button type="button" class="step-copy-btn" data-copy="' +
+        escapeHtml(copyMatch[1]) +
+        '"><code>' +
+        escapeHtml(copyMatch[1]) +
+        '</code><span class="step-copy-action">Kopieren</span></button></div>'
+      : "";
     return (
       '<div class="step-card step-card--simple">' +
       '<p class="step-now">Das machst du jetzt</p>' +
@@ -495,6 +501,7 @@
       formatInline(headline) +
       "</p>" +
       detail +
+      copyHtml +
       "</div>"
     );
   }
@@ -559,7 +566,7 @@
         "Tipp auf was Passendes – oder schreib kürzer, z.B. „401“.",
         KB.filter(function (i) {
           return (
-            ["status", "probleme", "pro-401", "pro-403", "xc-empty", "vpn", "install-tv", "support"].indexOf(
+            ["status", "probleme", "pro-401", "pro-403", "xc-empty", "epg", "vpn", "install-tv", "support"].indexOf(
               i.id
             ) !== -1
           );

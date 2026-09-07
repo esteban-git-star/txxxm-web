@@ -60,7 +60,7 @@ window.TIVIM_KB = [
   {
     id: "pro-403",
     title: "Fehlercode 403",
-    summary: "Kommt der Fehler immer – oder nur bei manchen Filmen?",
+    summary: "Immer – oder nur bei manchen Filmen?",
     keywords: [
       "403", "fehlercode 403", "fehler 403", "abo", "abgelaufen",
       "parallel", "gesperrt", "sperrung", "zwei geräte", "pro 403",
@@ -68,52 +68,59 @@ window.TIVIM_KB = [
     ],
     type: "choose",
     options: [
-      {
-        title: "Immer 403",
-        summary: "Egal welchen Sender oder Film ich anwähle",
-        intent: "pro-403-always"
-      },
-      {
-        title: "Nur bei manchen",
-        summary: "Andere Inhalte laufen normal",
-        intent: "pro-403-some"
-      }
+      { title: "Immer 403", intent: "pro-403-always" },
+      { title: "Nur bei manchen", intent: "pro-403-some" }
     ]
   },
   {
     id: "pro-403-always",
     title: "403 kommt immer",
-    summary: "Dann: Double-Connect (parallel) oder Abo abgelaufen.",
+    summary: "Parallel-Login oder Abo abgelaufen.",
     keywords: [],
     type: "steps",
     steps: [
-      "Beende Tivim überall sonst: Handy, zweiter Stick, die andere App.",
-      "Tivim Pro und Tivim XC nicht gleichzeitig offen lassen.",
-      "Eine Minute warten – dann nur auf diesem Gerät wieder öffnen.",
+      {
+        goal: "Tivim überall sonst beenden.",
+        text: "Handy, zweiter Stick, die andere App – alles zu. Pro und XC nicht gleichzeitig offen."
+      },
+      {
+        goal: "Eine Minute warten, dann nur auf einem Gerät öffnen."
+      },
       {
         goal: "Ablaufdatum in den Xtream-Parametern prüfen.",
         taps: ["Einstellungen", "Wiedergabelisten", "Tivim", "Xtream-Parameter"]
       },
-      "Restlaufzeit / Ablaufdatum prüfen. Datum vorbei = Abo durch, deshalb 403.",
-      "Abo durch? App nicht zurücksetzen. Schreib der Person mit den Zugangsdaten und schick ein Foto vom Fehlercode 403 und vom Ablaufdatum."
+      {
+        goal: "Datum vorbei? Dann Abo durch – App nicht zurücksetzen.",
+        text: "Schreib der Person mit den Zugangsdaten. Foto vom 403 und vom Ablaufdatum mitschicken."
+      }
     ]
   },
   {
     id: "pro-403-some",
     title: "403 nur bei manchen Inhalten",
-    summary: "Dann sind oft einzelne Inhalte offline – kein Abo-Problem.",
+    summary: "Oft einzelne Inhalte offline – kein Abo-Problem.",
     keywords: [],
     type: "steps",
     steps: [
-      "Wenn andere Sender und Filme normal laufen, ist dein Abo in der Regel okay.",
-      "Manche Inhalte sind zeitweise offline. Das können wir nicht in der App „reparieren“.",
-      "Schreib dem Support / der Person mit den Zugangsdaten: welcher Sender oder Film, und ein Foto vom 403."
+      {
+        goal: "Andere Sender und Filme testen.",
+        text: "Laufen die normal, ist dein Abo in der Regel okay."
+      },
+      {
+        goal: "Einzelne Inhalte sind oft zeitweise offline.",
+        text: "Das lässt sich in der App nicht „reparieren“."
+      },
+      {
+        goal: "Support mit Foto schreiben.",
+        text: "Welcher Sender oder Film? Plus Foto vom 403."
+      }
     ]
   },
   {
     id: "pro-codec",
     title: "CodecException",
-    summary: "Player meckert in Pro – meist kein Abo-Problem.",
+    summary: "Player-Fehler in Pro – meist kein Abo-Problem.",
     keywords: [
       "codec", "codecexception", "codec exception", "codec fehler",
       "ein fehler ist aufgetreten", "erneut versuchen", "player fehler", "pro codec",
@@ -121,25 +128,30 @@ window.TIVIM_KB = [
     ],
     type: "steps",
     steps: [
-      "Player-Fehler in Tivim Pro – nicht das Abo.",
-      "Denselben Sender oder Film in Tivim XC öffnen. Geht XC auch nicht → Support mit Foto.",
       {
-        lead: "VLC installieren:",
+        goal: "Denselben Inhalt in Tivim XC testen.",
+        text: "Geht XC auch nicht → Support mit Foto."
+      },
+      {
+        goal: "VLC for Fire installieren.",
         taps: ["Suche öffnen", "VLC Player suchen", "VLC for Fire installieren"]
       },
-      "VLC einmal öffnen und Zugriff auf alle Dateien erlauben.",
       {
-        lead: "In VLC:",
+        goal: "In VLC Zugriff auf alle Dateien erlauben.",
+        text: "VLC einmal öffnen und die Berechtigung bestätigen."
+      },
+      {
+        goal: "In VLC den User-Agent setzen.",
         taps: [
           "Links: Andere",
           "Einstellungen",
           "Ganz unten: Erweitert",
           "HTTP User-Agent",
-          "TivimPlayer eintragen & speichern"
+          "TivimPlayer"
         ]
       },
       {
-        lead: "In Tivim Pro:",
+        goal: "In Tivim Pro den Inhalt extern öffnen.",
         taps: [
           "VLC beenden",
           "Tivim Pro öffnen",
@@ -148,15 +160,15 @@ window.TIVIM_KB = [
         ]
       },
       {
+        goal: "VLC wählen und „Immer“ bestätigen.",
         taps: ["VLC wählen", "Immer auswählen"]
-      },
-      "Fertig: zwei Player. Solange der Inhalt online ist, sollte einer gehen."
+      }
     ]
   },
   {
     id: "xc-empty",
     title: "Tivim XC – Listen leer",
-    summary: "XC zeigt nix – keine Sender, keine Filme.",
+    summary: "Keine Sender, keine Filme.",
     keywords: [
       "listen leer", "liste leer", "leer", "keine sender", "keine filme",
       "inhalt", "lädt nicht", "xc leer", "nichts angezeigt", "update xc",
@@ -164,22 +176,75 @@ window.TIVIM_KB = [
     ],
     type: "steps",
     steps: [
-      "Tivim XC beenden (Zurück zweimal, wirklich zu).",
-      "Router vom Strom ziehen.",
-      "Gerät (Stick / Fernseher) vom Strom ziehen.",
-      "5 Minuten warten.",
-      "Alles wieder an, Tivim XC öffnen.",
       {
-        lead: "Immer noch leer?",
-        taps: ["App zu, wieder auf", "Hauptmenü rechts oben: Update (runde Pfeile)"]
+        goal: "Router und Gerät 5 Minuten vom Strom.",
+        text: "Beides wirklich aus der Steckdose. Danach wieder an, kurz warten, XC öffnen."
       },
       {
-        lead: "Immer noch leer?",
+        goal: "Immer noch leer? Tivim XC wirklich beenden und neu öffnen.",
+        text: "Zurück zweimal – App zu, nicht nur minimieren."
+      },
+      {
+        goal: "Update in XC tippen.",
+        taps: ["Hauptmenü rechts oben: Update (runde Pfeile)"]
+      },
+      {
+        goal: "Speicher-Berechtigung prüfen und Update wiederholen.",
         taps: [
           "Gerät-Einstellungen → Apps → Tivim XC",
           "Berechtigungen → Speicher / Dateien / Medien → Erlauben",
           "Nochmal Update"
         ]
+      }
+    ]
+  },
+  {
+    id: "epg",
+    title: "EPG lädt nicht",
+    summary: "Programmguide fehlt oder bleibt leer – welche App?",
+    keywords: [
+      "epg", "epg lädt nicht", "epg leer", "programmguide", "tv guide",
+      "programmheft", "sendeplan", "kein epg", "epg update", "epg aktualisieren",
+      "guide lädt nicht", "elektronischer programmführer"
+    ],
+    type: "choose",
+    options: [
+      { title: "Tivim Pro", intent: "epg-pro" },
+      { title: "Tivim XC", intent: "epg-xc" }
+    ]
+  },
+  {
+    id: "epg-pro",
+    title: "EPG lädt nicht – Tivim Pro",
+    summary: "In den Einstellungen neu laden.",
+    keywords: ["epg pro", "pro epg"],
+    type: "steps",
+    steps: [
+      {
+        goal: "EPG in Tivim Pro aktualisieren.",
+        taps: ["Einstellungen", "EPG", "Aktualisieren"]
+      },
+      {
+        goal: "Kurz warten, dann zurück zum Live-TV prüfen.",
+        text: "Lädt es immer noch nicht → Support mit Foto schreiben."
+      }
+    ]
+  },
+  {
+    id: "epg-xc",
+    title: "EPG lädt nicht – Tivim XC",
+    summary: "Wie bei leeren Listen: Update tippen.",
+    keywords: ["epg xc", "xc epg"],
+    type: "steps",
+    steps: [
+      {
+        goal: "Im Hauptmenü Update tippen.",
+        taps: ["Hauptmenü rechts oben: Update (runde Pfeile)"],
+        text: "Gleicher Knopf wie bei leeren Listen – lädt Inhalte und EPG neu."
+      },
+      {
+        goal: "Immer noch leer? App zu und Update wiederholen.",
+        text: "Zurück zweimal (App wirklich zu), neu öffnen, nochmal Update."
       }
     ]
   },
@@ -210,7 +275,7 @@ window.TIVIM_KB = [
   {
     id: "probleme",
     title: "Was hakt bei dir?",
-    summary: "Ohne Details können wir nicht helfen – was trifft zu?",
+    summary: "Was trifft zu?",
     keywords: [
       "habt ihr probleme", "habt ihr ein problem", "habt ihr störungen",
       "probleme", "problem", "geht nicht", "funktioniert nicht", "geht bei mir nicht",
@@ -219,11 +284,11 @@ window.TIVIM_KB = [
     ],
     type: "choose",
     options: [
-      { title: "Läuft Tivim bei euch?", summary: "Server-Check live", intent: "status" },
-      { title: "Bei mir geht was nicht", summary: "App hängt, schwarz, Login", intent: "probleme-app" },
-      { title: "Fehlercode auf dem Screen", summary: "401, 403, CodecException", intent: "probleme-code" },
-      { title: "Ruckelt abends", summary: "Meist VPN", intent: "vpn" },
-      { title: "Listen leer (XC)", summary: "Nix zu sehen", intent: "xc-empty" }
+      { title: "Läuft Tivim bei euch?", intent: "status" },
+      { title: "App geht nicht", intent: "probleme-app" },
+      { title: "Fehlercode auf dem Screen", intent: "probleme-code" },
+      { title: "Listen leer (XC)", intent: "xc-empty" },
+      { title: "EPG lädt nicht", intent: "epg" }
     ]
   },
   {
@@ -233,9 +298,9 @@ window.TIVIM_KB = [
     keywords: [],
     type: "choose",
     options: [
-      { title: "Tivim Pro", summary: "Schwarz, Login, hängt", intent: "pro-dead" },
-      { title: "Tivim XC", summary: "Login, schwarz, hängt", intent: "xc-dead" },
-      { title: "Purple Player (iPhone)", summary: "iOS / iPad / Mac", intent: "purple-fix" }
+      { title: "Tivim Pro", intent: "pro-dead" },
+      { title: "Tivim XC", intent: "xc-dead" },
+      { title: "Purple Player (iPhone)", intent: "purple-fix" }
     ]
   },
   {
@@ -245,9 +310,9 @@ window.TIVIM_KB = [
     keywords: [],
     type: "choose",
     options: [
-      { title: "Fehlercode 401", summary: "User-Agent fehlt", intent: "pro-401" },
-      { title: "Fehlercode 403", summary: "Immer oder nur manche?", intent: "pro-403" },
-      { title: "CodecException", summary: "Player-Fehler in Pro", intent: "pro-codec" }
+      { title: "Fehlercode 401", intent: "pro-401" },
+      { title: "Fehlercode 403", intent: "pro-403" },
+      { title: "CodecException", intent: "pro-codec" }
     ]
   },
   {
@@ -259,11 +324,22 @@ window.TIVIM_KB = [
     ],
     type: "steps",
     steps: [
-      "Update im App Store prüfen.",
-      "In Purple ausloggen, App komplett schließen (aus dem Hintergrund wischen).",
-      "Neu öffnen: Playlist → mit Code anmelden.",
-      "Code FA69EV, dann deine Tivim-Zugangsdaten.",
-      "Immer noch tot? Schreib der Person mit den Zugangsdaten – mit Foto."
+      {
+        goal: "Router und Gerät 5 Minuten vom Strom.",
+        text: "Router aus der Steckdose. iPhone/iPad aus und 5 Minuten warten, dann wieder an."
+      },
+      { goal: "Update im App Store prüfen." },
+      {
+        goal: "App komplett schließen und neu öffnen.",
+        text: "Aus dem Hintergrund wischen, dann neu starten."
+      },
+      {
+        goal: "Immer noch tot? Ausloggen und mit Code FA69EV neu anmelden.",
+        text: "Playlist → mit Code anmelden → deine Tivim-Zugangsdaten. Nur wenn der Strom-Reset nicht geholfen hat."
+      },
+      {
+        goal: "Immer noch tot? Support mit Foto schreiben."
+      }
     ]
   },
   {
@@ -276,10 +352,26 @@ window.TIVIM_KB = [
     ],
     type: "steps",
     steps: [
-      "Zurück-Taste zweimal – Tivim Pro wirklich beenden, dann wieder öffnen.",
-      "Hilft das nicht: Einstellungen → Wiedergabelisten → Tivim → Löschen.",
-      "App beenden, neu öffnen, wieder anmelden.",
-      "Immer noch tot? Support mit Foto vom Bildschirm."
+      {
+        goal: "Router und Gerät 5 Minuten vom Strom.",
+        text: "Beides wirklich aus der Steckdose. Danach wieder an, kurz warten, Pro öffnen."
+      },
+      {
+        goal: "Tivim Pro wirklich beenden und neu öffnen.",
+        text: "Zurück-Taste zweimal – App zu, dann wieder starten."
+      },
+      {
+        goal: "Wiedergabeliste aktualisieren – nicht löschen.",
+        taps: ["Einstellungen", "Wiedergabelisten", "Tivim", "Aktualisieren"]
+      },
+      {
+        goal: "Immer noch tot? Erst dann Playlist löschen und neu anmelden.",
+        taps: ["Einstellungen", "Wiedergabelisten", "Tivim", "Löschen"],
+        text: "Zugangsdaten bereithalten. Löschen nur als letzter Schritt – sonst Chaos."
+      },
+      {
+        goal: "Immer noch tot? Support mit Foto vom Bildschirm."
+      }
     ]
   },
   {
@@ -292,10 +384,25 @@ window.TIVIM_KB = [
     ],
     type: "steps",
     steps: [
-      "Zurück-Taste zweimal – Tivim XC wirklich beenden, dann wieder öffnen.",
-      "Hilft das nicht: Settings → Sign out.",
-      "App beenden, dann Sign in – Daten sind meist noch da.",
-      "Immer noch tot? Support mit Foto."
+      {
+        goal: "Router und Gerät 5 Minuten vom Strom.",
+        text: "Beides wirklich aus der Steckdose. Danach wieder an, kurz warten, XC öffnen."
+      },
+      {
+        goal: "Tivim XC wirklich beenden und neu öffnen.",
+        text: "Zurück-Taste zweimal – App zu, dann wieder starten."
+      },
+      {
+        goal: "Update im Hauptmenü tippen.",
+        taps: ["Hauptmenü rechts oben: Update (runde Pfeile)"]
+      },
+      {
+        goal: "Immer noch tot? Sign out, dann neu Sign in.",
+        text: "Settings → Sign out. App beenden. Daten sind meist noch da."
+      },
+      {
+        goal: "Immer noch tot? Support mit Foto."
+      }
     ]
   },
   {

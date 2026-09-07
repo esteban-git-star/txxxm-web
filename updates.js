@@ -5,7 +5,7 @@
   if (!slot) return;
 
   var API = window.TIVIM_API || "";
-  var VISIBLE_MAX = 3;
+  var VISIBLE_MAX = 2;
 
   function escapeHtml(s) {
     return String(s)

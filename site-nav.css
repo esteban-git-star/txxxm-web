@@ -13,9 +13,9 @@ body.has-site-nav {
   top: 0;
   z-index: 100;
   background: var(--glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line-strong);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--line);
   margin: 0 -18px 10px;
   padding: 0 18px;
 }
@@ -37,17 +37,17 @@ body.has-site-nav {
   width: 40px;
   height: 40px;
   text-decoration: none;
-  border: 1px solid var(--line-strong);
+  border: 0;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--surface-face);
   color: var(--accent-text);
-  box-shadow: var(--shadow-sm);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--elev-panel);
+  transition: background 0.15s ease, color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .site-top-home:active {
   background: var(--surface-hover);
-  border-color: var(--accent-border);
   color: var(--text);
 }
 .site-top-home svg {
@@ -63,16 +63,16 @@ body.has-site-nav {
   bottom: 0;
   z-index: 200;
   background: var(--glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid var(--line-strong);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .site-bottom-inner {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   max-width: 430px;
   margin: 0 auto;
@@ -89,22 +89,23 @@ body.has-site-nav {
   padding: 4px 2px;
   text-decoration: none;
   color: var(--muted-2);
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 0.58rem;
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
   border-radius: var(--radius-md);
-  transition: color 0.12s ease, background 0.12s ease;
+  transition: color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-press);
   -webkit-tap-highlight-color: transparent;
 }
 .site-nav-item:active {
   background: var(--accent-soft);
   color: var(--accent-text);
+  transform: scale(0.96);
 }
 .site-nav-item.is-active {
   color: var(--accent-text);
   background: var(--accent-soft);
-  box-shadow: none;
+  box-shadow: inset 0 1px 0 rgba(255, 248, 240, 0.05);
 }
 .site-nav-item.is-active .site-nav-icon { stroke: currentColor; }
 

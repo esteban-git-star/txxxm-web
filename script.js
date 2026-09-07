@@ -162,6 +162,7 @@
       { title: "Fehlercode 401", desc: "User-Agent fehlt in Tivim Pro", link: "index.html#pro-401", keywords: "401 useragent user-agent tivimplayer pro fehlercode" },
       { title: "Fehlercode 403", desc: "Abo abgelaufen oder Tivim läuft parallel", link: "index.html#pro-403", keywords: "403 abo abgelaufen parallel handy fernseher gesperrt pro" },
       { title: "Tivim XC lädt nicht", desc: "Listen leer: keine Sender, keine Filme", link: "index.html#xc-empty", keywords: "xc leer inhalt update ablehnen erlauben listen filme sender" },
+      { title: "EPG lädt nicht", desc: "Programmguide aktualisieren – Pro oder XC", link: "index.html#epg", keywords: "epg programmguide sendeplan guide aktualisieren pro xc" },
       { title: "Server-Status", desc: "Live-Status: Online oder Wartung", link: "news.html", keywords: "status server online offline störung ausfall" },
       { title: "Support kontaktieren", desc: "Hilfe anfordern & Checkliste", link: "kontakt.html", keywords: "support hilfe kontakt whatsapp anschreiben" }
     ];

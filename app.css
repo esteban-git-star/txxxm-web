@@ -23,88 +23,59 @@ body {
 /* —— Home (nur #homeView, Anleitungen unverändert) —— */
 .page-home #homeView .hero {
   text-align: center;
-  padding: 40px 0 4px;
+  padding: 32px 0 2px;
+  animation: tivim-rise var(--dur-med) var(--ease-out) both;
 }
 
-.page-home #homeView .logo {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 20px;
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  border: 1px solid var(--accent-border);
-  font-size: 1.1rem;
+.page-home #homeView .brand {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
   font-weight: 700;
-  letter-spacing: -0.04em;
-  color: var(--accent-text);
-  box-shadow: var(--shadow-accent);
+  letter-spacing: -0.055em;
+  text-transform: none;
+  color: var(--text);
 }
 
 .page-home #homeView .q {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.028em;
+  font-size: 1.08rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  color: var(--muted);
 }
 
 .page-home #homeView .hint {
-  margin: 12px auto 0;
-  font-size: 0.9rem;
-  color: var(--muted);
-  line-height: 1.5;
+  margin: 8px auto 0;
+  font-size: 0.88rem;
+  color: var(--muted-2);
+  line-height: 1.45;
   max-width: 22em;
   font-weight: 400;
-}
-
-.page-home #homeView .server-status-container {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 16px auto 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  border-radius: 0;
-  color: var(--muted-2);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.page-home #homeView .server-status-container .status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--muted-2);
-  flex-shrink: 0;
-  box-shadow: none;
-}
-
-.page-home #homeView .server-status-container .status-dot.online {
-  background: var(--ok);
-  color: var(--ok);
-}
-
-.page-home #homeView .server-status-container .status-dot.offline {
-  background: var(--bad);
-  color: var(--bad);
+  font-family: var(--font-body);
 }
 
 .page-home #homeView .ask {
-  margin-top: 28px;
+  margin-top: 24px;
   display: flex;
   gap: 6px;
-  padding: 5px 5px 5px 6px;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
+  padding: 4px;
+  background-color: var(--surface);
+  background-image: var(--surface-face);
+  border: 0;
   border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elev-panel);
+  animation: tivim-rise var(--dur-med) var(--ease-out) 60ms both;
 }
 
 .page-home #homeView .ask:focus-within {
-  border-color: var(--accent-border);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 240, 0.14),
+    inset 0 0 0 1px rgba(232, 168, 56, 0.28),
+    0 0 0 3px rgba(232, 168, 56, 0.12),
+    0 10px 28px rgba(0, 0, 0, 0.45);
+  transition: box-shadow var(--dur-fast) ease;
 }
 
 .page-home #homeView .ask input {
@@ -116,7 +87,7 @@ body {
   font: inherit;
   font-size: 0.92rem;
   font-weight: 400;
-  padding: 13px 12px;
+  padding: 13px 14px;
   outline: none;
 }
 
@@ -137,208 +108,60 @@ body {
   font-size: 0.86rem;
   letter-spacing: 0;
   cursor: pointer;
-  box-shadow: var(--shadow-accent);
-  transition: opacity 0.12s ease;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 4px 14px rgba(232, 168, 56, 0.28);
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) var(--ease-press), background var(--dur-fast) ease;
 }
 
 .page-home #homeView .ask button[type="submit"]:active {
-  opacity: 0.9;
-  transform: none;
+  opacity: 0.92;
+  transform: scale(0.97);
 }
 
 @media (hover: hover) {
   .page-home #homeView .ask button[type="submit"]:hover {
     background: var(--accent-hover);
-    box-shadow: none;
   }
 }
 
 .page-home #homeView .home-doors {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 24px;
+  margin-top: 20px;
+  animation: tivim-rise var(--dur-med) var(--ease-out) 110ms both;
 }
 
-.page-home #homeView .home-door {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 80px;
-  padding: 16px 18px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  color: var(--text);
-  text-align: center;
-  text-decoration: none;
-  font: inherit;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.12s ease, border-color 0.12s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.page-home #homeView .home-door:active {
-  background: var(--surface-hover);
-  border-color: var(--accent-border);
-}
-
-.page-home #homeView .home-door svg {
-  width: 24px;
-  height: 24px;
-  stroke: var(--accent-text);
-  margin-bottom: 8px;
-}
-
-.page-home #homeView .home-door strong {
-  display: block;
-  font-size: 0.94rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.page-home #homeView .home-door em {
-  display: block;
-  margin-top: 4px;
-  font-style: normal;
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.35;
-  font-weight: 400;
-}
-
-@media (hover: hover) {
-  .page-home #homeView .home-door:hover {
-    border-color: var(--accent-border);
-    background: var(--surface-hover);
-  }
-}
-
-.page-home #homeView .chips-label {
-  margin: 24px 0 10px;
-  text-align: center;
-  font-size: 0.72rem;
+.page-home #homeView .shortcuts-label {
+  margin: 26px 0 8px;
+  text-align: left;
+  padding-left: 2px;
+  font-size: 0.7rem;
   color: var(--muted-2);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  animation: tivim-fade var(--dur-med) var(--ease-out) 160ms both;
 }
 
-.page-home #homeView .chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.page-home #homeView .list-group--compact {
   margin-top: 0;
-  justify-content: center;
+  animation: tivim-rise var(--dur-med) var(--ease-out) 180ms both;
 }
 
-.page-home #homeView .chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--line-strong);
-  background: transparent;
-  color: var(--muted);
-  border-radius: var(--radius-pill);
-  padding: 8px 12px;
-  font-size: 0.78rem;
+.page-home #homeView .list-row--compact {
+  min-height: 52px;
+  padding: 13px 16px 13px 18px;
+}
+
+.page-home #homeView .list-row--compact .list-copy strong {
+  font-size: 0.9rem;
   font-weight: 500;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.page-home #homeView .chip:active {
-  background: var(--accent-soft);
-  color: var(--accent-text);
-  border-color: var(--accent-border);
-  transform: none;
-}
-
-.page-home #homeView .chip-ico,
-.page-home #homeView .chip svg {
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  flex-shrink: 0;
-  padding: 0;
-  box-sizing: content-box;
-  border-radius: 0;
-  background: none;
-}
-
-.page-home #homeView .chip:active svg {
-  stroke: currentColor;
-}
-
-@media (hover: hover) {
-  .page-home #homeView .chip:hover {
-    color: var(--accent-text);
-    border-color: var(--accent-border);
-    background: var(--accent-soft);
-  }
-}
-
-.page-home #homeView .more {
-  margin-top: 36px;
-  padding-top: 24px;
+.page-home #homeView .live-updates {
+  margin-top: 32px;
+  padding-top: 18px;
   border-top: 1px solid var(--line);
-}
-
-.page-home #homeView .more p {
-  margin: 0 0 12px;
-  text-align: center;
-  font-size: 0.72rem;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--muted-2);
-  font-weight: 500;
-}
-
-.page-home #homeView .more-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.page-home #homeView .more a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 50px;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.84rem;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: background 0.12s ease, border-color 0.12s ease;
-}
-
-.page-home #homeView .more a:active {
-  background: var(--surface-hover);
-  transform: none;
-}
-
-.page-home #homeView .more a svg {
-  width: 16px;
-  height: 16px;
-  stroke: var(--accent-text);
-  opacity: 1;
-}
-
-@media (hover: hover) {
-  .page-home #homeView .more a:hover {
-    border-color: var(--line-strong);
-    background: var(--surface-hover);
-  }
 }
 
 /* Fallback für Guide-Head (gleiche Basis wie vorher) */
@@ -432,11 +255,13 @@ body.guide-open #guideView {
 
 .step-card {
   margin-top: 14px;
-  padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
+  padding: 18px 16px;
+  background-color: var(--surface);
+  background-image: var(--surface-face);
+  border: 0;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elev-panel);
+  animation: tivim-rise var(--dur-med) var(--ease-out) both;
 }
 
 .step-now {
@@ -484,14 +309,15 @@ body.guide-open #guideView {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--line);
+  background: rgba(255, 248, 240, 0.03);
+  border: 0;
   border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--hairline);
 }
 
 .step-menu-item.is-key {
-  border-color: var(--accent-border);
   background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
 }
 
 .step-menu-n {

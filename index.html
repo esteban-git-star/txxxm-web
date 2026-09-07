@@ -12,18 +12,18 @@
   <meta property="og:url" content="https://tivim-web.com/" />
   <meta property="og:image" content="https://tivim-web.com/preview.jpg" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0c0a09" />
+  <meta name="theme-color" content="#080706" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Tivim" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=4" />
-  <link rel="stylesheet" href="support.css?v=10" />
-  <link rel="stylesheet" href="app.css?v=11" />
-  <link rel="stylesheet" href="site-nav.css?v=6" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="support.css?v=17" />
+  <link rel="stylesheet" href="app.css?v=18" />
+  <link rel="stylesheet" href="site-nav.css?v=10" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="page-home">
@@ -32,13 +32,9 @@
 
     <div id="homeView">
       <header class="hero">
-        <div class="logo" aria-hidden="true">T</div>
-        <h1 class="q">Hi – brauchst du Hilfe?</h1>
-        <p class="hint">Schreib einfach, was los ist. Wir führen dich durch unsere Anleitung.</p>
-        <div class="server-status-container" id="server-status">
-          <span id="status-dot" class="status-dot"></span>
-          <span id="status-text" class="status-text">Schauen wir nach…</span>
-        </div>
+        <p class="brand">Tivim</p>
+        <h1 class="q">Brauchst du Hilfe?</h1>
+        <p class="hint">Schreib’s wie an WhatsApp – wir führen dich durch.</p>
       </header>
 
       <form class="ask" id="askForm" autocomplete="off">
@@ -46,47 +42,59 @@
           id="askInput"
           type="text"
           enterkeyhint="go"
-          placeholder="z.B. geht nix / Fehler 401 / ist down?"
+          placeholder="z.B. Fehler 401 / geht nix / ruckelt"
           aria-label="Frage eingeben"
         />
         <button type="submit">Los</button>
       </form>
 
-      <div class="home-doors" id="homeDoors">
-        <a class="home-door" href="install.html">
-          <i data-lucide="download" aria-hidden="true"></i>
-          <strong>Neu einrichten</strong>
-          <em>TV, Handy oder PC</em>
+      <div class="list-group home-doors" id="homeDoors">
+        <a class="list-row" href="install.html">
+          <span class="list-copy">
+            <strong>Neu einrichten</strong>
+            <em>TV, Handy oder PC</em>
+          </span>
+          <span class="list-chevron" aria-hidden="true">›</span>
         </a>
-        <button type="button" class="home-door" data-intent="probleme">
-          <i data-lucide="circle-alert" aria-hidden="true"></i>
-          <strong>Läuft nicht / Fehler</strong>
-          <em>App hängt, Codes, schwarzer Bildschirm</em>
+        <button type="button" class="list-row" data-intent="probleme">
+          <span class="list-copy">
+            <strong>Läuft nicht</strong>
+            <em>Fehler, App hängt, schwarz</em>
+          </span>
+          <span class="list-chevron" aria-hidden="true">›</span>
         </button>
-        <button type="button" class="home-door" data-intent="vpn">
-          <i data-lucide="shield" aria-hidden="true"></i>
-          <strong>Ruckelt abends</strong>
-          <em>Meist Leitung – VPN hilft</em>
+        <button type="button" class="list-row" data-intent="vpn">
+          <span class="list-copy">
+            <strong>Ruckelt abends</strong>
+            <em>Meist Leitung – VPN hilft</em>
+          </span>
+          <span class="list-chevron" aria-hidden="true">›</span>
         </button>
       </div>
 
-      <p class="chips-label">Oft gesucht</p>
-      <div class="chips" id="chips">
-        <button type="button" class="chip" data-intent="status"><i data-lucide="activity" class="chip-ico" aria-hidden="true"></i> Läuft Tivim?</button>
-        <button type="button" class="chip" data-intent="pro-401"><i data-lucide="key-round" class="chip-ico" aria-hidden="true"></i> Fehler 401</button>
-        <button type="button" class="chip" data-intent="pro-403"><i data-lucide="ban" class="chip-ico" aria-hidden="true"></i> Fehler 403</button>
-        <button type="button" class="chip" data-intent="pro-codec"><i data-lucide="film" class="chip-ico" aria-hidden="true"></i> CodecException</button>
-        <button type="button" class="chip" data-intent="xc-empty"><i data-lucide="list-x" class="chip-ico" aria-hidden="true"></i> Listen leer</button>
+      <p class="shortcuts-label">Oft gesucht</p>
+      <div class="list-group list-group--compact" id="chips">
+        <button type="button" class="list-row list-row--compact" data-intent="pro-401">
+          <span class="list-copy"><strong>Fehler 401</strong></span>
+          <span class="list-chevron" aria-hidden="true">›</span>
+        </button>
+        <button type="button" class="list-row list-row--compact" data-intent="pro-403">
+          <span class="list-copy"><strong>Fehler 403</strong></span>
+          <span class="list-chevron" aria-hidden="true">›</span>
+        </button>
+        <button type="button" class="list-row list-row--compact" data-intent="xc-empty">
+          <span class="list-copy"><strong>Listen leer</strong></span>
+          <span class="list-chevron" aria-hidden="true">›</span>
+        </button>
+        <button type="button" class="list-row list-row--compact" data-intent="epg">
+          <span class="list-copy"><strong>EPG lädt nicht</strong></span>
+          <span class="list-chevron" aria-hidden="true">›</span>
+        </button>
+        <button type="button" class="list-row list-row--compact" data-intent="status">
+          <span class="list-copy"><strong>Läuft Tivim?</strong></span>
+          <span class="list-chevron" aria-hidden="true">›</span>
+        </button>
       </div>
-
-      <nav class="more">
-        <p>Noch was?</p>
-        <div class="more-grid">
-          <a href="install.html"><i data-lucide="download" aria-hidden="true"></i> Installation</a>
-          <a href="wunschbox.html"><i data-lucide="message-square-plus" aria-hidden="true"></i> Wunschbox</a>
-          <a href="mehr.html"><i data-lucide="ellipsis" aria-hidden="true"></i> Mehr</a>
-        </div>
-      </nav>
 
       <div id="liveUpdates" class="live-updates is-hide" aria-live="polite"></div>
     </div>
@@ -102,12 +110,12 @@
   </div>
 
   <script src="api-config.js?v=1"></script>
-  <script src="kb.js?v=20260902-1"></script>
-  <script src="assistant.js?v=20260902-1"></script>
+  <script src="kb.js?v=20260907-4"></script>
+  <script src="assistant.js?v=20260907-4"></script>
   <script src="script.js?v=20260831-11"></script>
   <script src="update-format.js?v=1"></script>
-  <script src="updates.js?v=5"></script>
-  <script src="site-nav.js?v=5"></script>
+  <script src="updates.js?v=6"></script>
+  <script src="site-nav.js?v=6"></script>
   <script>
     if (typeof lucide !== "undefined") lucide.createIcons();
   </script>

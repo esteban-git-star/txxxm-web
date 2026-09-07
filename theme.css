@@ -1,21 +1,23 @@
 /* Design-Tokens – Warm Kino (Tivim Support) */
 :root {
-  --bg: #0c0a09;
-  --bg-elevated: #12100e;
-  --surface: #1a1714;
-  --surface-2: #1e1b17;
-  --surface-hover: #242019;
-  --line: rgba(232, 168, 56, 0.07);
-  --line-strong: rgba(232, 168, 56, 0.14);
+  --bg: #080706;
+  --bg-elevated: #14110e;
+  --surface: #1c1814;
+  --surface-2: #24201b;
+  --surface-hover: #2a251f;
+  /* Neutrale Linien – Gold nur als Akzent */
+  --line: rgba(255, 248, 240, 0.08);
+  --line-strong: rgba(255, 248, 240, 0.12);
+  --hairline: rgba(255, 248, 240, 0.1);
   --text: #f5f0ea;
-  --muted: #9a928a;
-  --muted-2: #6f6860;
+  --muted: #a39a90;
+  --muted-2: #75706a;
   --accent: #e8a838;
   --accent-hover: #f0b84a;
-  --accent-soft: rgba(232, 168, 56, 0.12);
-  --accent-glow: rgba(232, 168, 56, 0.22);
+  --accent-soft: rgba(232, 168, 56, 0.14);
+  --accent-glow: rgba(232, 168, 56, 0.28);
   --accent-text: #f0c56e;
-  --accent-border: rgba(232, 168, 56, 0.28);
+  --accent-border: rgba(232, 168, 56, 0.32);
   --accent-on: #1a1208;
   --ok: #6dbf7a;
   --ok-soft: rgba(109, 191, 122, 0.14);
@@ -23,17 +25,33 @@
   --bad-soft: rgba(212, 115, 115, 0.12);
   --warn-soft: rgba(232, 168, 56, 0.08);
   --focus-ring: rgba(232, 168, 56, 0.4);
-  --glass: rgba(12, 10, 9, 0.92);
+  --glass: rgba(8, 7, 6, 0.82);
   --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 10px;
   --radius-pill: 999px;
   --radius-btn: var(--radius-pill);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.28);
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
-  --shadow-accent: 0 4px 18px rgba(232, 168, 56, 0.18);
-  --font-display: "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.55);
+  --shadow-accent: 0 6px 22px rgba(232, 168, 56, 0.22);
+  /* Sichtbare Tiefe: Randlicht + Specular + Drop */
+  --elev-panel:
+    inset 0 1px 0 rgba(255, 248, 240, 0.12),
+    inset 0 0 0 1px rgba(255, 248, 240, 0.055),
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 10px 28px rgba(0, 0, 0, 0.5);
+  --surface-face: linear-gradient(
+    180deg,
+    rgba(255, 248, 240, 0.045) 0%,
+    rgba(255, 248, 240, 0) 42%
+  );
+  --chevron-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M6 3.5L10.5 8 6 12.5' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --font-display: "Outfit", "DM Sans", system-ui, -apple-system, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-press: cubic-bezier(0.3, 0.7, 0.4, 1);
+  --dur-fast: 150ms;
+  --dur-med: 320ms;
   --radius: var(--radius-lg);
 }
 
@@ -53,12 +71,37 @@ body {
   color: var(--text);
   background: var(--bg);
   background-image:
-    radial-gradient(ellipse 90% 55% at 50% -15%, rgba(232, 168, 56, 0.07), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(232, 168, 56, 0.03), transparent);
+    radial-gradient(ellipse 110% 55% at 50% -18%, rgba(232, 168, 56, 0.1), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 85% 95%, rgba(232, 168, 56, 0.04), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(255, 248, 240, 0.025), transparent 45%);
 }
 
-h1, .door, .cta, .back, .chip, .faq summary, .step-n, .q {
+h1, .door, .cta, .back, .chip, .faq summary, .step-n, .q, .brand, .list-copy strong {
   font-family: var(--font-display);
+}
+
+@keyframes tivim-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes tivim-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .wrap {

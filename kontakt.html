@@ -5,64 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0c0a09" />
+  <meta name="theme-color" content="#080706" />
   <title>Support – Tivim Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css?v=4" />
-  <link rel="stylesheet" href="support.css?v=10" />
-  <link rel="stylesheet" href="site-nav.css?v=6" />
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css?v=8" />
+  <link rel="stylesheet" href="support.css?v=17" />
+  <link rel="stylesheet" href="site-nav.css?v=10" />
 </head>
-<body>
+<body class="page-slim">
   <div class="wrap">
-    <a class="back" id="kontaktBack" href="index.html">Zurück</a>
-    <header class="hero">
+    <header class="hero hero--slim">
       <h1 class="q">Bevor du schreibst</h1>
-      <p class="hint">Drei kurze Checks – dann wissen wir, woran’s liegt.</p>
+      <p class="hint">Erst kurz checken – dann Support.</p>
     </header>
 
-    <div class="status-panel">
-      <p class="label">1. Grünes Licht</p>
-      <div class="server-status-container" id="server-status">
-        <span id="status-dot" class="status-dot"></span>
-        <span id="status-text" class="status-text">Status wird geprüft...</span>
-      </div>
-      <p id="status-explain"></p>
-    </div>
+    <ol class="check-list">
+      <li>
+        <span class="check-n">1</span>
+        <div class="check-body">
+          <strong>Läuft der Server?</strong>
+          <div class="server-status-container server-status--inline" id="server-status">
+            <span id="status-dot" class="status-dot"></span>
+            <span id="status-text" class="status-text">Prüfen…</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span class="check-n">2</span>
+        <div class="check-body">
+          <strong>Router + Gerät 5 Min. vom Strom?</strong>
+          <p class="check-sub">Beides aus der Steckdose. Das zuerst – Playlist löschen erst ganz am Ende.</p>
+        </div>
+      </li>
+      <li>
+        <span class="check-n">3</span>
+        <div class="check-body">
+          <strong>App neu gestartet?</strong>
+          <p class="check-sub">App wirklich zu, wieder auf. Sonst: <a href="index.html#probleme-app">kurze Hilfe</a>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="check-n">4</span>
+        <div class="check-body">
+          <strong>Nur abends ruckeln?</strong>
+          <p class="check-sub">Dann eher <a href="index.html#vpn">VPN</a> – kein Support-Fall.</p>
+        </div>
+      </li>
+    </ol>
 
-    <div class="doors">
-      <a class="door" href="stoerungen.html">
-        <i data-lucide="rotate-cw" aria-hidden="true"></i>
-        <strong>2. App neu, ggf. neu anmelden</strong>
-        <em>App zu und wieder auf. Hilft das nicht: Playlist löschen bzw. Sign out / Sign in.</em>
-      </a>
-      <a class="door" href="vpn.html">
-        <i data-lucide="shield" aria-hidden="true"></i>
-        <strong>3. Nur abends ruckeln?</strong>
-        <em>Dann VPN, nicht Support. Das liegt an der Strecke zu dir.</em>
-      </a>
-    </div>
-
-    <div class="note">
-      <strong>Immer noch tot?</strong>
-      <p>Schreib der Person, von der du die Zugangsdaten hast. Mit Foto vom Bildschirm oder der Fehlermeldung – sonst raten wir.</p>
-    </div>
+    <p class="slim-foot">
+      Immer noch tot? Schreib der Person mit den Zugangsdaten – <strong>mit Foto</strong> vom Bildschirm.
+    </p>
   </div>
-  <script>
-    (function () {
-      var back = document.getElementById("kontaktBack");
-      if (back && document.referrer) {
-        back.addEventListener("click", function (e) {
-          e.preventDefault();
-          history.back();
-        });
-      }
-      if (typeof lucide !== "undefined") lucide.createIcons();
-    })();
-  </script>
   <script src="script.js?v=20260831-8"></script>
-  <script src="site-nav.js?v=5"></script>
+  <script src="site-nav.js?v=6"></script>
 </body>
 </html>
