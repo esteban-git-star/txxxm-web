@@ -251,7 +251,7 @@ window.TIVIM_KB = [
   {
     id: "vpn",
     title: "VPN – wenn’s abends ruckelt",
-    summary: "Meist deine Leitung, nicht dass Tivim down ist.",
+    summary: "Meist deine Leitung – nicht der Server.",
     keywords: [
       "vpn", "ruckelt", "ruckeln", "abends", "hakelt", "lag", "stau",
       "telekom", "privado", "proton", "langsam", "hängt"

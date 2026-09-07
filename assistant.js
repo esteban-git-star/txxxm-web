@@ -249,15 +249,15 @@
       if (result.state === "online") {
         finish(
           "online",
-          "Server online",
-          "Bei uns läuft’s. Geht bei dir trotzdem nix? Meist VPN abends, App neu starten – oder ein Fehlercode.",
+          "Tivim online",
+          "Bei uns alles grün. Geht’s bei dir trotzdem nicht: meist VPN abends, App neu starten – oder ein Fehlercode.",
           true
         );
       } else if (result.state === "offline") {
         finish(
           "offline",
-          "Wartungsarbeiten",
-          "Gerade Pause bei uns. App nicht zurücksetzen – kurz warten und nochmal probieren.",
+          "Tivim offline / Wartung",
+          "Gerade Pause bei uns. App nicht zurücksetzen – kurz warten und nochmal prüfen.",
           false
         );
       } else {

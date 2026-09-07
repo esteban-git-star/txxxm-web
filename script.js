@@ -71,15 +71,15 @@
       if (result.state === "online") {
         apply(
           "online",
-          "Server online",
-          "Bei uns läuft’s. Geht bei dir trotzdem nix? Meist Leitung/VPN – nicht dass Tivim down ist.",
+          "Tivim online",
+          "Bei uns alles grün. Geht’s bei dir trotzdem nicht, liegt’s meist an Leitung, VPN oder der App.",
           true
         );
       } else if (result.state === "offline") {
         apply(
           "offline",
-          "Wartungsarbeiten",
-          "Gerade Pause bei uns. App nicht zurücksetzen – kurz warten.",
+          "Tivim offline / Wartung",
+          "Gerade Pause bei uns. App nicht zurücksetzen – kurz warten und später nochmal prüfen.",
           false
         );
       } else {
