@@ -263,14 +263,16 @@ window.TIVIM_KB = [
   {
     id: "status",
     title: "Läuft Tivim gerade?",
-    summary: "Schauen wir live nach, ob bei uns was hängt.",
+    summary: "Grün = bei uns ok.",
     keywords: [
       "ist tivim down", "tivim down", "geht tivim", "läuft tivim", "ist tivim online",
       "server down", "server online", "server offline", "ausfall", "störung server",
       "wartung", "down", "online status", "läuft der server", "ist was los bei tivim",
-      "habt ihr ausfall", "seid ihr down", "tivim kaputt server"
+      "habt ihr ausfall", "seid ihr down", "tivim kaputt server", "server status"
     ],
-    type: "status"
+    type: "link",
+    href: "news.html",
+    cta: "Status prüfen"
   },
   {
     id: "probleme",
@@ -288,7 +290,8 @@ window.TIVIM_KB = [
       { title: "App geht nicht", intent: "probleme-app" },
       { title: "Fehlercode auf dem Screen", intent: "probleme-code" },
       { title: "Listen leer (XC)", intent: "xc-empty" },
-      { title: "EPG lädt nicht", intent: "epg" }
+      { title: "EPG lädt nicht", intent: "epg" },
+      { title: "Purple Player", intent: "purple" }
     ]
   },
   {
@@ -300,7 +303,7 @@ window.TIVIM_KB = [
     options: [
       { title: "Tivim Pro", intent: "pro-dead" },
       { title: "Tivim XC", intent: "xc-dead" },
-      { title: "Purple Player (iPhone)", intent: "purple-fix" }
+      { title: "Purple Player (iPhone)", intent: "purple" }
     ]
   },
   {
@@ -316,12 +319,45 @@ window.TIVIM_KB = [
     ]
   },
   {
+    id: "purple",
+    title: "Purple Player – was ist los?",
+    summary: "iPhone, iPad oder Mac.",
+    keywords: [
+      "purple", "purple player", "iphone geht nicht", "ipad", "ios kaputt",
+      "purple hängt", "purple lädt"
+    ],
+    type: "choose",
+    options: [
+      { title: "Download hängt nach Live-TV", intent: "purple-hang" },
+      { title: "Geht sonst nicht", intent: "purple-fix" }
+    ]
+  },
+  {
+    id: "purple-hang",
+    title: "Purple – Download hängt",
+    summary: "Nach der ersten Anmeldung, nach Live-TV.",
+    keywords: [
+      "download hängt", "hängt nach live", "live tv hängt", "purple download",
+      "daten aktualisieren", "alle erfrischen", "erster login purple",
+      "lädt ewig purple", "purple bleibt stehen"
+    ],
+    type: "steps",
+    steps: [
+      {
+        goal: "Purple Player komplett beenden und neu starten.",
+        text: "Aus dem Hintergrund wischen, dann die App wieder öffnen."
+      },
+      {
+        goal: "Daten aktualisieren – alle erfrischen.",
+        taps: ["Einstellungen", "Daten aktualisieren", "Alle erfrischen"]
+      }
+    ]
+  },
+  {
     id: "purple-fix",
     title: "Purple Player – geht nicht",
     summary: "iPhone, iPad oder Mac.",
-    keywords: [
-      "purple", "purple player", "iphone geht nicht", "ipad", "ios kaputt"
-    ],
+    keywords: [],
     type: "steps",
     steps: [
       {

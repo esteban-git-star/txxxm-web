@@ -155,6 +155,7 @@
       { title: "PrivadoVPN Anleitung", desc: "Schritt-für-Schritt Einrichtung für Fire TV", link: "privado.html", keywords: "privado vpn premium kaufen installieren" },
       { title: "Proton VPN (Kostenlos)", desc: "Gratis VPN einrichten", link: "proton-free.html", keywords: "proton free kostenlos gratis vpn" },
       { title: "Purple Player (iOS)", desc: "Installation für iPhone & iPad", link: "mobile-install.html", keywords: "apple ios iphone ipad purple" },
+      { title: "Purple Download hängt", desc: "Nach Live-TV: Daten aktualisieren → Alle erfrischen", link: "index.html#purple-hang", keywords: "purple hängt download live tv daten aktualisieren erfrischen" },
       { title: "TV Installation (Fire TV & Google TV)", desc: "Tivim Pro & XC Schritt für Schritt", link: "tivim.html", keywords: "android fire tv stick google tv installieren pro xc" },
       { title: "Handy / Tablet", desc: "App für Android & iOS", link: "mobile-install.html", keywords: "handy tablet android apk mobile" },
       { title: "PC & Mac", desc: "Installation für Windows & macOS", link: "pc.html", keywords: "windows pc mac macbook laptop apple exe .exe computer desktop" },
