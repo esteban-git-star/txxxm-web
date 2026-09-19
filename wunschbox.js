@@ -4,6 +4,7 @@
   var form = document.getElementById("wishboxForm");
   var statusEl = document.getElementById("wishboxStatus");
   var submitBtn = document.getElementById("wishboxSubmit");
+  var submitHint = document.getElementById("wishboxSubmitHint");
   var searchInput = document.getElementById("wishSearch");
   var searchList = document.getElementById("wishSearchList");
   var searchLoading = document.getElementById("wishSearchLoading");
@@ -63,6 +64,17 @@
     }
 
     if (submitBtn) submitBtn.disabled = !canSubmit;
+    if (submitHint) {
+      if (canSubmit) {
+        submitHint.classList.add("is-hide");
+      } else if (freitextMode) {
+        submitHint.textContent = "Noch etwas mehr Text (mind. 10 Zeichen), dann geht’s.";
+        submitHint.classList.remove("is-hide");
+      } else {
+        submitHint.textContent = "Zuerst Titel aus der Suche wählen – oder Freitext nutzen.";
+        submitHint.classList.remove("is-hide");
+      }
+    }
   }
 
   function hideSearchList() {
@@ -468,4 +480,11 @@
   });
 
   updateSubmitState();
+
+  fetch(API_BASE + "/", { method: "GET", cache: "no-store" }).catch(function () {
+    setStatus(
+      "API gerade nicht erreichbar (api.tivim-web.com). Suche/Absenden geht dann nicht – Seite neu laden oder DNS kurz warten.",
+      "error"
+    );
+  });
 })();
