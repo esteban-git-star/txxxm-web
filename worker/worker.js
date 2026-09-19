@@ -1,6 +1,10 @@
 /**
  * tivim-chatbot – Cloudflare Worker (vollständig)
  *
+ * Custom Domain (wichtig): api.tivim-web.com → dieser Worker
+ * (Workers → tivim-chatbot → Settings → Domains & Routes → Custom Domain)
+ * Im Frontend nur noch https://api.tivim-web.com – kein *.workers.dev.
+ *
  * Cloudflare Dashboard einrichten:
  * 1. Bindings → KV → Variable name: UPDATES
  * 2. Bindings → R2 → Variable name: UPDATE_IMAGES (Bucket z.B. tivim-update-images)

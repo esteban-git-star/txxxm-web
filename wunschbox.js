@@ -25,7 +25,7 @@
 
   if (!form || !statusEl) return;
 
-  var API_BASE = window.TIVIM_API || "https://tivim-chatbot.eyepitv.workers.dev";
+  var API_BASE = window.TIVIM_API || "https://api.tivim-web.com";
   var WISH_API = API_BASE + "/wishbox";
   var selected = null;
   var freitextMode = false;

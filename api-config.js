@@ -1,2 +1,2 @@
-/** Öffentliche API-Basis – keine Secrets hier. */
-window.TIVIM_API = "https://tivim-chatbot.eyepitv.workers.dev";
+/** Öffentliche API-Basis – nur Marken-Domain, keine Account-Subdomains. */
+window.TIVIM_API = "https://api.tivim-web.com";

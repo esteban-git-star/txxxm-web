@@ -33,7 +33,7 @@
   }
 
   // Live-Server-Status
-  var SERVER_STATUS_URL = (window.TIVIM_API || "https://tivim-chatbot.eyepitv.workers.dev") + "/";
+  var SERVER_STATUS_URL = (window.TIVIM_API || "https://api.tivim-web.com") + "/";
 
   window.TIVIM_fetchStatus = async function () {
     try {
