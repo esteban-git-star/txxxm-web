@@ -597,7 +597,7 @@ export default {
         var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
         try {
           var previewCacheKey = new Request(
-            url.origin + "/trakt/preview?v=3&type=" + previewType + "&id=" + previewId
+            url.origin + "/trakt/preview?v=4&type=" + previewType + "&id=" + previewId
           );
           var cachedPreview = await caches.default.match(previewCacheKey);
           if (cachedPreview) return cachedPreview;
@@ -1091,6 +1091,7 @@ async function buildShowPreview(clientId, id) {
   var dateLabel = "Termin unbekannt";
   var dateIso = "";
   var episodeCode = "";
+  var seasonLabel = "";
 
   if (next && next.first_aired && next.season != null && next.number != null) {
     episodeCode = epCode(next.season, next.number);
@@ -1106,8 +1107,22 @@ async function buildShowPreview(clientId, id) {
     dateIso = sanitizeAdminDate(last.first_aired);
   } else if (status === "ended") {
     dateLabel = "Beendet";
-  } else if (status === "returning" || status === "in production") {
+  } else if (status === "returning series" || status === "returning" || status === "in production") {
     dateLabel = "Läuft · Termin offen";
+  }
+
+  // Laufende Staffel: Finale + Folgenanzahl (wenn Trakt die Episoden kennt)
+  var currentSeason =
+    next && next.season != null
+      ? next.season
+      : last && last.season != null && status !== "ended"
+        ? last.season
+        : null;
+  if (currentSeason != null && currentSeason > 0) {
+    var seasonInfo = await loadSeasonFinale(clientId, id, currentSeason);
+    if (seasonInfo) {
+      seasonLabel = seasonInfo.label;
+    }
   }
 
   return {
@@ -1117,10 +1132,49 @@ async function buildShowPreview(clientId, id) {
     year: show.year || null,
     status: status,
     dateLabel: dateLabel,
+    seasonLabel: seasonLabel,
     dateIso: dateIso,
     episodeCode: episodeCode,
     poster: pickTraktPoster(show),
   };
+}
+
+async function loadSeasonFinale(clientId, showId, season) {
+  try {
+    var resp = await traktFetch(clientId, "/shows/" + showId + "/seasons/" + season, {
+      extended: "full,episodes",
+    });
+    var data = await traktJson(resp);
+    if (!data) return null;
+
+    var episodes = Array.isArray(data.episodes) ? data.episodes : [];
+    var numbered = episodes.filter(function (ep) {
+      return ep && ep.number != null && parseInt(ep.number, 10) > 0;
+    });
+    if (!numbered.length) return null;
+
+    numbered.sort(function (a, b) {
+      return parseInt(a.number, 10) - parseInt(b.number, 10);
+    });
+    var finale = numbered[numbered.length - 1];
+    var count = numbered.length;
+    var finaleCode = epCode(season, finale.number);
+    var label = "Staffel " + season + " · " + count + " Folgen";
+    if (finale.first_aired) {
+      label += " · Finale " + finaleCode + " · " + formatTraktDate(finale.first_aired);
+    } else {
+      label += " · Finale " + finaleCode + " · Termin offen";
+    }
+    return {
+      season: season,
+      episodeCount: count,
+      finaleCode: finaleCode,
+      finaleIso: sanitizeAdminDate(finale.first_aired || ""),
+      label: label,
+    };
+  } catch (e) {
+    return null;
+  }
 }
 
 function posterPublicUrl(origin, type, id) {

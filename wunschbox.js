@@ -18,6 +18,7 @@
   var pickType = document.getElementById("wishPickType");
   var pickTitle = document.getElementById("wishPickTitle");
   var pickDate = document.getElementById("wishPickDate");
+  var pickSeason = document.getElementById("wishPickSeason");
   var pickPoster = document.getElementById("wishPickPoster");
   var pickPosterEmpty = document.getElementById("wishPickPosterEmpty");
   var pickClear = document.getElementById("wishPickClear");
@@ -131,6 +132,15 @@
       pickTitle.textContent = preview.title + (preview.year ? " (" + preview.year + ")" : "");
     }
     if (pickDate) pickDate.textContent = preview.dateLabel || "Termin wird noch geladen …";
+    if (pickSeason) {
+      if (preview.seasonLabel) {
+        pickSeason.textContent = preview.seasonLabel;
+        pickSeason.classList.remove("is-hide");
+      } else {
+        pickSeason.textContent = "";
+        pickSeason.classList.add("is-hide");
+      }
+    }
     setPoster(preview);
     if (searchInput) searchInput.value = "";
     hideSearchList();
