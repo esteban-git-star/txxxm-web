@@ -42,9 +42,12 @@ export default {
     const url = new URL(request.url);
     // Custom Domain api.* ODER Route tivim-web.com/api/*
     let path = url.pathname;
-    if (path === "/api" || path.startsWith("/api/")) {
+    const viaApiPrefix = path === "/api" || path.startsWith("/api/");
+    if (viaApiPrefix) {
       path = path.slice(4) || "/";
     }
+    // Öffentliche Links (Poster etc.) müssen /api behalten, wenn über Apex-Route
+    const publicBase = url.origin + (viaApiPrefix ? "/api" : "");
     const lang = url.searchParams.get("lang")?.toUpperCase() || "DE";
 
     // ==========================================
@@ -82,7 +85,7 @@ export default {
         });
 
         const imagePath = "/updates/img/" + key;
-        return json({ ok: true, image: imagePath, url: url.origin + imagePath }, 200, corsHeaders);
+        return json({ ok: true, image: imagePath, url: publicBase + imagePath }, 200, corsHeaders);
       } catch (e) {
         return json({ error: "upload failed" }, 500, corsHeaders);
       }
@@ -191,7 +194,7 @@ export default {
             if (!w.trakt || !w.trakt.type || !w.trakt.id) return w;
             return Object.assign({}, w, {
               trakt: Object.assign({}, w.trakt, {
-                poster: posterPublicUrl(url.origin, w.trakt.type, w.trakt.id),
+                poster: posterPublicUrl(publicBase, w.trakt.type, w.trakt.id),
               }),
             });
           });
@@ -335,7 +338,7 @@ export default {
           if (!trakt) {
             return json({ error: "invalid trakt" }, 400, corsHeaders);
           }
-          trakt.poster = posterPublicUrl(url.origin, trakt.type, trakt.id);
+          trakt.poster = posterPublicUrl(publicBase, trakt.type, trakt.id);
         }
 
         var message = messageRaw;
@@ -542,7 +545,7 @@ export default {
         }
         var searchIp = request.headers.get("CF-Connecting-IP") || "unknown";
         var cache = caches.default;
-        var cacheKey = new Request(url.origin + "/trakt/search?v=5&q=" + encodeURIComponent(q.toLowerCase()));
+        var cacheKey = new Request(url.origin + "/trakt/search?v=6&q=" + encodeURIComponent(q.toLowerCase()));
         var cachedSearch = await cache.match(cacheKey);
         if (cachedSearch) return cachedSearch;
         if (!(await consumeTraktRate(env, searchIp, "search"))) {
@@ -569,7 +572,7 @@ export default {
                 id: item.ids.trakt,
                 title: String(item.title || "").slice(0, 200),
                 year: item.year || null,
-                poster: posterPublicUrl(url.origin, kind, item.ids.trakt),
+                poster: posterPublicUrl(publicBase, kind, item.ids.trakt),
               });
             });
           }
@@ -605,7 +608,7 @@ export default {
 
           var preview = await buildTraktPreview(env, previewType, previewId);
           if (!preview) return json({ error: "not found" }, 404, corsHeaders);
-          preview.poster = posterPublicUrl(url.origin, previewType, previewId);
+          preview.poster = posterPublicUrl(publicBase, previewType, previewId);
           var previewOut = json(preview, 200, corsHeaders);
           previewOut.headers.set("Cache-Control", "public, s-maxage=1800, max-age=1800");
           ctx.waitUntil(caches.default.put(previewCacheKey, previewOut.clone()));
