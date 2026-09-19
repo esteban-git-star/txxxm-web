@@ -597,7 +597,7 @@ export default {
         var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
         try {
           var previewCacheKey = new Request(
-            url.origin + "/trakt/preview?v=4&type=" + previewType + "&id=" + previewId
+            url.origin + "/trakt/preview?v=5&type=" + previewType + "&id=" + previewId
           );
           var cachedPreview = await caches.default.match(previewCacheKey);
           if (cachedPreview) return cachedPreview;
@@ -1141,13 +1141,14 @@ async function buildShowPreview(clientId, id) {
 
 async function loadSeasonFinale(clientId, showId, season) {
   try {
-    var resp = await traktFetch(clientId, "/shows/" + showId + "/seasons/" + season, {
-      extended: "full,episodes",
-    });
+    // Episoden-Liste (nicht Season-Objekt) – sonst kommt oft keine episodes[] zurück
+    var resp = await traktFetch(
+      clientId,
+      "/shows/" + showId + "/seasons/" + season + "/episodes",
+      { extended: "full" }
+    );
     var data = await traktJson(resp);
-    if (!data) return null;
-
-    var episodes = Array.isArray(data.episodes) ? data.episodes : [];
+    var episodes = Array.isArray(data) ? data : Array.isArray(data && data.episodes) ? data.episodes : [];
     var numbered = episodes.filter(function (ep) {
       return ep && ep.number != null && parseInt(ep.number, 10) > 0;
     });
