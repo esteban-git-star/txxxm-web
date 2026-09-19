@@ -496,7 +496,16 @@ body.admin-page {
   font-size: 0.84rem;
   line-height: 1.35;
   color: var(--text);
-  max-width: 220px;
+  max-width: 260px;
+}
+.wish-trakt-season {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--accent-text);
+  max-width: 260px;
+  font-weight: 500;
 }
 .wish-trakt-date--empty,
 .wish-trakt-date--legacy {

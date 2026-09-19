@@ -152,18 +152,29 @@
   }
 
   function wishDateCell(w) {
+    var season =
+      w.trakt && w.trakt.seasonLabel
+        ? '<span class="wish-trakt-season">' + escapeHtml(w.trakt.seasonLabel) + "</span>"
+        : "";
     if (w.trakt && w.trakt.dateLabel) {
       return (
         '<span class="wish-trakt-date" title="' +
         escapeHtml(w.trakt.dateIso || "") +
         '">' +
         escapeHtml(w.trakt.dateLabel) +
-        "</span>"
+        "</span>" +
+        season
       );
     }
     if (w.adminDate) {
-      return '<span class="wish-trakt-date wish-trakt-date--legacy">' + escapeHtml(w.adminDate) + "</span>";
+      return (
+        '<span class="wish-trakt-date wish-trakt-date--legacy">' +
+        escapeHtml(w.adminDate) +
+        "</span>" +
+        season
+      );
     }
+    if (season) return season;
     return '<span class="wish-trakt-date wish-trakt-date--empty">—</span>';
   }
 
@@ -223,7 +234,7 @@
           wishTitleHtml(w) +
           '</div><span class="wish-meta">' +
           (meta || "—") +
-          '</span></div></div><div class="wish-card-fields"><div class="wish-card-date"><span>Termin (Trakt)</span><p>' +
+          '</span></div></div><div class="wish-card-fields"><div class="wish-card-date"><span>Termin &amp; Staffel</span><p>' +
           wishDateCell(w) +
           '</p></div><label><span>Notiz</span><input type="text" class="wish-note-input" data-field="note" value="' +
           escapeHtml(w.adminNote || "") +

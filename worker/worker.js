@@ -190,7 +190,37 @@ export default {
         }
 
         if (body.action === "get-wishes") {
-          var wishItems = (await readWishes(env)).items || [];
+          var wishStoreAll = await readWishes(env);
+          var wishItems = wishStoreAll.items || [];
+          var wishMutated = false;
+          var seasonRefreshed = 0;
+          for (var wi = 0; wi < wishItems.length; wi++) {
+            var wish = wishItems[wi];
+            if (!wish || wish.done) continue;
+            if (!wish.trakt || wish.trakt.type !== "show" || !wish.trakt.id) continue;
+            if (wish.trakt.seasonLabel) continue;
+            if (seasonRefreshed >= 15) break;
+            try {
+              var freshShow = await buildTraktPreview(env, "show", wish.trakt.id);
+              seasonRefreshed++;
+              if (!freshShow) continue;
+              wishItems[wi] = Object.assign({}, wish, {
+                trakt: Object.assign({}, wish.trakt, {
+                  dateLabel: freshShow.dateLabel,
+                  seasonLabel: freshShow.seasonLabel || "",
+                  dateIso: freshShow.dateIso,
+                  episodeCode: freshShow.episodeCode,
+                  status: freshShow.status,
+                }),
+              });
+              wishMutated = true;
+            } catch (seasonErr) {
+              /* Trakt optional */
+            }
+          }
+          if (wishMutated) {
+            await writeWishes(env, { items: wishItems });
+          }
           wishItems = wishItems.map(function (w) {
             if (!w.trakt || !w.trakt.type || !w.trakt.id) return w;
             return Object.assign({}, w, {
