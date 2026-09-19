@@ -26,7 +26,7 @@
 
   if (!form || !statusEl) return;
 
-  var API_BASE = window.TIVIM_API || "https://api.tivim-web.com";
+  var API_BASE = window.TIVIM_API || "https://tivim-web.com/api";
   var WISH_API = API_BASE + "/wishbox";
   var selected = null;
   var freitextMode = false;
@@ -483,7 +483,7 @@
 
   fetch(API_BASE + "/", { method: "GET", cache: "no-store" }).catch(function () {
     setStatus(
-      "API gerade nicht erreichbar (api.tivim-web.com). Suche/Absenden geht dann nicht – Seite neu laden oder DNS kurz warten.",
+      "API gerade nicht erreichbar. Suche/Absenden geht dann nicht – Seite neu laden.",
       "error"
     );
   });

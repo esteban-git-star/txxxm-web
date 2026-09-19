@@ -33,7 +33,7 @@
   }
 
   // Live-Server-Status
-  var SERVER_STATUS_URL = (window.TIVIM_API || "https://api.tivim-web.com") + "/";
+  var SERVER_STATUS_URL = (window.TIVIM_API || "https://tivim-web.com/api") + "/";
 
   window.TIVIM_fetchStatus = async function () {
     try {

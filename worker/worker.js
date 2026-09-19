@@ -1,9 +1,11 @@
 /**
  * tivim-chatbot – Cloudflare Worker (vollständig)
  *
- * Custom Domain (wichtig): api.tivim-web.com → dieser Worker
- * (Workers → tivim-chatbot → Settings → Domains & Routes → Custom Domain)
- * Im Frontend nur noch https://api.tivim-web.com – kein *.workers.dev.
+ * Custom Domain/Route (wichtig):
+ * - Empfohlen: Route `tivim-web.com/api*` → dieser Worker
+ * - Optional: Custom Domain `api.tivim-web.com`
+ * Frontend: https://tivim-web.com/api – kein *.workers.dev.
+ * Pfade /api/... werden im Worker auf /... normalisiert.
  *
  * Cloudflare Dashboard einrichten:
  * 1. Bindings → KV → Variable name: UPDATES
@@ -38,7 +40,11 @@ export default {
     }
 
     const url = new URL(request.url);
-    const path = url.pathname;
+    // Custom Domain api.* ODER Route tivim-web.com/api/*
+    let path = url.pathname;
+    if (path === "/api" || path.startsWith("/api/")) {
+      path = path.slice(4) || "/";
+    }
     const lang = url.searchParams.get("lang")?.toUpperCase() || "DE";
 
     // ==========================================
