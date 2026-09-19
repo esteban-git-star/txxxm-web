@@ -597,7 +597,7 @@ export default {
         var previewIp = request.headers.get("CF-Connecting-IP") || "unknown";
         try {
           var previewCacheKey = new Request(
-            url.origin + "/trakt/preview?v=5&type=" + previewType + "&id=" + previewId
+            url.origin + "/trakt/preview?v=6&type=" + previewType + "&id=" + previewId
           );
           var cachedPreview = await caches.default.match(previewCacheKey);
           if (cachedPreview) return cachedPreview;
@@ -1095,20 +1095,32 @@ async function buildShowPreview(clientId, id) {
 
   if (next && next.first_aired && next.season != null && next.number != null) {
     episodeCode = epCode(next.season, next.number);
-    dateLabel = "Nächste Folge " + episodeCode + " · " + formatTraktDate(next.first_aired);
+    dateLabel =
+      "Als Nächstes: " +
+      episodeCode +
+      " am " +
+      formatTraktDate(next.first_aired);
     dateIso = sanitizeAdminDate(next.first_aired);
   } else if (status === "ended" && last && last.first_aired && last.season != null && last.number != null) {
     episodeCode = epCode(last.season, last.number);
-    dateLabel = "Beendet · letzte Folge " + episodeCode + " · " + formatTraktDate(last.first_aired);
+    dateLabel =
+      "Serie beendet · letzte Folge " +
+      episodeCode +
+      " am " +
+      formatTraktDate(last.first_aired);
     dateIso = sanitizeAdminDate(last.first_aired);
   } else if (last && last.first_aired && last.season != null && last.number != null) {
     episodeCode = epCode(last.season, last.number);
-    dateLabel = "Letzte Folge " + episodeCode + " · " + formatTraktDate(last.first_aired);
+    dateLabel =
+      "Zuletzt gelaufen: " +
+      episodeCode +
+      " am " +
+      formatTraktDate(last.first_aired);
     dateIso = sanitizeAdminDate(last.first_aired);
   } else if (status === "ended") {
-    dateLabel = "Beendet";
+    dateLabel = "Serie beendet";
   } else if (status === "returning series" || status === "returning" || status === "in production") {
-    dateLabel = "Läuft · Termin offen";
+    dateLabel = "Läuft weiter · nächster Termin noch offen";
   }
 
   // Laufende Staffel: Finale + Folgenanzahl (wenn Trakt die Episoden kennt)
@@ -1160,11 +1172,11 @@ async function loadSeasonFinale(clientId, showId, season) {
     var finale = numbered[numbered.length - 1];
     var count = numbered.length;
     var finaleCode = epCode(season, finale.number);
-    var label = "Staffel " + season + " · " + count + " Folgen";
+    var label = "Aktuelle Staffel " + season + ": " + count + " Folgen";
     if (finale.first_aired) {
-      label += " · Finale " + finaleCode + " · " + formatTraktDate(finale.first_aired);
+      label += " · Staffelfinale (" + finaleCode + ") am " + formatTraktDate(finale.first_aired);
     } else {
-      label += " · Finale " + finaleCode + " · Termin offen";
+      label += " · Staffelfinale (" + finaleCode + ") noch ohne Datum";
     }
     return {
       season: season,
