@@ -128,7 +128,7 @@
   }
 
   function loadInstallCodes() {
-    var api = window.TIVIM_API || "";
+    var api = window.TIVIM_API || "https://tivim-web.com/api";
     if (!api) {
       syncCodeDisplay();
       return Promise.resolve();

@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var base = window.TIVIM_API || "";
+  var base = window.TIVIM_API || "https://tivim-web.com/api";
   /* Fallback bis Worker deployed / pc-app in Admin gesetzt */
   var fallback = {
     "pc-app":

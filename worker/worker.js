@@ -2,7 +2,8 @@
  * tivim-chatbot – Cloudflare Worker (vollständig)
  *
  * Custom Domain/Route (wichtig):
- * - Empfohlen: Route `tivim-web.com/api*` → dieser Worker
+ * - Empfohlen: Routes `tivim-web.com/api` UND `tivim-web.com/api/*` → dieser Worker
+ * - NICHT `tivim-web.com/api*` (würde z.B. /api-config.js / tivim-api.js stehlen)
  * - Optional: Custom Domain `api.tivim-web.com`
  * Frontend: https://tivim-web.com/api – kein *.workers.dev.
  * Pfade /api/... werden im Worker auf /... normalisiert.
@@ -40,7 +41,7 @@ export default {
     }
 
     const url = new URL(request.url);
-    // Custom Domain api.* ODER Route tivim-web.com/api/*
+    // Custom Domain api.* ODER Routes tivim-web.com/api + tivim-web.com/api/*
     let path = url.pathname;
     const viaApiPrefix = path === "/api" || path.startsWith("/api/");
     if (viaApiPrefix) {

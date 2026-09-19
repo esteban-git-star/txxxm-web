@@ -4,7 +4,7 @@
   var slot = document.getElementById("liveUpdates");
   if (!slot) return;
 
-  var API = window.TIVIM_API || "";
+  var API = window.TIVIM_API || "https://tivim-web.com/api";
   var VISIBLE_MAX = 2;
 
   function escapeHtml(s) {

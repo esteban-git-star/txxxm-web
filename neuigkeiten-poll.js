@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var API = window.TIVIM_API || "";
+  var API = window.TIVIM_API || "https://tivim-web.com/api";
   var STORAGE_KEY = "tivim_poll_voted";
 
   var pollBtn = document.getElementById("open-poll-btn");

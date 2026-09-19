@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var API = window.TIVIM_API || "";
+  var API = window.TIVIM_API || "https://tivim-web.com/api";
   var SESSION_KEY = "tivim_admin_token";
   var PANEL_TITLES = {
     wishes: "Wunschbox",
